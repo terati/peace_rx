@@ -1,0 +1,88 @@
+@import "./../theme.css";
+
+.main {
+  margin-left: var(--sidebar_width);
+  padding: 20px 50px;
+
+}
+
+.gridRow {
+  display: flex;
+  height: 100vh;
+  flex-direction: row;
+  margin-top: var(--topbar_height);
+  margin-left: var(--sidebar_width);
+  padding: 0 50px;
+}
+
+.gridLeftCol {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+}
+
+.gridRightCol {
+  flex: 1;
+}
+
+.statusBoxes {
+  display: flex;
+  flex-direction: row;
+}
+
+#_box1 {
+  background: linear-gradient(135deg, rgb(97, 89, 253) 0%, rgb(191, 67, 248) 100%);
+}
+
+#_box2 {
+  background: linear-gradient(135deg, rgb(119, 194, 255) 0%, rgb(55, 161, 161) 100%);
+}
+
+#_box3 {
+  background: linear-gradient(135deg, rgba(0, 102, 51, 0.685) 0%, rgb(165, 184, 0) 100%);
+}
+
+._box {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+  width: 200px;
+  height: 200px;
+  padding: 20px;
+  border-radius: 20px;
+  margin-right: 20px;
+}
+
+._boxTitle {
+  font-size: 20px;
+}
+
+._boxDescription {
+  /* bottom: 0px; */
+}
+
+._boxDescription h1{
+  font-size: 50px;
+  padding: 0;
+  margin: 0;
+}
+
+._boxDescription p{
+  font-size: 15px;
+  padding: 0;
+  margin: 0;
+}
+
+/* ---------------------------------------------------- */
+.gridLeftTop {
+  /* flex: 1; */
+  padding-bottom: 20px;
+}
+
+.gridLeftBottom {
+  flex: 1;
+  /* display: block; */
+  /* justify-content: center;
+  align-items: center; */
+}

@@ -1,0 +1,29 @@
+@import "./../theme.css";
+
+.sidebar {
+  margin-top: var(--topbar_height);
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: var(--sidebar_width);
+  background-color: rgb(37, 36, 36);
+}
+
+.sidebar img {
+  width: 100%;
+  padding: 15px 0px;
+  filter: invert(70%)
+}
+
+.sidebar .selected {
+  border-left: solid 6px rgb(37, 36, 36);
+  /* border-radius: 10px; */
+}
+
+.sidebar img:hover {
+  background-color: aquamarine;
+}

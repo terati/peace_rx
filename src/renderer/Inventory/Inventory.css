@@ -1,0 +1,16 @@
+@import "./../theme.css";
+
+.main {
+  margin-left: var(--sidebar_width);
+  padding: 20px 50px;
+
+}
+
+.inventoryRow {
+  display: flex;
+  height: 100vh;
+  flex-direction: row;
+  margin-top: var(--topbar_height);
+  margin-left: var(--sidebar_width);
+  padding: 0 50px;
+}
