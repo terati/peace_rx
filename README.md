@@ -6,6 +6,8 @@ Bootstrapped with Electron React Boilerplate.
 
 Designed and Created by Timothy Wong.
 
+MIT License
+
 <!-- <img src=".erb/img/erb-banner.svg" width="100%" />
 
 <br>
