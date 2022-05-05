@@ -1,6 +1,7 @@
 @import "./../theme.css";
 
 .sidebar {
+  box-sizing: border-box;
   margin-top: var(--topbar_height);
   position: fixed;
   display: flex;
@@ -11,6 +12,7 @@
   height: 100%;
   width: var(--sidebar_width);
   background-color: rgb(37, 36, 36);
+  z-index: 2;
 }
 
 .sidebar img {

@@ -26,34 +26,34 @@ export default function App() {
   return (
     <>
       <header id="titlebar">
-      <div id="drag-region">
+        <div id="drag-region">
 
-        <div id="window-title">
-          <span>Peace Logistic Rx</span>
+          <div id="window-title">
+            <span>Peace Logistic Rx</span>
+          </div>
+
+          <div id="window-controls">
+
+            <div className="button" id="min-button" onClick={() => window.electron.ipcRenderer.minimize()}>
+              <img className="icon" height={size} width={size} src={minimizeIcon} draggable="false" />
+            </div>
+            <div className="button" id="max-button" onClick={() => window.electron.ipcRenderer.maximize()}>
+              <img className="icon" height={size} width={size} src={restoreUpIcon} draggable="false" />
+            </div>
+            <div className="button" id="restore-button" onClick={() => window.electron.ipcRenderer.restore()}>
+              <img className="icon" height={size} width={size} src={restoreDownIcon} draggable="false" />
+            </div>
+            <div className="button" id="close-button" onClick={() => window.electron.ipcRenderer.close()}>
+              <img className="icon" height={size} width={size} src={closeIcon} draggable="false" />
+            </div>
+
+          </div>
         </div>
-
-        <div id="window-controls">
-
-          <div className="button" id="min-button" onClick={() => window.electron.ipcRenderer.minimize()}>
-            <img className="icon" height={size} width={size} src={minimizeIcon} draggable="false" />
-          </div>
-          <div className="button" id="max-button" onClick={() => window.electron.ipcRenderer.maximize()}>
-            <img className="icon" height={size} width={size} src={restoreUpIcon} draggable="false" />
-          </div>
-          <div className="button" id="restore-button" onClick={() => window.electron.ipcRenderer.restore()}>
-            <img className="icon" height={size} width={size} src={restoreDownIcon} draggable="false" />
-          </div>
-          <div className="button" id="close-button" onClick={() => window.electron.ipcRenderer.close()}>
-            <img className="icon" height={size} width={size} src={closeIcon} draggable="false" />
-          </div>
-
-        </div>
-      </div>
-    </header>
+      </header>
 
       <Router> 
         <Routes>
-          <Route path="/" element={<Main />} />
+          <Route path="/" element={<Inventory />} />
           <Route path="/inventory" element={<Inventory />} />
         </Routes>
       </Router>
