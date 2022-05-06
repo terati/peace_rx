@@ -1,5 +1,7 @@
 @import "./../theme.css";
 
+
+
 .main {
   margin-left: var(--sidebar_width);
   padding: 20px 50px;
@@ -40,8 +42,8 @@
   font-family: inherit;
 }
 
-table, th, td {
-  border: 1px solid white;
+table, th {
+  /* border: 1px solid white; */
 }
 
 table.table_wrapper{
@@ -52,7 +54,7 @@ table.table_wrapper{
 table.table_wrapper tr:first-child{
   position: sticky;
   top: 0;
-  background-color: #270a0a;
+  background-color: #254053;
   text-align: left;
 }
 
@@ -66,12 +68,12 @@ th:before {
 
 th:before {
   top: -1px;
-  border-top: 1px solid rgb(255, 255, 255);
+  /* border-top: 1px solid rgb(255, 255, 255); */
 }
 
 th:after {
   bottom: -1px;
-  border-bottom: 1px solid rgb(255, 255, 255);
+  /* border-bottom: 1px solid rgb(255, 255, 255); */
 }
 
 /* thead, tbody, tr {
@@ -120,12 +122,12 @@ th:after {
   border: 1px solid #dddddd;
 }
 
-td {
-  padding: 5px 5px;
+td, th {
+  padding: 15px 15px;
 }
 
 tr {
-  height: 100px;
+  min-height: 70px;
 }
 
 tr:nth-child(even) {
@@ -185,14 +187,34 @@ tr:hover {
   width: 500px;
   height: 500px;
   position: fixed;
-  background-color: rgb(68, 61, 61);
+  background-color: rgb(48, 51, 56);
   top: calc(50% - 250px);
   left: calc(50% - 250px);
   z-index: 1;
-  border-radius: 20px;
+  border-radius: 10px;
   padding: 20px;
-  
+
+  font-family: 'Roboto', sans-serif, Georgia, 'Times New Roman', Times, serif;
 }
+
+.inner_popup_items {
+  padding-bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.inner_popup_item_row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.inner_popup_item_row div {
+  min-width: 150px;
+}
+
 
 .button_action_div {
   display: flex;
@@ -232,14 +254,13 @@ tr:hover {
 .grid-item {
   /* background-color: aquamarine; */
   border: 1px solid rgba(0, 0, 0, 0.8);
-  padding: 20px;
+  padding-bottom: 20px;
   text-align: center;
   animation-duration: 5s;
   animation-name: fade;
   animation-iteration-count: infinite;
   animation-timing-function: linear;
 }
-
 
 
 

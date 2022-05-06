@@ -1,3 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Source+Sans+Pro:wght@200&display=swap');
+
+* {
+  font-family: 'Roboto', sans-serif, Arial, Helvetica, sans-serif;
+  font-weight: 300;
+}
 
 :root {
   --sidebar_width: 70px;

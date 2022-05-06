@@ -5,6 +5,8 @@ import './Inventory.css';
 import './SelectionStyles.css';
 import Sidebar from 'renderer/Sidebar/Sidebar';
 import throttle from 'lodash/throttle';
+import { Popup_input } from './Popup_input';
+import { Toast } from './Toast';
 import axios from 'axios';
 
 function Inventory() {
@@ -15,6 +17,13 @@ function Inventory() {
   const [search_value, set_search_value] = React.useState<string | number | undefined>('a');
   // const [is_number, set_is_number] = React.useState<boolean | undefined>();
   const [search_div_open, set_search_div_open] = React.useState<boolean>(false);
+
+  const [popup_item_name, set_popup_item_name] = React.useState('');
+  const [popup_item_ndc, set_popup_item_ndc] = React.useState('');
+  const [popup_item_qoh, set_popup_item_qoh] = React.useState('');
+  const [popup_item_price, set_popup_item_price] = React.useState('');
+  const [popup_item_threshhold, set_popup_item_threshhold] = React.useState('');
+  const [popup_item_manufacturer, set_popup_item_manufacturer] = React.useState('');
 
   const throttled = React.useCallback(
     throttle((new_search_value) => {
@@ -65,19 +74,40 @@ function Inventory() {
     <>
       <Sidebar selected={'inventory'}/>
 
+      <Toast />
+
       {
         (search_div_open == true) && 
           <div className="popup_div" onClick={() => set_search_div_open(false)} >  
             <div className="inner_popup" onClick={(e) => e.stopPropagation()} >
-              <div>
-                <div> Item Name: asd </div>
-                <div> QOH: 12 </div>
-                <div> Threshhold: 10 </div>
-                <div> Price: $3.34 </div>
-                <div> Last Updated: Never </div>
+              <div className="inner_popup_items">
+                <div className="inner_popup_item_row">
+                  <div> Item Name: </div>
+                  <Popup_input value={popup_item_name} onChange={(e:any) => set_popup_item_name(e.target.value)} /> 
+                </div>
+                <div className="inner_popup_item_row">
+                  <div> NDC:  </div>
+                  <Popup_input value={popup_item_ndc} onChange={(e:any) => set_popup_item_ndc(e.target.value)} /> 
+                </div>
+                <div className="inner_popup_item_row">
+                  <div> QOH:  </div>
+                  <Popup_input value={popup_item_qoh} onChange={(e:any) => set_popup_item_qoh(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row">
+                  <div> Threshhold:  </div>
+                  <Popup_input value={popup_item_threshhold} onChange={(e:any) => set_popup_item_threshhold(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row">
+                  <div> Price:  </div>
+                  <Popup_input value={popup_item_price} onChange={(e:any) => set_popup_item_price(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Last Updated:  </div>
+                  <Popup_input value={popup_item_name} onChange={(e:any) => set_popup_item_name(e.target.value)} />
+                </div>
               </div>
 
-              <div className="color_grid"> 
+              {/* <div className="color_grid"> 
                 <div className="grid-item">1</div>
                 <div className="grid-item">2</div>
                 <div className="grid-item">3</div>  
@@ -88,7 +118,7 @@ function Inventory() {
                 <div className="grid-item">8</div>
                 <div className="grid-item">9</div>  
 
-              </div>
+              </div> */}
               
               <div className="button_action_div">
                 <button className="cancel_button" onClick={() => set_search_div_open(false)}> Cancel </button> 

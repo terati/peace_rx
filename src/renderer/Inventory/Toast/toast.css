@@ -1,0 +1,17 @@
+.toast_success {
+  position: fixed;
+  height: 40px;
+  width: 400px;
+  bottom: 20px;
+  left: 80px;
+  background-color: rgb(59, 55, 55);
+  border-left: solid 5px green ;
+  z-index: 1;
+  margin-left: 20px;
+  margin-right: 20px;
+  padding-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 20px;
+}
