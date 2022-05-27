@@ -13,6 +13,7 @@ import './App.css';
 
 import Inventory from './Inventory/Inventory';
 import { Main } from './Main';
+import Setting from './Setting/Setting';
 // onClick={() => ipcRenderer.send('close-window')}
 // import { ipcRenderer } from require('electron').myPing;
 

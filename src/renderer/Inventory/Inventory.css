@@ -19,8 +19,10 @@
 }
 
 .inventoryRow {
-  /* display: flex; */
+  display: flex;
   /* position: absolute; */
+  background-color: rgb(43, 40, 40);
+
   box-sizing: border-box;
   max-height: 100vh;
   height: 100vh;
@@ -84,7 +86,9 @@ th:after {
 
 .table_wrapper_super {
   width: 100%;
-  height: 80%;
+  flex-grow: 1;
+  height: 50px;
+  /* height: 80%; */
   /* display: block; */
   /* overflow-x: auto; */
   overflow: auto;
@@ -155,9 +159,10 @@ tr:hover {
 .search_category {
   display: flex;
   flex-direction: column;
-  height: 15%;
+  /* height: 15%; */
   margin: 0;
   padding: 0;
+  background-color: aqua;
 }
 
 .search_category_bottom {
@@ -263,4 +268,9 @@ tr:hover {
 }
 
 
-
+.pagination_options {
+  height: 50px;
+  margin-bottom: 10px;
+  background-color: aquamarine;
+  width: 100%;
+}

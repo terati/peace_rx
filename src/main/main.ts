@@ -10,7 +10,7 @@
  */
 import path from 'path';
 // const fs = require("fs");
-import { app, BrowserWindow, shell, ipcMain } from 'electron';
+import { app, BrowserWindow, shell, ipcMain, globalShortcut } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -178,4 +178,19 @@ app
     }
   })
  
+
+// -------------------------------------------------------------------------
+
+
+// ioHook.on("mouseclick", () => {
+//   console.log("A mouseclick occured.")
+// });
+
+// ioHook.start();
+
+
+// -------------------------------------------------------------------------
+
+
+
 

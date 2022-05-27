@@ -1,0 +1,36 @@
+@import "./../theme.css";
+
+.div_setting {
+  box-sizing: border-box;
+  flex-direction: column;
+  margin-top: var(--topbar_height);
+  margin-left: var(--sidebar_width);
+  padding: 20px 100px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.div_inner_setting {
+  min-width: max-content;
+  width: 100%;
+  height: 100%;
+  background-color: rgb(36, 37, 37);
+  padding: 20px;
+  min-height: 500px;
+}
+
+.inner_grid_row {
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 20px;
+}
+
+.inner_grid_col1 {
+  min-width: 200px;
+}
+
+.inner_grid_col2 {
+  display: flex;
+  flex-direction: row;
+}

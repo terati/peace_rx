@@ -81,25 +81,20 @@
     }
   },
   "author": {
-    "name": "Electron React Boilerplate Maintainers",
-    "email": "electronreactboilerplate@gmail.com",
-    "url": "https://electron-react-boilerplate.js.org"
+    "name": "Timothy Wong",
+    "email": "-",
+    "url": "-"
   },
   "contributors": [
     {
-      "name": "Amila Welihinda",
-      "email": "amilajack@gmail.com",
-      "url": "https://github.com/amilajack"
-    },
-    {
-      "name": "John Tran",
-      "email": "jptran318@gmail.com",
-      "url": "https://github.com/jooohhn"
+      "name": "Timothy Wong",
+      "email": "-",
+      "url": "-"
     }
   ],
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
+    "url": "-"
   },
   "keywords": [
     "electron",
@@ -112,7 +107,7 @@
     "hot",
     "reload"
   ],
-  "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
+  "homepage": "-",
   "jest": {
     "testURL": "http://localhost/",
     "testEnvironment": "jsdom",
@@ -139,6 +134,20 @@
     ],
     "setupFiles": [
       "./.erb/scripts/check-build-exists.ts"
+    ]
+  },
+  "iohook": {
+    "targets": [
+      "electron-82"
+    ],
+    "platforms": [
+      "win32",
+      "darwin",
+      "linux"
+    ],
+    "arches": [
+      "x64",
+      "ia32"
     ]
   },
   "devDependencies": {
@@ -224,7 +233,8 @@
     "react": "^18.0.0",
     "react-chartjs-2": "^4.1.0",
     "react-dom": "^18.0.0",
-    "react-router-dom": "^6.3.0"
+    "react-router-dom": "^6.3.0",
+    "react-webcam": "^7.0.1"
   },
   "devEngines": {
     "node": ">=14.x",

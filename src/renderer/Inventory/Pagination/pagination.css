@@ -1,0 +1,22 @@
+
+
+.squares_wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+
+.square_index {
+  width: 40px;
+  height: 40px;
+  background-color: rgb(71, 70, 68);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+
+
+
