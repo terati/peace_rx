@@ -1,18 +1,52 @@
 
 
 .squares_wrapper {
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
+  background-color: rgb(71, 70, 68);
 }
 
 
 .square_index {
   width: 40px;
   height: 40px;
-  background-color: rgb(71, 70, 68);
+  /* background-color: rgb(71, 70, 68); */
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.selected_page {
+  background-color: aqua;
+}
+
+.pagination_wrapper {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 5px;
+}
+
+.pagination_left_arrow {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(71, 70, 68);
+  border-radius: 5px;
+  margin-right: 10px;
+}
+
+.pagination_right_arrow {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(71, 70, 68);
+  border-radius: 5px;
+  margin-left: 10px;
 }
 
 
