@@ -1,4 +1,7 @@
 
+:root {
+  --dark_hover_color: rgb(103, 103, 103)
+}
 
 .squares_wrapper {
   display: inline-flex;
@@ -14,10 +17,19 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  border-top: solid white 1px;
+  border-bottom: solid white 1px;
+  /* border-left: solid white 0.5px;
+  border-right: solid white 0.5px; */
+}
+
+.square_index:hover {
+  background-color: var(--dark_hover_color);
+  cursor: pointer;
 }
 
 .selected_page {
-  background-color: aqua;
+  background-color: rgb(145, 149, 149);
 }
 
 .pagination_wrapper {
@@ -27,6 +39,26 @@
   margin: 5px;
 }
 
+
+
+.pagination_double_left_arrow {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(71, 70, 68);
+  /* border-radius: 5px; */
+  border: solid white 1px;
+  border-right: 0;
+  border-radius: 10px 0 0 10px;
+}
+
+.pagination_double_left_arrow:hover {
+  background-color: var(--dark_hover_color);
+  cursor: pointer;
+}
+
 .pagination_left_arrow {
   display: flex;
   width: 40px;
@@ -34,8 +66,14 @@
   justify-content: center;
   align-items: center;
   background-color: rgb(71, 70, 68);
-  border-radius: 5px;
-  margin-right: 10px;
+  border: solid white 1px;
+  /* border-right: 0; */
+  /* border-radius: 5px; */
+}
+
+.pagination_left_arrow:hover {
+  background-color: var(--dark_hover_color);
+  cursor: pointer;
 }
 
 .pagination_right_arrow {
@@ -45,10 +83,43 @@
   justify-content: center;
   align-items: center;
   background-color: rgb(71, 70, 68);
-  border-radius: 5px;
-  margin-left: 10px;
+  border: solid white 1px;
+  /* border-left: 0; */
+  /* border-radius: 5px; */
 }
 
+.pagination_right_arrow:hover {
+  background-color: var(--dark_hover_color);
+  cursor: pointer;
+}
+
+.pagination_double_right_arrow {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(71, 70, 68);
+  border: solid white 1px;
+  border-left: 0;
+  border-radius: 0 10px 10px 0;
+  /* border-radius: 5px; */
+}
+
+.pagination_double_right_arrow:hover {
+  background-color: var(--dark_hover_color);
+  cursor: pointer;
+}
+
+
+
+.selectDisable {
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
 
 
 

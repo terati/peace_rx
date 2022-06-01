@@ -15,7 +15,10 @@ function Inventory() {
   const [data, setData] = React.useState<any>({});
   const [loading, setLoading] = React.useState<boolean>(true);
   const [action_status, set_action_status] = React.useState<boolean>(true);
-  const [search_value, set_search_value] = React.useState<string | number | undefined>(0);
+  // atorvastatin
+  // 7220502390
+  // 72205-023-90
+  const [search_value, set_search_value] = React.useState<string | number | undefined>(72205);
   // const [is_number, set_is_number] = React.useState<boolean | undefined>();
   const [search_div_open, set_search_div_open] = React.useState<boolean>(false);
 
@@ -31,6 +34,15 @@ function Inventory() {
   const toast_ref = React.useRef('hellotrue');
   const [toast_status, set_toast_status] = React.useState<boolean>(false);
 
+  const ref = React.createRef();
+
+
+  const [pagination_offset, set_pagination_offset] = React.useState(0);
+  const [pagination_limit, set_pagination_limit] = React.useState(50);
+  const [pagination_index, set_pagination_index] = React.useState(1);
+
+
+
   const throttled = React.useCallback(
     throttle((new_search_value) => {
       let is_number = /^\d/.test(new_search_value);
@@ -39,7 +51,7 @@ function Inventory() {
         fetchData = async () => { // ndc number 
           try {
             //`https://api.fda.gov/drug/ndc.json?search=packaging.package_ndc:"${new_search_value}"&limit=20`
-            const result = await axios(`http://localhost:3000/api/inventory_db/?search=${new_search_value}&offset=0&limit=50`)
+            const result = await axios(`http://localhost:3000/api/inventory_db/?search=${new_search_value}&offset=${pagination_offset}&limit=${pagination_limit}`)
                                     .then((datum) => {
                                       console.log(datum)
                                       setData(datum);
@@ -70,12 +82,13 @@ function Inventory() {
       
       fetchData();
     }, 1000),
-    []
+    [pagination_index]
   );
 
   React.useEffect(() => {
+    set_pagination_offset((pagination_index-1)*pagination_limit); 
     throttled(search_value);
-  }, [search_value, ])  
+  }, [search_value, pagination_limit, pagination_index])  
 
   const select_row_index_onclick = (event:any, key:number) => {
     set_selected_row_index(key);
@@ -243,7 +256,16 @@ function Inventory() {
           </div>
 
           <div className="pagination_options"> 
-                <Pagination max={5} current={3}/>
+                <Pagination ref={ref} max={10} current={3} pagination_index={pagination_index} set_pagination_index={set_pagination_index}/>
+
+                <div className="select_show_options">
+                  <p style={{padding: "5px"}}>Show: </p> 
+                  <select>
+                    <option value="0">10 rows</option>
+                    <option value="1">50 rows</option>
+                    <option value="2">100 rows</option>
+                  </select>
+                </div>
           </div>
 
         </div>
