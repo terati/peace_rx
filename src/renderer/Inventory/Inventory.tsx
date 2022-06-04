@@ -8,6 +8,9 @@ import throttle from 'lodash/throttle';
 import { Popup_input } from './Popup_input';
 import { Toast } from './Toast';
 import { Pagination } from './Pagination';
+import { Loader } from './Loader';
+import { Inventory_Search } from './Inventory_Search';
+import dog_gif from "./../../../assets/generalIcons/doge.gif";
 import axios from 'axios';
 
 function Inventory() {
@@ -36,7 +39,7 @@ function Inventory() {
 
   const ref = React.createRef();
 
-
+  const [pagination_page_count, set_pagination_page_count] = React.useState(0);
   const [pagination_offset, set_pagination_offset] = React.useState(0);
   const [pagination_limit, set_pagination_limit] = React.useState(50);
   const [pagination_index, set_pagination_index] = React.useState(1);
@@ -45,6 +48,7 @@ function Inventory() {
 
   const throttled = React.useCallback(
     throttle((new_search_value) => {
+      setLoading(true);
       let is_number = /^\d/.test(new_search_value);
       let fetchData;
       if (is_number) {
@@ -55,6 +59,8 @@ function Inventory() {
                                     .then((datum) => {
                                       console.log(datum)
                                       setData(datum);
+                                      set_pagination_page_count( Math.ceil( parseInt(datum.data.count)/pagination_limit ) );
+                                      // console.log( Math.ceil(parseInt(datum.data.count)/pagination_limit) );
                                       setLoading(false);
                                     });
           } catch (error) {
@@ -86,6 +92,9 @@ function Inventory() {
   );
 
   React.useEffect(() => {
+    console.log(data);
+    // set_pagination_page_count( Math.ceil( parseInt(data.data.count)/pagination_limit ) );
+    console.log(pagination_page_count);
     set_pagination_offset((pagination_index-1)*pagination_limit); 
     throttled(search_value);
   }, [search_value, pagination_limit, pagination_index])  
@@ -102,6 +111,51 @@ function Inventory() {
     set_popup_item_manufacturer(row_data ?? 'labeler_name');
 
     set_search_div_open(true);
+  }
+
+
+
+  const [global_click_down, set_global_click_down] = React.useState(false);
+  const [test_width, set_test_width] = React.useState(100);
+  const [parent_x, set_parent_x] = React.useState(0);
+  const parentRef = React.useRef();
+  const [click_flag, set_click_flag] = React.useState(false);
+  const [coords, set_coords] = React.useState({x: 0, y: 0});
+  React.useEffect(() => {
+    const handleClickUpEvent = (event:any) => {
+      set_global_click_down(false);
+      set_click_flag(false);
+    };
+    window.addEventListener('mouseup', handleClickUpEvent);
+    return () => {
+      window.removeEventListener('mouseup', handleClickUpEvent);
+    };
+  }, []);
+  React.useEffect(() => {
+    const handleWindowMouseMove = (event:any) => {
+      set_coords({
+        x: event.clientX,
+        y: event.clientY,
+      });
+      set_test_width( Math.abs(event.x-parent_x) );
+      console.log( Math.abs(event.x-parent_x), event.x, parent_x );
+    }
+
+    if (click_flag) window.addEventListener('mousemove', handleWindowMouseMove);
+    return () => {
+      window.removeEventListener('mousemove', handleWindowMouseMove);
+    };
+  }, [click_flag]);
+  const click_handler_test = (event:any) => {
+    event.stopPropagation();
+    event.preventDefault();
+    set_click_flag(true);
+    let tmp = parentRef?.current.getBoundingClientRect();
+    console.log(tmp);
+    set_parent_x(tmp.left);
+  }
+  const click_handler_release_test = () => {
+    set_click_flag(false);
   }
 
   return (
@@ -184,7 +238,7 @@ function Inventory() {
 
             <div className="search_category_bottom">
               <div> 
-                <input type="text" onChange={(e) => set_search_value(e.target.value)}/>
+                <Inventory_Search type="text" onChange={(e) => set_search_value(e.target.value)} />
               </div>
 
               {/* <div className="custom-select-option">
@@ -204,8 +258,19 @@ function Inventory() {
           <div className='table_wrapper_super'>
             <table className="table_wrapper">
               {/* <thead> */}
-                <tr>
-                  <th>Proprietary Name</th>
+                <tr className="table_header">
+                  <th>
+                    <div ref={parentRef} className="table_item_div" style={{width: test_width}} >
+                      <div className="table_slider" onMouseDown={click_handler_test} onMouseUp={click_handler_release_test} >
+                        <div className="three_dots">
+                          <div className="dot"></div>
+                          <div className="dot"></div>
+                          <div className="dot"></div>
+                        </div>
+                      </div>
+                      Proprietary Name
+                    </div>
+                  </th>
                   <th>NDC Package Code</th>
                   <th>QOH</th>
                   <th>Thresh</th>
@@ -231,13 +296,22 @@ function Inventory() {
                     Not Found.
                   </td> */}
                 {/* </tr> */}
+
+
+                {/* { (loading==true) && 
+                  <tr className="loading_tr">
+                    Hello World
+
+                  </tr>
+                } */}
+
                 { (loading==false) && data.data.rows.map((el:any, index:number) => {
                   // let description = el.packaging.filter((pkg:any) => pkg.package_ndc == search_value)[0].description;
                   // let package_ndc = el.packaging.filter((pkg:any) => pkg.package_ndc == search_value)[0]?.package_ndc;
                   // let strengths = el.active_ingredients.map((inner_el:any) => {  })
                   return (
                     <tr key={index} className="body_td" onClick={event => select_row_index_onclick(event, index)}>
-                      <td> {el.propietary_name} </td>
+                      <td> <div className="table_item_div" style={{width: test_width}} > {el.propietary_name} </div></td>
                       <td> {el.ndc_package_code ?? 'N/A'} </td>
                       <td> {el.qoh ?? 0} </td>
                       <td> {el.thresh ?? 0} </td>
@@ -253,13 +327,27 @@ function Inventory() {
                 {/* { <td colSpan={1000} className="long_colspan"> Not Found </td> } */}
               {/* </tbody> */}
             </table>
+            {(loading==true) && 
+              <div className="loading_tr">
+                <Loader />
+              </div>
+            }
+
+            {(!loading && (pagination_page_count==0) ) && 
+              <div className="nothing_here">
+                <img height={100} width={100} src={dog_gif} draggable="false" alt="Nothing to see"/>
+                <p> Nothing here. </p>
+              </div>
+            }
           </div>
 
           <div className="pagination_options"> 
-                <Pagination ref={ref} max={10} current={3} pagination_index={pagination_index} set_pagination_index={set_pagination_index}/>
+                <Pagination ref={ref} max={pagination_page_count} current={3} pagination_index={pagination_index} set_pagination_index={set_pagination_index}/>
+
+                
 
                 <div className="select_show_options">
-                  <p style={{padding: "5px"}}>Show: </p> 
+                  <p style={{padding: "5px"}}>Show: {pagination_index} / {pagination_page_count} page </p> 
                   <select>
                     <option value="0">10 rows</option>
                     <option value="1">50 rows</option>

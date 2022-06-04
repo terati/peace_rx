@@ -1,10 +1,17 @@
-/* 
+
+.inventory_search {
+  background-color: rgba(255, 255, 255, 0);
+  box-sizing: border-box;
+  padding: 12px 20px;
+  color: white;
+}
+
 input[type=text], select {
   width: 500px;
   padding: 10px 10px;
   margin: 8px 0;
   display: inline-block;
-  border: 1px solid rgb(255, 255, 255);
+  border: 1px solid rgb(77, 77, 77);
   border-radius: 4px;
   box-sizing: border-box;
   outline: none;
@@ -12,15 +19,13 @@ input[type=text], select {
 }
 
 input[type=text]:focus {
-  border: 1px solid rgb(241, 5, 5);
+  border: 1px solid rgb(136, 136, 136);
 }
 
-input[type=submit] {
-  width: 100%;
-  padding: 14px 20px;
-  margin: 8px 0;
-  border: none; 
-  border-radius: 4px;
-  cursor: pointer;
-} */
+
+
+
+
+
+
 
