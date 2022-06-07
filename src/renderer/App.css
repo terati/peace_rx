@@ -95,7 +95,7 @@ a:hover {
   margin: 0;
   width: calc(100% - 2px); /*Compensate for body 1px border*/
   background: #254053;
-  z-index: 2;
+  z-index: 9999999999;
 }
 
 #titlebar #drag-region {

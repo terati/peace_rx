@@ -31,6 +31,21 @@ function Inventory() {
   const [popup_item_price, set_popup_item_price] = React.useState('');
   const [popup_item_threshhold, set_popup_item_threshhold] = React.useState('');
   const [popup_item_manufacturer, set_popup_item_manufacturer] = React.useState('');
+  const [popup_item_package_description, set_popup_item_package_description] = React.useState('');
+  const [popup_item_active_numerator_strength, set_popup_item_active_numerator_strength] = React.useState('');
+  const [popup_item_active_ingredient_unit, set_popup_item_active_ingredient_unit] = React.useState('');
+  const [popup_item_deaschedule, set_popup_item_deaschedule] = React.useState('');
+  const [popup_item_product_type_name, set_popup_item_product_type_name] = React.useState('');
+  const [popup_item_nonpropietary_name, set_popup_item_nonpropietary_name] = React.useState('');
+  const [popup_item_route_name, set_popup_item_route_name] = React.useState('');
+  const [popup_item_dosage_form_name, set_popup_item_dosage_form_name] = React.useState('');
+  const [popup_item_substance_name, set_popup_item_substance_name] = React.useState('');
+  const [popup_item_start_marketing_date, set_popup_item_start_marketing_date] = React.useState('');
+  const [popup_item_pharm_classes, set_popup_item_pharm_classes] = React.useState('');
+
+  const [selected_ndc_package_code, set_selected_ndc_package_code] = React.useState('72205-023-90');
+  const [spl_set_id, set_spl_set_id] = React.useState('');
+  const [label_data, set_label_data] = React.useState(null);
 
   const [selected_row_index, set_selected_row_index] = React.useState<number | null>(null);
 
@@ -92,6 +107,35 @@ function Inventory() {
   );
 
   React.useEffect(() => {
+    const fetchLabelMedia = async (package_ndc:any) => {
+      try {
+        console.log(package_ndc);
+        const media = await axios(`https://api.fda.gov/drug/label.json?search=openfda.package_ndc.exact:"${package_ndc}"`)
+                            .then((datum:any) => {
+                              set_label_data(datum);
+                              console.log(datum);
+                            })
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    const fetchFromFDA = async () => { // ndc number 
+      try {
+        //`https://api.fda.gov/drug/ndc.json?search=packaging.package_ndc:"${new_search_value}"&limit=20`
+        const result = await axios(`https://api.fda.gov/drug/ndc.json?search=packaging.package_ndc:"${selected_ndc_package_code}"&limit=20`)
+                        .then((datum) => {
+                          console.log('From FDA', datum);
+                          fetchLabelMedia(selected_ndc_package_code);
+                        });
+      } catch (error) {
+        // console.error(error);
+      }
+    }
+    fetchFromFDA();
+  }, [selected_ndc_package_code])
+
+  React.useEffect(() => {
     console.log(data);
     // set_pagination_page_count( Math.ceil( parseInt(data.data.count)/pagination_limit ) );
     console.log(pagination_page_count);
@@ -108,7 +152,18 @@ function Inventory() {
     set_popup_item_qoh(row_data.qoh ?? 'NA');
     set_popup_item_price(row_data.purchase_price ?? 'NA');
     set_popup_item_threshhold(row_data.thresh ?? 'NA');
-    set_popup_item_manufacturer(row_data ?? 'labeler_name');
+    set_popup_item_manufacturer(row_data.labeler_name ?? 'NA');
+    set_popup_item_package_description(row_data.package_description ?? 'NA');
+    set_popup_item_active_numerator_strength(row_data.active_numerator_strength ?? 'NA');
+    set_popup_item_active_ingredient_unit(row_data.active_ingredient_unit ?? 'NA');
+    set_popup_item_deaschedule(row_data.deaschedule ?? 'NA');
+    set_popup_item_product_type_name(row_data.product_type_name ?? 'NA');
+    set_popup_item_nonpropietary_name(row_data.nonpropietary_name ?? 'NA');
+    set_popup_item_route_name(row_data.route_name ?? 'NA');
+    set_popup_item_dosage_form_name(row_data.dosage_form_name ?? 'NA');
+    set_popup_item_substance_name(row_data.substance_name ?? 'NA');
+    set_popup_item_start_marketing_date(row_data.start_marketing_date ?? 'NA');
+    set_popup_item_pharm_classes(row_data.pharm_classes ?? 'NA');
 
     set_search_div_open(true);
   }
@@ -117,10 +172,34 @@ function Inventory() {
 
   const [global_click_down, set_global_click_down] = React.useState(false);
   const [test_width, set_test_width] = React.useState(100);
+  const [min_column_width, set_min_column_width] = React.useState(70);
+  const [column_widths, set_column_widths] = React.useState({
+    0: 150,
+    1: 180,
+    2: 70,
+    3: 70,
+    4: 100,
+    5: 100,
+    6: 100,
+    7: 200,
+    8: 300
+  });
   const [parent_x, set_parent_x] = React.useState(0);
-  const parentRef = React.useRef();
+  const [parent_x_dt, set_parent_x_dt] = React.useState({
+    0: 200,
+    1: 200,
+    2: 200,
+    3: 200,
+    4: 200,
+    5: 200,
+    6: 200,
+    7: 200,
+    8: 200
+  });
+  const parentRef = React.useRef<Array<HTMLDivElement | null>>([]);
   const [click_flag, set_click_flag] = React.useState(false);
   const [coords, set_coords] = React.useState({x: 0, y: 0});
+  const [last_clicked_idx, set_last_clicked_idx] = React.useState<number>(0);
   React.useEffect(() => {
     const handleClickUpEvent = (event:any) => {
       set_global_click_down(false);
@@ -137,8 +216,19 @@ function Inventory() {
         x: event.clientX,
         y: event.clientY,
       });
-      set_test_width( Math.abs(event.x-parent_x) );
-      console.log( Math.abs(event.x-parent_x), event.x, parent_x );
+      // set_test_width( Math.abs(event.x-parent_x) );
+      // console.log(event.x, last_clicked_idx, parent_x_dt[last_clicked_idx]);
+      // console.log( Math.abs(event.x - parent_x_dt[last_clicked_idx]) );
+      let tmp_new_width = Math.abs(event.x - parent_x_dt[last_clicked_idx]);
+      if (tmp_new_width <= min_column_width) {
+        tmp_new_width = min_column_width;
+      } 
+      set_column_widths(prevState => ({
+        ...prevState,
+        [last_clicked_idx]: tmp_new_width
+      }));
+
+      // console.log( Math.abs(event.x-parent_x), event.x, parent_x );
     }
 
     if (click_flag) window.addEventListener('mousemove', handleWindowMouseMove);
@@ -146,18 +236,74 @@ function Inventory() {
       window.removeEventListener('mousemove', handleWindowMouseMove);
     };
   }, [click_flag]);
-  const click_handler_test = (event:any) => {
+  const click_handler_test = (event:any, key:any) => {
     event.stopPropagation();
     event.preventDefault();
+    set_last_clicked_idx(key);
     set_click_flag(true);
-    let tmp = parentRef?.current.getBoundingClientRect();
-    console.log(tmp);
-    set_parent_x(tmp.left);
+    let tmp = parentRef?.current[key].getBoundingClientRect();
+    set_parent_x_dt(prevState => ({
+      ...prevState,
+      [key]: tmp.left
+    }));
+    // set_parent_x(tmp.left);
   }
   const click_handler_release_test = () => {
     set_click_flag(false);
   }
 
+  const table_column_titles = [
+    {
+      name: "Propietary Name",
+      width: 200,
+      parse_property: "propietary_name",
+      additional_properties: ""
+    },
+    {
+      name: "NDC Package Code",
+      width: 200,
+      parse_property: "ndc_package_code",
+      additional_properties: "table_item_border"
+    },
+    {
+      name: "QOH",
+      width: 200,
+      parse_property: "qoh",
+      additional_properties: ""
+    }, 
+    {
+      name: "Thresh",
+      width: 200,
+      parse_property: "thresh",
+      additional_properties: ""
+    },
+    {
+      name: "Purchase Price",
+      width: 200,
+      parse_property: "purchase_price",
+      additional_properties: ""
+    },
+    {
+      name: "Suggested Price",
+      width: 200,
+      parse_property: "suggested_selling_price",
+      additional_properties: ""
+    }, 
+    {
+      name: "Last Transaction",
+      width: 200,
+      parse_property: "updatedAt",
+      additional_properties: ""
+    }, 
+    {
+      name: "Description",
+      width: 200,
+      parse_property: "package_description",
+      additional_properties: ""
+    }
+  ]
+
+  const example = "propietary_name"
   return (
     <>
       <Sidebar selected={'inventory'}/>
@@ -195,7 +341,62 @@ function Inventory() {
                   <div> Last Updated:  </div>
                   <Popup_input value={popup_item_name} onChange={(e:any) => set_popup_item_name(e.target.value)} />
                 </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Package Description:  </div>
+                  <div className="inner_popup_item_content"> {popup_item_package_description} </div>
+                </div>
+
+                <div className="inner_popup_item_row"> 
+                  <div> Strength </div>
+                  <Popup_input value={`${popup_item_active_numerator_strength} ${popup_item_active_ingredient_unit}`}  />
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Deaschedule </div>
+                  <Popup_input value={popup_item_deaschedule} onChange={(e:any) => set_popup_item_deaschedule(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Product Type Name </div>
+                  <Popup_input value={popup_item_product_type_name} onChange={(e:any) => set_popup_item_product_type_name(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Nonpropietary Name </div>
+                  <Popup_input value={popup_item_nonpropietary_name} onChange={(e:any) => set_popup_item_nonpropietary_name(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Route Name </div>
+                  <Popup_input value={popup_item_route_name} onChange={(e:any) => set_popup_item_route_name(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Dosage Form Name </div>
+                  <Popup_input value={popup_item_dosage_form_name} onChange={(e:any) => set_popup_item_dosage_form_name(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Substance Name </div>
+                  <Popup_input value={popup_item_substance_name} onChange={(e:any) => set_popup_item_substance_name(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Start Marketing Date </div>
+                  <Popup_input value={popup_item_start_marketing_date} onChange={(e:any) => set_popup_item_start_marketing_date(e.target.value)} />
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Pharm Classes </div>
+                  <Popup_input value={popup_item_pharm_classes} onChange={(e:any) => set_popup_item_pharm_classes(e.target.value)} />
+                </div>
+                {/* popup_item_pharm_classes */}
               </div>
+ 
+              {/*
+              set_popup_item_active_numerator_strength(row_data.active_numerator_strength ?? 'NA');
+              set_popup_item_active_ingredient_unit(row_data.active_ingredient_unit ?? 'NA');
+              set_popup_item_deaschedule(row_data.deaschedule ?? 'NA');
+              set_popup_item_product_type_name(row_data.product_type_name ?? 'NA');
+              set_popup_item_nonpropietary_name(row_data.nonpropietary_name ?? 'NA');
+              set_popup_item_route_name(row_data.route_name ?? 'NA');
+              set_popup_item_dosage_form_name(row_data.dosage_form_name ?? 'NA');
+              
+              set_popup_item_substance_name(row_data.substance_name ?? 'NA');
+              set_popup_item_start_marketing_date(row_data.start_marketing_date ?? 'NA'); */}
+
 
               {/* <div className="color_grid"> 
                 <div className="grid-item">1</div>
@@ -259,9 +460,26 @@ function Inventory() {
             <table className="table_wrapper">
               {/* <thead> */}
                 <tr className="table_header">
-                  <th>
-                    <div ref={parentRef} className="table_item_div" style={{width: test_width}} >
-                      <div className="table_slider" onMouseDown={click_handler_test} onMouseUp={click_handler_release_test} >
+                  { table_column_titles.map((item, idx:number) => {
+                    return (
+                      <th>
+                        <div ref={el => parentRef.current[idx] = el} className="table_item_div_head" style={{width: column_widths[idx]}}>
+                          <div className="table_slider" onMouseDown={(e) => click_handler_test(e, idx)} onMouseUp={click_handler_release_test} >
+                            <div className="three_dots">
+                              <div className="dot"></div>
+                              <div className="dot"></div>
+                              <div className="dot"></div>
+                            </div>
+                          </div>
+                          {item.name}
+                        </div>
+                      </th>
+                    )
+                    })
+                  }
+                  {/* <th>
+                    <div ref={parentRef} className="table_item_div" style={{width: column_widths[0]}}>
+                      <div className="table_slider" onMouseDown={(e) => click_handler_test(e, 0)} onMouseUp={click_handler_release_test} >
                         <div className="three_dots">
                           <div className="dot"></div>
                           <div className="dot"></div>
@@ -271,21 +489,26 @@ function Inventory() {
                       Proprietary Name
                     </div>
                   </th>
-                  <th>NDC Package Code</th>
+
+                  <th>
+                    <div ref={parentRef} className="table_item_div" style={{width: column_widths[1]}}>
+                        <div className="table_slider" onMouseDown={(e) => click_handler_test(e, 1)} onMouseUp={click_handler_release_test} >
+                          <div className="three_dots">
+                            <div className="dot"></div>
+                            <div className="dot"></div>
+                            <div className="dot"></div>
+                          </div>
+                        </div>
+                        NDC Package Code
+                    </div>
+                  </th>
+
                   <th>QOH</th>
                   <th>Thresh</th>
-                  {/* <th>Route</th> */}
                   <th>Purchase Price</th>
-                  {/* <th>Product NDC</th> */}
                   <th>Suggested Price</th>
                   <th>Last Transaction</th>
-                  {/* <th>Product Type Name</th> */}
-                  {/* <th>Start Marketing Date</th>
-                  <th>End Marketing Date</th>
-                  <th>Market Category</th>
-                  <th>Package Description</th> */}
-                  {/* <th>Pharm Class</th> */}
-                  <th> Description </th>
+                  <th> Description </th> */}
                 </tr>
               {/* </thead> */}
 
@@ -311,14 +534,21 @@ function Inventory() {
                   // let strengths = el.active_ingredients.map((inner_el:any) => {  })
                   return (
                     <tr key={index} className="body_td" onClick={event => select_row_index_onclick(event, index)}>
-                      <td> <div className="table_item_div" style={{width: test_width}} > {el.propietary_name} </div></td>
-                      <td> {el.ndc_package_code ?? 'N/A'} </td>
-                      <td> {el.qoh ?? 0} </td>
-                      <td> {el.thresh ?? 0} </td>
-                      <td> {el.purchase_price ?? 'N/A'} </td>
-                      <td> {el.suggested_selling_price ?? 'N/A'} </td>
-                      <td> {el.updatedAt ?? 'N/A'} </td>
-                      <td> {el.package_description} </td>
+                      { table_column_titles.map((item, idx:number) => {
+                          return (
+                            <td> <div className={`table_item_div ${item.additional_properties}`} style={{width: column_widths[idx]}}> <p>{el[item.parse_property] ?? 'N/A'}</p> </div></td>
+                          )
+                        }) 
+                      }
+
+                      {/* <td> <div className="table_item_div" style={{width: column_widths[0]}}> {el[example]} </div></td>
+                      <td> <div className="table_item_div" style={{width: column_widths[1]}}> {el.ndc_package_code ?? 'N/A'} </div></td>
+                      <td> <div className="table_item_div" style={{width: column_widths[2]}}> {el.qoh ?? 0} </div></td>
+                      <td> <div className="table_item_div" style={{width: column_widths[3]}}> {el.thresh ?? 0} </div></td>
+                      <td> <div className="table_item_div" style={{width: column_widths[4]}}> {el.purchase_price ?? 'N/A'} </div></td>
+                      <td> <div className="table_item_div" style={{width: column_widths[5]}}> {el.suggested_selling_price ?? 'N/A'} </div></td>
+                      <td> <div className="table_item_div" style={{width: column_widths[6]}}> {el.updatedAt ?? 'N/A'} </div></td>
+                      <td> <div className="table_item_div" style={{width: column_widths[7]}}> {el.package_description} </div></td> */}
                     </tr>
                   )
                   })

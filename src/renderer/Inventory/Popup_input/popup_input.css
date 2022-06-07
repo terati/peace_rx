@@ -1,5 +1,5 @@
 input[type=text].popup_input, select.popup_input  {
-  width: 300px;
+  width: 100%;
   /* padding: 3px 3px; */
   padding: 4px 5px;
   margin-top: 10px;
