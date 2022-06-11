@@ -18,14 +18,29 @@
 .sidebar img {
   width: 100%;
   padding: 15px 0px;
-  filter: invert(70%)
+  /* filter: invert(70%) */
 }
 
 .sidebar .selected {
-  border-left: solid 6px rgb(37, 36, 36);
+  box-sizing: border-box;
+  border-left: solid 5px rgb(219, 219, 219);
+  border-right: solid 5px rgba(219, 219, 219, 0);
   /* border-radius: 10px; */
 }
 
+
+.option_focus {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+}
+
 .sidebar img:hover {
-  background-color: aquamarine;
+  background-color: rgb(83, 130, 177);
+}
+
+.sidebar .option_focus:hover {
+  background-color: rgb(83, 130, 177);
 }

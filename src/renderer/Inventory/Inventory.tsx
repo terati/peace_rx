@@ -3,6 +3,7 @@ import './../App.css';
 import './InputStyles.css';
 import './Inventory.css';
 import './SelectionStyles.css';
+import './Header_Input_Styles.css';
 import Sidebar from 'renderer/Sidebar/Sidebar';
 import throttle from 'lodash/throttle';
 import { Popup_input } from './Popup_input';
@@ -52,6 +53,9 @@ function Inventory() {
   const toast_ref = React.useRef('hellotrue');
   const [toast_status, set_toast_status] = React.useState<boolean>(false);
 
+  // search_dropdown
+  const [search_dropdown, set_search_dropdown] = React.useState('Auto');
+
   const ref = React.createRef();
 
   const [pagination_page_count, set_pagination_page_count] = React.useState(0);
@@ -70,7 +74,7 @@ function Inventory() {
         fetchData = async () => { // ndc number 
           try {
             //`https://api.fda.gov/drug/ndc.json?search=packaging.package_ndc:"${new_search_value}"&limit=20`
-            const result = await axios(`http://localhost:3000/api/inventory_db/?search=${new_search_value}&offset=${pagination_offset}&limit=${pagination_limit}`)
+            const result = await axios(`http://localhost:3000/api/inventory_db/ndc/?search=${new_search_value}&offset=${pagination_offset}&limit=${pagination_limit}`)
                                     .then((datum) => {
                                       console.log(datum)
                                       setData(datum);
@@ -87,7 +91,8 @@ function Inventory() {
       } else {
         fetchData = async () => { // either brand name or generic name
           try {
-            const result = await axios(`https://api.fda.gov/drug/ndc.json?search=brand_name:"${new_search_value}"&limit=20`)
+            //  https://api.fda.gov/drug/ndc.json?search=brand_name:"${new_search_value}"&limit=20
+            const result = await axios(`http://localhost:3000/api/inventory_db/string/?search=${new_search_value}&offset=${pagination_offset}&limit=${pagination_limit}`)
                                     .then((datum) => {
                                       console.log(datum)
                                       setData(datum);
@@ -417,7 +422,8 @@ function Inventory() {
                   onClick={() => {
                     set_toast_status(true);
                     set_search_div_open(false);
-                  }} > Save </button>
+                  }} > Save 
+                </button>
               </div>
             </div>
           </div> 
@@ -441,6 +447,17 @@ function Inventory() {
               <div> 
                 <Inventory_Search type="text" onChange={(e) => set_search_value(e.target.value)} />
               </div>
+              <div className="search_dropdown">
+                <button className="search_dropbtn" tabIndex={-1}> {search_dropdown} </button>
+                  <div className="search_dropdown_content">
+                    <a href="#" onClick={() => set_search_dropdown('Auto')} >Auto</a>
+                    <a href="#" onClick={() => set_search_dropdown('NDC')}>NDC</a>
+                    <a href="#" onClick={() => set_search_dropdown('GS1')}>GS1</a>
+                    <a href="#" onClick={() => set_search_dropdown('TXT')}>TXT</a>
+                  </div>
+              </div>
+
+              {/* </div> */}
 
               {/* <div className="custom-select-option">
                 <select>
