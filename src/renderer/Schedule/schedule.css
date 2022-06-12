@@ -1,0 +1,29 @@
+@import "./../theme.css";
+
+.div_schedule {
+  box-sizing: border-box;
+  flex-direction: column;
+  padding: 8px 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: rgb(43, 40, 40);
+  position: relative;
+  height: 100%;
+  min-height: 100vh;
+  max-height: 100vh;
+  /* overflow: hidden; */
+}
+
+.div_row {
+  display: flex;
+  background-color: rgb(83, 83, 83);
+  box-sizing: border-box;
+  max-height: 100vh;
+  height: 100vh;
+  margin-top: var(--topbar_height);
+  margin-left: var(--sidebar_width);
+  /* padding: 20px 50px; */
+  width: 100%;
+}

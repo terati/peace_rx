@@ -49,16 +49,20 @@ function Sidebar({ selected = 'home' }) {
           <Database_Icon height={size} width={size} fill="white" />
         </div>
 
-        <div className={`option_focus ${(selected == 'signout') ? 'selected' : ''}`}>
+        <div className={`option_focus ${(selected == 'settings') ? 'selected' : ''}`}
+          onClick={() => navigate('/settings')}
+        >
           <Settings_Icon height={size} width={size} fill="white" />
         </div>
 
-        <div className={`option_focus ${(selected == 'calender') ? 'selected' : ''}`}>
+        <div className={`option_focus ${(selected == 'schedule') ? 'selected' : ''}`}
+          onClick={() => navigate('/schedule')}
+        >
           <Calender_Icon height={size} width={size} fill="white" />
         </div>
 
-        <div className={`option_focus ${(selected == 'settings') ? 'selected' : ''}`}>
-          <Settings_Icon height={size} width={size} fill="white" />
+        <div className={`option_focus ${(selected == 'signout') ? 'selected' : ''}`}>
+          <Signout_Icon height={size} width={size} fill="white" />
         </div>
         
       </div> 

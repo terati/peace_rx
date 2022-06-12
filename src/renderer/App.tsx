@@ -14,6 +14,7 @@ import './App.css';
 import Inventory from './Inventory/Inventory';
 import { Main } from './Main';
 import Setting from './Setting/Setting';
+import { Schedule } from './Schedule';
 // onClick={() => ipcRenderer.send('close-window')}
 // import { ipcRenderer } from require('electron').myPing;
 
@@ -54,8 +55,10 @@ export default function App() {
 
       <Router> 
         <Routes>
-          <Route path="/" element={<Inventory />} />
+          <Route path="/" element={<Schedule />} />
           <Route path="/inventory" element={<Inventory />} />
+          <Route path="/settings" element={<Setting />} />
+          <Route path="/schedule" element={<Schedule />} />
         </Routes>
       </Router>
     </>

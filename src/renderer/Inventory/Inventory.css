@@ -29,7 +29,7 @@
   flex-direction: column;
   margin-top: var(--topbar_height);
   margin-left: var(--sidebar_width);
-  margin-bottom: 100px;
+  /* margin-bottom: 100px; */
   padding: 20px 50px;
 }
 
