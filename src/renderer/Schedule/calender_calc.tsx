@@ -73,8 +73,16 @@ const computeCalender = (year:number) => {
     month: "December",
   }]
 
-  const arrayRange = (start:number, end:number) => {
-    return Array(end - start + 1).fill(0).map((_, idx) => start + idx)
+  const arrayRange = (start:number, end:number, month:number) => {
+    return Array(end - start + 1).fill(0).map((_, idx) => {
+      return (
+        {
+          month: month,
+          background: true,
+          date: start + idx
+        }
+      )
+    })
   }
 
   let ret_dt = {}
@@ -83,16 +91,27 @@ const computeCalender = (year:number) => {
   for (let i = 0; i < len; i++) {
     const monthly_day_number = dayNumber(1, i+1, year);
     let cnt = monthly_day_number;
-
-    let range = arrayRange(prevDays - monthly_day_number+1, prevDays);
+    let ii = i - 1; 
+    if (ii < 0) {
+      ii = 11;
+    }
+    let range = arrayRange(prevDays - monthly_day_number+1, prevDays, ii);
     let month_number_of_days = numberOfDays(i, year);
     cnt += month_number_of_days;
     for (let j = 0; j < month_number_of_days; j++) {
-      range.push(j + 1);
+      range.push({
+        month: i,
+        background: false,
+        date: j + 1
+      });
     }
     let remaining = 42 - cnt;
     for (let j = 0; j < remaining; j++) {
-      range.push(j + 1);
+      range.push({
+        month: (i+1)%12,
+        background: true,
+        date: j + 1
+      });
     }
     ret_dt[arr[i]["month"]] = range;
   }

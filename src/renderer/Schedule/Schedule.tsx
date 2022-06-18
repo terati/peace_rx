@@ -5,6 +5,9 @@ import { computeCalender } from './calender_calc';
 import MenuBurger_Icon from '../Icons_Color_Control/Menu_burger';
 import Left_Icon from '../Icons_Color_Control/Left_Arrow';
 import Right_Icon from '../Icons_Color_Control/Right_Arrow';
+import Plus_Icon from '../Icons_Color_Control/Plus';
+
+import { Checkbox } from './Checkbox';
 
 let month_dt = {
   0: "January",
@@ -27,7 +30,8 @@ function Schedule() {
   const [mm, set_mm] = React.useState(today.getMonth());
   const [yyyy, set_yyyy] = React.useState(today.getFullYear()); 
   const [full_year_calender, set_full_year_calender] = React.useState(computeCalender(yyyy));
-  
+  console.log(full_year_calender);
+
   const [day, set_day] = React.useState(dd);
   const [month, set_month] = React.useState(mm);
   const [year, set_year] = React.useState(yyyy);
@@ -40,6 +44,104 @@ function Schedule() {
   const [animation_status, set_animation_status] = React.useState(true);
 
   const [collapse_sidebar, set_collapse_sidebar] = React.useState(false);
+
+  const events_test = {
+    '15_5_2022': {
+      981293: {
+        name: "Timothy",
+        role: "tech",
+        day: 6,
+        month: 0,
+        year: 2022,
+        time_specified: true,
+        time_start: '8am',
+        time_end: '12pm',
+        note: 'It is your birthday !'
+      },
+      23748927: {
+        name: "Ben",
+        role: "pharmacist",
+        day: 6,
+        month: 1,
+        year: 2022,
+        time_specified: true,
+        time_start: '12am',
+        time_end: '12pm',
+        note: 'Test123'
+      },
+    },
+    '6_1_2022': {
+      981293: {
+        name: "Timothy",
+        role: "tech",
+        day: 6,
+        month: 1,
+        year: 2022,
+        time_specified: true,
+        time_start: '8am',
+        time_end: '12pm',
+        note: 'It is your birthday !'
+      },
+      23748927: {
+        name: "Ben",
+        role: "pharmacist",
+        day: 6,
+        month: 1,
+        year: 2022,
+        time_specified: true,
+        time_start: '12am',
+        time_end: '12pm',
+        note: 'Test123'
+      }
+    }
+  }
+  const [events, set_event] = React.useState(events_test);
+
+  const individuals = [
+    {
+      first_name: "Timothy",
+      last_name: "Wong",
+      role: "tech",
+      color: "purple",
+      checked: true
+    },
+    {
+      first_name: "Benjamin",
+      last_name: "Ng",
+      role: "pharmacist",
+      color: "pink",
+      checked: true
+    },
+    {
+      first_name: "Anita",
+      last_name: "Leung",
+      role: "tech",
+      color: "orange",
+      checked: true
+    },
+    {
+      first_name: "Glenn",
+      last_name: "Balas",
+      role: "pharmacist",
+      color: "green",
+      checked: true
+    },
+    {
+      first_name: "Shasha",
+      last_name: "He",
+      role: "tech",
+      color: "yellow",
+      checked: true
+    }
+  ]
+
+  //accordion
+  const [calender_accordion_visibility, set_calender_accordion_visibility] = React.useState(true);
+  const [checkmark1, set_checkmark1] = React.useState(true);
+  const [checkmark2, set_checkmark2] = React.useState(true);
+
+  const [calender_accordion_visibility2, set_calender_accordion_visibility2] = React.useState(true);
+  const [individual_checkmarks, set_individual_checkmarks] = React.useState([...individuals]);
 
   React.useEffect(() => {
     set_full_year_calender(computeCalender(year));
@@ -119,16 +221,24 @@ function Schedule() {
               <h1>Calender</h1>
               <button className="today_button"> Today </button>
               <div className='left_arrow' onClick={left_month_click_handler}>
-                <Left_Icon fill="white" width={13} height={13}/> 
+                <Left_Icon fill="white" width={13} height={13}/>
               </div>
               <div className='right_arrow' onClick={right_month_click_handler}>
                 <Right_Icon fill="white" width={13} height={13}/> 
               </div>
               <h2 className="div_description" > { month_dt[month] } {year} </h2>
+              
           </div>
           <div className="schedule_content">
+            <div className={`add_div ${collapse_sidebar ? "add_icon_transition" : ""}`}>
+              <Plus_Icon width={20} height={20} fill={"white"} />
+              <div className={`add_description ${collapse_sidebar ? "add_description_transition" : ""}`} >
+                {!collapse_sidebar ? "Create" : ""}
+              </div> 
+            </div>
             <div className={`schedule_left_sidebar ${collapse_sidebar ? 'collapse_sidebar' : ''}`}>
               <div className="left_sidebar_inner_div">
+                
                 <div className="mini_calender_title">
                   <div>
                     { month_dt[mini_calender_month] } {mini_calender_year}
@@ -146,7 +256,7 @@ function Schedule() {
 
                   {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((value, idx) => {
                     return (
-                      <div className="mini_calender_day_titles">
+                      <div className={`mini_calender_day_titles`}>
                         {value}
                       </div>
                     )
@@ -155,14 +265,51 @@ function Schedule() {
 
                   {mini_full_year_calender[month_dt[mini_calender_month]].map((value, idx) => {
                     return (
-                      <div className="mini_schedule_day">
-                        {value}
+                      <div className={`mini_schedule_day ${value?.background ? 'lighter_date_color' : ''} `}>
+                        {value.date}
                       </div>
                     )
                   })}
 
                 </div>
+
+                <div className="calender_accordion" onClick={() => set_calender_accordion_visibility(!calender_accordion_visibility)}>
+                  Role Selection 
+                </div>
+                { calender_accordion_visibility && 
+                  <div className="calender_accordion_dropdown">
+                    <div className="checkbox_div_container">
+                      <Checkbox checked={checkmark1} onChange={() => set_checkmark1(!checkmark1)} color={"red"} description="Pharmacist" />
+                    </div>
+                    <div className="checkbox_div_container">
+                      <Checkbox checked={checkmark2} onChange={() => set_checkmark2(!checkmark2)} color={"blue"} description="Tech" />
+                    </div>
+                  </div>
+                }
+
+                <div className="calender_accordion" onClick={() => set_calender_accordion_visibility2(!calender_accordion_visibility2)}>
+                  Individual Selection
+                </div>
+                { calender_accordion_visibility2 && 
+                  <div className="calender_accordion_dropdown">
+                    { individual_checkmarks.map((obj, idx) => {
+                        return (
+                          <>
+                            <div className="checkbox_div_container">
+                              <Checkbox checked={obj?.checked} onChange={(event:Event) => {
+                                let tmp = [...individual_checkmarks];
+                                tmp[idx].checked = !tmp[idx].checked;
+                                set_individual_checkmarks(tmp);
+                              }} color={obj?.color} description={obj?.first_name} />
+                            </div>
+                          </>
+                        )
+                    }) }
+                  </div>
+                }
+
               </div>
+
             </div>
             <div className={`schedule_large_calender ${animation_status ? 'calender_animation' : ''}`}
               onAnimationEnd={animation_end}
@@ -178,9 +325,15 @@ function Schedule() {
               }
 
               {full_year_calender[month_dt[month]].map((value, idx) => {
+                console.log( `${value.date}_${value.month}_${year}` );
                 return (
-                  <div className="schedule_day">
-                    {value}
+                  <div className={`schedule_day ${value?.background ? 'lighter_date_color' : ''}`}>
+                    <div className="large_calender_date"> {value.date} </div>
+                    { events[`${value.date}_${value.month}_${year}`] && 
+                      <div className="test_bubbles">
+                        TW
+                      </div>
+                    }
                   </div>
                 )
               })}
