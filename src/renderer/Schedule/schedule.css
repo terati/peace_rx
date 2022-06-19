@@ -50,9 +50,11 @@
   margin-left: 100px;
   font-size: smaller;
   border-radius: 5px;
+  transition: .1s;
 }
 .today_button:hover {
   transform: none;
+  background-color: rgb(11, 10, 29);
 }
 
 .schedule_topheader {
@@ -164,6 +166,76 @@
   padding-top: 4px;
   border-top: 1px solid var(--border-color);
   border-right: 1px solid var(--border-color);
+  overflow: hidden;
+}
+
+.large_calender_date {
+  padding: 3px;
+  height: 20px;
+  width: 20px;
+}
+
+.today_tooltip {
+  /* position: relative; */
+  display: block;
+  position: absolute;
+  width: 20px;
+  height: 20px; 
+  background-color: rgba(28, 29, 29, 0);
+  border-radius: 50%;
+  /* left: -5px; */
+  /* padding: 5px; */
+}
+
+.today_tooltip .today_tooltip_text {
+  visibility: hidden;
+  /* width: auto; */
+  background-color: rgb(50, 46, 46);
+  color: white;
+  /* text-align: center; */
+  /* padding: 5px 8px; */
+  position: absolute;
+  
+  /* z-index: 99; */
+  bottom: 130%;
+  /* left: -50%; */
+}
+
+.today_tooltip_text {
+  position: absolute;
+  display: block;
+  bottom: 130%;
+  left: -50%;
+  padding: 5px 8px;
+  text-align: center;
+  border-radius: 3px;
+}
+
+.today_tooltip .todaY_tooltip_text::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: black transparent transparent transparent;
+}
+
+.today_tooltip:hover .today_tooltip_text {
+  visibility: visible;
+}
+
+.large_calender_bubbles_wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
+.large_calender_today {
+  display: block;
+  background-color: rgb(8, 107, 188);
+  border-radius: 50%;
+  cursor: pointer;
 }
 
 .lighter_date_color {
@@ -202,6 +274,11 @@
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+}
+
+.mini_calender_today {
+  background-color: rgb(4, 58, 158);
+  border-radius: 50%;
 }
 
 .mini_arrows {
@@ -260,7 +337,7 @@
   margin-bottom: 10px;
 }
 
-.add_div {
+.create_div {
   position: absolute;
   left: 100px;
   top: 110px;
@@ -277,17 +354,17 @@
   transition: all .3s ease;
 }
 
-.add_div:hover {
+.create_div:hover {
   cursor: pointer;
   background-color: rgb(32, 32, 32);;
 }
 
-.add_description {
+.create_description {
   display: block;
   margin: 10px;
 }
 
-.add_description_transition {
+.create_description_transition {
   margin: 0px;
 }
 
@@ -299,15 +376,24 @@
 
 
 
-.test_bubbles {
+.name_bubbles {
   display: flex;
   justify-content: center;
   align-items: center;
-  background-color: rgb(65, 65, 65);
-  height: 30px;
-  width: 30px;
+  background-color: rgb(0, 0, 0);
+  border: 2px solid rgb(255, 255, 255);
+  color: white;
+  font-size: 8px;
+  height: 20px;
+  width: 20px;
   border-radius: 50%;
   overflow: hidden;
+  margin: 1px;
+  user-select: none;
+}
+
+.name_bubbles:hover {
+  cursor: pointer;
 }
 
 

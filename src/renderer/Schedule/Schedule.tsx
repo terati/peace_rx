@@ -30,7 +30,7 @@ function Schedule() {
   const [mm, set_mm] = React.useState(today.getMonth());
   const [yyyy, set_yyyy] = React.useState(today.getFullYear()); 
   const [full_year_calender, set_full_year_calender] = React.useState(computeCalender(yyyy));
-  console.log(full_year_calender);
+  // console.log(full_year_calender);
 
   const [day, set_day] = React.useState(dd);
   const [month, set_month] = React.useState(mm);
@@ -48,7 +48,11 @@ function Schedule() {
   const events_test = {
     '15_5_2022': {
       981293: {
-        name: "Timothy",
+        id: 981293,
+        user_id: 101,
+        first_name: "Timothy",
+        last_name: "Wong",
+        initials: "TW",
         role: "tech",
         day: 6,
         month: 0,
@@ -59,7 +63,11 @@ function Schedule() {
         note: 'It is your birthday !'
       },
       23748927: {
-        name: "Ben",
+        id: 23748927,
+        user_id: 102,
+        first_name: "Ben",
+        last_name: "Ng",
+        initials: "BN",
         role: "pharmacist",
         day: 6,
         month: 1,
@@ -70,9 +78,13 @@ function Schedule() {
         note: 'Test123'
       },
     },
-    '6_1_2022': {
+    '6_0_2022': {
       981293: {
-        name: "Timothy",
+        id: 981293,
+        user_id: 101,
+        first_name: "Timothy",
+        initials: "TW",
+        last_name: "Wong",
         role: "tech",
         day: 6,
         month: 1,
@@ -83,7 +95,11 @@ function Schedule() {
         note: 'It is your birthday !'
       },
       23748927: {
-        name: "Ben",
+        id: 23748927,
+        user_id: 102,
+        first_name: "Ben",
+        last_name: "Ng",
+        initials: "BN",
         role: "pharmacist",
         day: 6,
         month: 1,
@@ -95,7 +111,7 @@ function Schedule() {
       }
     }
   }
-  const [events, set_event] = React.useState(events_test);
+  const [events, set_events] = React.useState(events_test);
 
   const individuals = [
     {
@@ -135,6 +151,49 @@ function Schedule() {
     }
   ]
 
+  const individuals_dt = {
+    101: {
+      user_id: 101,
+      first_name: "Timothy",
+      last_name: "Wong",
+      role: "tech",
+      color: "blue",
+      checked: true
+    },
+    102: {
+      user_id: 102,
+      first_name: "Benjamin",
+      last_name: "Ng",
+      role: "pharmacist",
+      color: "purple",
+      checked: true
+    },
+    103: {
+      user_id: 103,
+      first_name: "Anita",
+      last_name: "Leung",
+      role: "tech",
+      color: "orange",
+      checked: true
+    },
+    104: {
+      user_id: 104,
+      first_name: "Glenn",
+      last_name: "Balas",
+      role: "pharmacist",
+      color: "green",
+      checked: true
+    },
+    105: {
+      user_id: 105,
+      first_name: "Shasha",
+      last_name: "He",
+      role: "tech",
+      color: "yellow",
+      checked: true
+    }
+  }
+
   //accordion
   const [calender_accordion_visibility, set_calender_accordion_visibility] = React.useState(true);
   const [checkmark1, set_checkmark1] = React.useState(true);
@@ -142,6 +201,67 @@ function Schedule() {
 
   const [calender_accordion_visibility2, set_calender_accordion_visibility2] = React.useState(true);
   const [individual_checkmarks, set_individual_checkmarks] = React.useState([...individuals]);
+  const [individual_dt, set_individual_dt] = React.useState(individuals_dt);
+
+  //holds for click and drag properties for large calender 
+  const [click_hold, set_click_hold] = React.useState(false);
+  const [click_start_object, set_click_start_object] = React.useState({});
+  const [click_start_date, set_click_start_date] = React.useState(null);
+
+  const [previous_hover_date, set_previous_hover_date] = React.useState(null);
+
+  const onMouseDown_bubble_handler = (e, date, calender_event_object, idx) => {
+    set_click_hold(true);
+    // console.log(date, e, calender_event_object, idx);
+    set_click_start_object(calender_event_object);
+    set_click_start_date(date);
+    
+    set_previous_hover_date(date);
+  }
+
+  const onMouseOver_bubble_handler = (e, date:string) => {
+    if (!click_hold) return; 
+    // console.log(click_hold);
+    // console.log(click_hold, click_start_object);
+    if (previous_hover_date && set_click_start_object) {
+      let id = click_start_object?.id;
+      // console.log(id);
+        let new_events = { ...events };
+      if (events[previous_hover_date][id]) {
+        delete events[previous_hover_date][id];
+        // console.log({...click_start_object});
+        if (new_events[date]) {
+          new_events[date][id] = {...click_start_object};
+        } else {
+          new_events[date] = {};
+          new_events[date][id] = {...click_start_object};
+        }
+      }
+      set_events(new_events);
+      
+    }
+    set_previous_hover_date(date);
+    
+    // if (click_hold) {
+
+    // }
+    // console.log(date);
+  }
+
+  const onMouseUp_bubble_handler = (e) => {
+    set_click_hold(false);
+  }
+
+  
+  //upmouse click event 
+  React.useEffect(() => {
+    const mouseup_callback = () => set_click_hold(false);
+
+    window.addEventListener("onmouseup", mouseup_callback);
+    return () => {
+      window.removeEventListener("onmouseup", mouseup_callback);
+    };
+  }, [])
 
   React.useEffect(() => {
     set_full_year_calender(computeCalender(year));
@@ -209,6 +329,13 @@ function Schedule() {
     set_animation_status(true);
   }
 
+  const today_button_click_handler = () => {
+    set_year(yyyy);
+    set_mini_calender_year(yyyy);
+    set_month(mm);
+    set_mini_calender_month(mm);
+  }
+
   return (
     <>
       <Sidebar selected={'schedule'}/>
@@ -219,7 +346,11 @@ function Schedule() {
                 <MenuBurger_Icon fill="white" width={15} height={15}/>
               </div>
               <h1>Calender</h1>
-              <button className="today_button"> Today </button>
+              <button className="today_button" 
+                onClick={today_button_click_handler} 
+              > 
+                Today 
+              </button>
               <div className='left_arrow' onClick={left_month_click_handler}>
                 <Left_Icon fill="white" width={13} height={13}/>
               </div>
@@ -230,10 +361,13 @@ function Schedule() {
               
           </div>
           <div className="schedule_content">
-            <div className={`add_div ${collapse_sidebar ? "add_icon_transition" : ""}`}>
+            <div className={`create_div ${collapse_sidebar ? "add_icon_transition" : ""}`}>
               <Plus_Icon width={20} height={20} fill={"white"} />
-              <div className={`add_description ${collapse_sidebar ? "add_description_transition" : ""}`} >
+              <div className={`create_description ${collapse_sidebar ? "create_description_transition" : ""}`} >
                 {!collapse_sidebar ? "Create" : ""}
+                <div className='create_dropdown'> 
+                
+                </div>
               </div> 
             </div>
             <div className={`schedule_left_sidebar ${collapse_sidebar ? 'collapse_sidebar' : ''}`}>
@@ -265,7 +399,10 @@ function Schedule() {
 
                   {mini_full_year_calender[month_dt[mini_calender_month]].map((value, idx) => {
                     return (
-                      <div className={`mini_schedule_day ${value?.background ? 'lighter_date_color' : ''} `}>
+                      <div className={`mini_schedule_day 
+                                ${value?.background ? 'lighter_date_color' : ''} 
+                                ${((yyyy == year) && (value.date == dd) && (value.month == mm)) ? "mini_calender_today" : ""}
+                            `}>
                         {value.date}
                       </div>
                     )
@@ -325,15 +462,35 @@ function Schedule() {
               }
 
               {full_year_calender[month_dt[month]].map((value, idx) => {
-                console.log( `${value.date}_${value.month}_${year}` );
+                // console.log( `${value.date}_${value.month}_${year}` );
                 return (
-                  <div className={`schedule_day ${value?.background ? 'lighter_date_color' : ''}`}>
-                    <div className="large_calender_date"> {value.date} </div>
-                    { events[`${value.date}_${value.month}_${year}`] && 
-                      <div className="test_bubbles">
-                        TW
+                  <div className={`schedule_day ${value?.background ? 'lighter_date_color' : ''}`}
+                    onMouseOver={(e) => onMouseOver_bubble_handler(e, `${value.date}_${value.month}_${year}`)}
+                    onMouseUp={(e) => onMouseUp_bubble_handler(e)}
+                  > 
+                    {/* date number */}
+                    <div className={`large_calender_date ${((yyyy == year) && (value.date == dd) && (value.month == mm)) ? "large_calender_today" : ""}`}
+                    > 
+                    { ((yyyy == year) && (value.date == dd) && (value.month == mm)) &&
+                      <div className="today_tooltip">
+                        <span className="today_tooltip_text">Today</span>
                       </div>
-                    }
+                    } 
+                      {value.date} 
+                    </div>
+                    <div className="large_calender_bubbles_wrapper">
+                      { Object.values(events[`${value.date}_${value.month}_${year}`] ?? {}).map((calender_event, calender_event_idx) => {
+                          return (
+                            <div className="name_bubbles" 
+                              onMouseDown={(e) => onMouseDown_bubble_handler(e, `${value.date}_${value.month}_${year}`, calender_event, calender_event_idx)}
+                              style={{ backgroundColor: individual_dt[calender_event?.user_id]?.color }}
+                            >
+                              {calender_event?.initials}
+                            </div>
+                          )
+                        })
+                      }
+                    </div>
                   </div>
                 )
               })}
