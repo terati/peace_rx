@@ -1,5 +1,6 @@
 import * as React from 'react';
 import './schedule.css';
+import './draggable_div.css';
 import Sidebar from 'renderer/Sidebar/Sidebar';
 import { computeCalender } from './calender_calc';
 import MenuBurger_Icon from '../Icons_Color_Control/Menu_burger';
@@ -241,11 +242,6 @@ function Schedule() {
       
     }
     set_previous_hover_date(date);
-    
-    // if (click_hold) {
-
-    // }
-    // console.log(date);
   }
 
   const onMouseUp_bubble_handler = (e) => {
@@ -262,6 +258,8 @@ function Schedule() {
       window.removeEventListener("onmouseup", mouseup_callback);
     };
   }, [])
+
+  const [create_dropdown_status, set_create_dropdown_status] = React.useState(false);
 
   React.useEffect(() => {
     set_full_year_calender(computeCalender(year));
@@ -336,9 +334,70 @@ function Schedule() {
     set_mini_calender_month(mm);
   }
 
+  
+  const is_dragging = React.useRef(false);
+  const drag_parent_ref = React.useRef();
+  const drag_head_ref = React.useRef();
+  const [x_delta, set_x_delta] = React.useState();
+  const [y_delta, set_y_delta] = React.useState();
+  const [x_parent, set_x_parent] = React.useState();
+  const [y_parent, set_y_parent] = React.useState();
+  const [drag_x_pos, set_drag_x_pos] = React.useState('');
+  const [drag_y_pos, set_drag_y_pos] = React.useState('');
+
+  const onMouseDown_drag = React.useCallback(e => {
+    if (drag_head_ref.current && drag_head_ref.current.contains(e.target)) {
+      is_dragging.current = true;
+      set_x_parent(drag_parent_ref.current.offsetLeft);
+      set_y_parent(drag_parent_ref.current.offsetTop);
+      set_x_delta(e.clientX - drag_parent_ref.current.offsetLeft);
+      set_y_delta(e.clientY - drag_parent_ref.current.offsetTop);
+        e.clientX - drag_parent_ref.current.offsetLeft,
+        e.clientY - drag_parent_ref.current.offsetTop
+        )
+    }
+  }, []);
+
+  const onMouseUp_drag = React.useCallback(() => {
+    if (is_dragging.current) {
+      is_dragging.current = false;
+    }
+  }, []);
+
+  const onMouseMove_drag = React.useCallback(e => {
+    if (is_dragging.current) {
+      set_drag_y_pos(e.clientY - y_delta);
+      set_drag_x_pos(e.clientX - x_delta);
+    }
+  }, [x_delta, y_delta]);
+
+  //draggable mousedown event
+  React.useEffect(() => {
+      
+    document.addEventListener("mouseup", onMouseUp_drag);
+    document.addEventListener("mousedown", onMouseDown_drag);
+    document.addEventListener("mousemove", onMouseMove_drag);
+    return () => {
+      document.removeEventListener("mouseup", onMouseUp_drag);
+      document.removeEventListener("mousedown", onMouseDown_drag);
+      document.removeEventListener("mousemove", onMouseMove_drag);
+    }
+  }, [onMouseUp_drag, onMouseDown_drag, onMouseMove_drag]);
+
   return (
     <>
       <Sidebar selected={'schedule'}/>
+
+      <div className="calender_draggable_div" ref={drag_parent_ref} 
+        style={{
+          top: `${drag_y_pos}px`,
+          left: `${drag_x_pos}px`
+        }}
+      > 
+        <div className="calender_draggable_frame" ref={drag_head_ref}></div>
+        Hello World
+      </div>
+
       <div className="div_schedule" >
         <div className="div_main">
           <div className="schedule_topheader">
@@ -361,12 +420,20 @@ function Schedule() {
               
           </div>
           <div className="schedule_content">
-            <div className={`create_div ${collapse_sidebar ? "add_icon_transition" : ""}`}>
+            <div className={`create_div ${collapse_sidebar ? "add_icon_transition" : ""}`}
+              tabIndex={0}
+              onClick={() => {
+                set_create_dropdown_status(!create_dropdown_status)
+              } }
+              onBlur={() => set_create_dropdown_status(false)}
+            >
               <Plus_Icon width={20} height={20} fill={"white"} />
               <div className={`create_description ${collapse_sidebar ? "create_description_transition" : ""}`} >
                 {!collapse_sidebar ? "Create" : ""}
-                <div className='create_dropdown'> 
-                
+                <div className={`create_dropdown ${create_dropdown_status ? '' : 'create_dropdown_collapse'} `}
+                > 
+                  <div className='create_dropdown_options'> Event </div>
+                  <div className='create_dropdown_options'> New User </div>
                 </div>
               </div> 
             </div>
