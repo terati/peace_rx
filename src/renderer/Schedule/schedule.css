@@ -4,6 +4,10 @@
   --border-color: rgb(96, 96, 96);
 }
 
+html {
+  overflow: hidden;
+}
+
 .div_schedule {
   box-sizing: border-box;
   flex-direction: column;
@@ -61,10 +65,12 @@
   display: flex;
   align-items: center;
   /* padding: 0px 20px; */
+  /* margin-top: 10px; */
   height: 60px;
   width: 100%;
   background-color: rgb(39, 39, 39);
   border-bottom: solid 1px var(--border-color);
+  box-sizing: border-box;
 }
 
 .schedule_topheader h1{
@@ -95,13 +101,15 @@
 .schedule_content {
   display: flex;
   flex-direction: row;
-  height: 100%;
+  height: calc(100vh - var(--topbar_height) - 61px);
   background-color: rgb(39, 39, 39);
+  box-sizing: border-box;
 }
 
 .schedule_left_sidebar {
   box-sizing: border-box;
   height: calc(100vh - var(--topbar_height) - 61px);
+  min-width: 270px;
   width: 270px;
   
   background-color: rgb(39, 39, 39);
@@ -121,6 +129,7 @@
   /* opacity: 0; */
   /* visibility: collapse; */
   /* flex-basis: 0px; */
+  min-width: 0;
   width: 5px;
   transform: translate(-200px);
   /* flex-grow: 0.0001; */

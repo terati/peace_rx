@@ -1,0 +1,280 @@
+@import "./../theme.css";
+
+html {
+  --week_grid_color: rgb(90, 90, 90);
+  --week_ticker_width: 80px;
+}
+
+.schedule_week_calender {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  /* background-color: rgba(182, 35, 35, 0); */
+  display: block;
+  overflow: auto;
+}
+
+.swc table, tr, td {
+  border: none;
+}
+
+.swc table {
+  box-sizing: border-box;
+  text-align: left;
+  position: relative;
+  border-collapse: collapse;
+  /* margin-left: 100px; */
+}
+
+.swc th {
+  background: rgb(39, 39, 39);
+  position: sticky;
+  height: 20px;
+  min-height: 20px;
+  top: 0; /* Don't forget this, required for the stickiness */
+  /* box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4); */
+  /* padding: 100px 10px; */
+  z-index: 99999;
+}
+
+
+table thead th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 9999;
+}
+
+.swc table tbody tr td:first-child {
+  position: sticky;
+  left: 0;
+  /* background: rgb(42, 6, 6); */
+  z-index: 9999;
+}
+
+.swc td {
+  /* padding: 20px; */
+}
+
+.week_title_div {
+  box-sizing: border-box;
+  height: 100px;
+  width: 200px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: end;
+  outline: none;
+  position: relative;
+  z-index: 999999999;
+  /* background-color: rgb(39, 39, 39); */
+  /* border-left: solid 1px white; */
+}
+
+.week_title_div::after {
+  content: '';
+  width: 100%;
+  height: 20px;
+  display: grid;
+  box-sizing: border-box;
+  border-collapse: collapse;
+  outline: none;
+  bottom: 0;
+  position: absolute;
+}
+
+.week_left_top_corner::after {
+  border-left: none;
+}
+
+.week_left_top_corner {
+  width: var(--week_ticker_width);
+  z-index: 99999;
+}
+
+.week_title_div h2 {
+  margin: 0;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.week_title_div p {
+  margin: 0;
+  padding: 0;
+  font-size: small;
+}
+
+/* 
+.schedule_week_calender_inner_div {
+  position: relative;
+  height: calc(100% - 100px);
+
+}
+
+.schedule_week_calender_sub_header {
+  height: 100px;
+  width: 100%;
+  background-color: aqua;
+  display: grid;
+  min-width: 700px;
+  grid-template-columns: 30px repeat(7, 1fr);
+  box-sizing: border-box;
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+
+.schedule_week_calender_sub_header_div {
+  display: block;
+  flex-grow: 1;
+  border-left: 1px solid white;
+  border-bottom: 1px solid white;
+  box-sizing: border-box;
+}
+
+.schedule_week_calender_sub_content {
+  position: relative;
+  display: flex;
+  height: 100%;
+  width: 100%;
+  flex-grow: 1;
+  flex-direction: row;
+}
+
+.schedule_week_calender_sub_ticks {
+  display: block;
+  width: 30px;
+  background-color: rgb(0, 164, 109);
+  height: 100%;
+  max-height: 100%;
+}
+
+.schedule_week_calender_sub_divs {
+
+} */
+
+
+td {
+  border-left: 1px solid var(--week_grid_color);
+  border-right: 1px solid var(--week_grid_color);
+  padding: 0;
+}
+
+td:hover, tr:hover {
+  background-color: rgba(255, 0, 0, 0)
+}
+
+td:first-child {
+  border: none;
+  width: var(--week_ticker_width);
+}
+
+.week_tickers {
+  /* height: 2400px; */
+  box-sizing: border-box;
+  width: var(--week_ticker_width);
+  background-color: rgba(61, 54, 45, 0);
+}
+
+.week_tickers_div {
+  position: relative;
+  height: 50px;
+  width: var(--week_ticker_width);
+  box-sizing: border-box;
+  /* background-color: blueviolet; */
+  /* border-top: 1px solid rgb(255, 255, 255); */
+}
+
+.week_tickers_div_offset {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  height: 20px;
+  right: 30px;
+  bottom: -10px;
+  font-size: 10px;
+  z-index: 999;
+}
+
+.week_tickers_div:before {
+  content: '';
+  position: absolute;
+  top: 0px;
+  right: -1px;
+  width: 20px;
+  height: 5px;
+  border-top: 1px solid var(--week_grid_color);
+}
+
+/* .week_tickers_div:after {
+} */
+
+.week_large_div {
+  height: 1220px;
+  position: relative; 
+  z-index: 989; 
+  
+} 
+
+.week_large_div_surface {
+  position: absolute;
+  background-color: rgba(127, 255, 212, 0);
+  top: 20px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  height: 100%;
+}
+
+.week_example_timeline {
+  width: 10px;
+  background-color: rgb(144, 54, 54);
+  /* height: 100%; */
+  position: absolute;
+  top: 10px;
+  bottom: 50px;
+  margin: 0 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.week_small_div {
+  height: 50px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  border-top: 1px solid var(--week_grid_color);
+  outline: none;
+  /* border-left: 10px solid white; */
+  /* border-top: 1px solid white; */
+}
+
+.week_small_trim {
+  height: 20px;
+  border-top: none;
+  position: sticky;
+  background-color: rgb(39, 39, 39);
+  top: 100px;
+  z-index: 99999;
+}
+
+.week_small_trim_ticker {
+  height: 20px;
+  border-top: none;
+  position: sticky;
+  background-color: rgba(39, 39, 39, 0);
+  width: var(--week_ticker_width);
+  /* top: 100px; */
+}
+
+
+
+
+
+
+
+
