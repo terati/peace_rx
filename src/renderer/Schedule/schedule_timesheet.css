@@ -1,0 +1,114 @@
+html {
+  --timesheet_border_color: rgb(98, 98, 98);
+}
+
+.schedule_timesheet_calender {
+  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: auto;
+  /* background-color: aqua; */
+}
+
+.timesheet_row {
+  display: flex;
+  flex-direction: row;
+  height: 100px;
+  box-sizing: border-box;
+  /* justify-content: center; */
+}
+
+.timesheet_row_date {
+  /* background-color: aqua; */
+  min-width: 200px;
+  height: 100%;
+  border-top: 1px solid var(--timesheet_border_color);
+  border-left: 1px solid var(--timesheet_border_color);
+  border-bottom: 1px solid var(--timesheet_border_color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.timesheet_row_start_end {
+  display: flex;
+  flex-direction: row;
+  /* background-color: red; */
+  min-width: 200px;
+  height: 100%;
+  border-top: 1px solid var(--timesheet_border_color);
+  border-left: 1px solid var(--timesheet_border_color);
+  border-bottom: 1px solid var(--timesheet_border_color);
+}
+
+.timesheet_row_start_end_denotation {
+  display: flex;
+  flex-direction: column;
+}
+
+.timesheet_start {
+  display: flex;
+  flex-grow: 1;
+  border-right: 1px solid var(--timesheet_border_color);
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(25, 54, 45);
+  padding: 5px;
+}
+
+.timesheet_end {
+  display: flex;
+  flex-grow: 1;
+  border-top: 1px solid var(--timesheet_border_color);
+  border-right: 1px solid var(--timesheet_border_color);
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(49, 39, 26);
+  padding: 5px;
+}
+
+.timesheet_row_start_end_times {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.timesheet_start_data {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+}
+
+.timesheet_end_data {
+  display: flex;
+  flex-grow: 1;
+  align-items: center;
+  justify-content: center;
+  border-top: 1px solid var(--timesheet_border_color);
+}
+
+.timesheet_row_start_end_times {
+
+}
+
+.timesheet_row_total_time {
+  /* background-color: bisque; */
+  min-width: 100px;
+  height: 100%;
+  border-top: 1px solid var(--timesheet_border_color);
+  border-left: 1px solid var(--timesheet_border_color);
+  border-right: 1px solid var(--timesheet_border_color);
+  border-bottom: 1px solid var(--timesheet_border_color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+
+
+
+
+

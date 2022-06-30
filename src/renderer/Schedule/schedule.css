@@ -73,6 +73,17 @@ html {
   box-sizing: border-box;
 }
 
+.schedule_dropdown {
+  position: absolute;
+  width: 150px;
+  height: 50px;
+  right: 20px;
+  background-color: rgba(165, 42, 42, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .schedule_topheader h1{
   font-size: 1.5rem;
 }
@@ -273,7 +284,8 @@ html {
   height: 200px;
   display: grid;
   padding: 10px 10px;
-  margin: 0px 10px;
+  /* margin: 0px 10px; */
+  margin: auto;
   grid-template-columns: repeat(7, 1fr);
 }
 .mini_calender_title {
@@ -286,6 +298,21 @@ html {
 }
 
 .mini_calender_today {
+  /* height: 20px;
+  width: 20px; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* background-color: rgb(4, 58, 158);
+  border-radius: 50%; */
+}
+
+.mini_schedule_focus_date {
+  height: 20px;
+  width: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: rgb(4, 58, 158);
   border-radius: 50%;
 }
@@ -354,7 +381,7 @@ html {
   border: solid rgba(255, 255, 255, 0.126) 2px;
   height: 50px;
   width: 120px;
-  z-index: 999;
+  z-index: 999999;
   border-radius: 30px;
   display: flex;
   align-items: center;
@@ -386,7 +413,7 @@ html {
   height: 60px; */
   padding: 5px 5px;
   border-radius: 10px;
-  background-color: rgb(86, 86, 86);
+  background-color: rgb(45, 45, 45);
   display: flex;
   flex-direction: column;
 
@@ -398,7 +425,7 @@ html {
 }
 
 .create_dropdown_options:hover {
-  background-color: rgb(71, 71, 71);
+  background-color: rgb(33, 33, 33);
 }
 
 .create_dropdown_collapse {

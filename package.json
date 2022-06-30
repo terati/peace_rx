@@ -232,6 +232,7 @@
     "lodash": "^4.17.21",
     "react": "^18.0.0",
     "react-chartjs-2": "^4.1.0",
+    "react-datepicker": "^4.8.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.3.0",
     "react-webcam": "^7.0.1"

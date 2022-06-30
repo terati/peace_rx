@@ -15,6 +15,7 @@ html {
   overflow: auto;
 }
 
+
 .swc table, tr, td {
   border: none;
 }
@@ -28,7 +29,7 @@ html {
 }
 
 .swc th {
-  background: rgb(39, 39, 39);
+  background: rgba(39, 39, 39, .8);
   position: sticky;
   height: 20px;
   min-height: 20px;
@@ -67,6 +68,7 @@ table thead th:first-child {
   outline: none;
   position: relative;
   z-index: 999999999;
+  backdrop-filter: blur(4px);
   /* background-color: rgb(39, 39, 39); */
   /* border-left: solid 1px white; */
 }
@@ -89,13 +91,20 @@ table thead th:first-child {
 
 .week_left_top_corner {
   width: var(--week_ticker_width);
-  z-index: 99999;
+  /* z-index: 99999; */
 }
 
 .week_title_div h2 {
   margin: 0;
   padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 30px;
+  width: 30px;
   margin-top: 10px;
+  border-radius: 50%;
+  background-color: rgba(39, 39, 39, 1);
 }
 
 .week_title_div p {
@@ -189,11 +198,15 @@ td:first-child {
   position: absolute;
   display: flex;
   align-items: center;
-  height: 20px;
+  justify-content: end;
+  height: 30px;
   right: 30px;
-  bottom: -10px;
+  left: 0;
+  bottom: -15px;
   font-size: 10px;
   z-index: 999;
+  background-color: rgba(39, 39, 39, .8);
+  border-radius: 0 5px 5px 0;
 }
 
 .week_tickers_div:before {
@@ -218,24 +231,30 @@ td:first-child {
 
 .week_large_div_surface {
   position: absolute;
-  background-color: rgba(127, 255, 212, 0);
+  /* background-color: rgba(127, 255, 212, 0.956); */
   top: 20px;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 99;
   height: 100%;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 .week_example_timeline {
-  width: 10px;
-  background-color: rgb(144, 54, 54);
+  width: 15px;
+  box-sizing: border-box;
+  background-color: rgba(207, 255, 16, 0.499);
   /* height: 100%; */
-  position: absolute;
+  position: relative;
   top: 10px;
-  bottom: 50px;
-  margin: 0 5px;
-  border-radius: 10px;
+  /* bottom: 50px; */
+  margin: 0 2px;
+  border-radius: 5px;
+  height: 250px;
   cursor: pointer;
 }
 
@@ -257,9 +276,11 @@ td:first-child {
   height: 20px;
   border-top: none;
   position: sticky;
-  background-color: rgb(39, 39, 39);
+  background-color: rgba(39, 39, 39, .8);
   top: 100px;
   z-index: 99999;
+  backdrop-filter: blur(4px);
+  border-radius: 0 0 10px 10px;
 }
 
 .week_small_trim_ticker {

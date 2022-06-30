@@ -2,6 +2,7 @@ import * as React from 'react';
 import './schedule.css';
 import './draggable_div.css';
 import './schedule_week.css';
+import './schedule_timesheet.css';
 import Sidebar from 'renderer/Sidebar/Sidebar';
 import { computeCalender } from './calender_calc';
 import MenuBurger_Icon from '../Icons_Color_Control/Menu_burger';
@@ -14,6 +15,10 @@ import Users_Icon from 'renderer/Icons_Color_Control/Users';
 import Clock_Icon from '../Icons_Color_Control/Clock';
 
 import { Checkbox } from './Checkbox';
+import { Dropdown } from './Dropdown';
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+
 import useWindowDimensions from './useWindowDimensions';
 
 let month_dt = {
@@ -344,7 +349,7 @@ function Schedule() {
 
   const [draggable_div_open, set_draggable_div_open] = React.useState(true);
   const is_dragging = React.useRef(false);
-  const drag_parent_ref = React.useRef();
+  const drag_parent_ref = React.useRef<any | null>();
   const drag_head_ref = React.useRef();
   const [x_delta, set_x_delta] = React.useState();
   const [y_delta, set_y_delta] = React.useState();
@@ -356,10 +361,13 @@ function Schedule() {
   const onMouseDown_drag = React.useCallback(e => {
     if (drag_head_ref.current && drag_head_ref.current.contains(e.target)) {
       is_dragging.current = true;
-      set_x_parent(drag_parent_ref.current.offsetLeft);
-      set_y_parent(drag_parent_ref.current.offsetTop);
-      set_x_delta(e.clientX - drag_parent_ref.current.offsetLeft);
-      set_y_delta(e.clientY - drag_parent_ref.current.offsetTop);
+      if (drag_parent_ref) {
+        set_x_parent(drag_parent_ref.current.offsetLeft);
+        set_y_parent(drag_parent_ref.current.offsetTop);
+        set_x_delta(e.clientX - drag_parent_ref.current.offsetLeft);
+        set_y_delta(e.clientY - drag_parent_ref.current.offsetTop);
+      }
+      
     }
   }, []);
 
@@ -396,6 +404,35 @@ function Schedule() {
 
   const [schedule_large_calender_open_status, set_schedule_large_calender_open_status] = React.useState(false);
   const [schedule_week_calender_open_status, set_schedule_week_calender_open_status] = React.useState(true);
+  const [schedule_timesheet_calender_open_status, set_schedule_timesheet_calender_open_status] = React.useState(false);
+
+  // the state of the calender: month, weekly, or timesheet
+  const [chosen_calender_state, set_chosen_calender_state] = React.useState();
+  React.useEffect(() => {
+    if (chosen_calender_state == 'Month') {
+      set_schedule_large_calender_open_status(true);
+      set_schedule_week_calender_open_status(false);
+      set_schedule_timesheet_calender_open_status(false);
+    } else if (chosen_calender_state == 'Week') {
+      set_schedule_large_calender_open_status(false);
+      set_schedule_week_calender_open_status(true);
+      set_schedule_timesheet_calender_open_status(false);
+    } else if (chosen_calender_state == 'Timesheet') {
+      set_schedule_large_calender_open_status(false);
+      set_schedule_week_calender_open_status(false);
+      set_schedule_timesheet_calender_open_status(true);
+    } else {
+      set_schedule_large_calender_open_status(true);
+      set_schedule_week_calender_open_status(false);
+      set_schedule_timesheet_calender_open_status(false);
+    }
+  }, [chosen_calender_state])
+
+  React.useEffect(() => {
+    if (draggable_div_open) {
+      drag_parent_ref?.current?.focus();
+    }
+  }, [draggable_div_open])
 
   return (
     <>
@@ -406,6 +443,12 @@ function Schedule() {
           style={{
             top: `${drag_y_pos}px`,
             left: `${drag_x_pos}px`
+          }}
+          tabIndex={0}
+          onBlur={(e) => {
+            if (!e.currentTarget.contains(e.relatedTarget)) { 
+              set_draggable_div_open(false);
+            }
           }}
         > 
           <div className="calender_draggable_frame" ref={drag_head_ref}>
@@ -481,11 +524,13 @@ function Schedule() {
                 <Right_Icon fill="white" width={13} height={13}/> 
               </div>
               <h2 className="div_description" > { month_dt[month] } {year} </h2>
-              
+              <div className="schedule_dropdown">
+                <Dropdown chosen={chosen_calender_state} set_chosen={set_chosen_calender_state} />
+              </div>
           </div>
           <div className="schedule_content">
             <div className={`create_div ${collapse_sidebar ? "add_icon_transition" : ""}`}
-              tabIndex={0}
+              tabIndex={1}
               onClick={() => {
                 set_create_dropdown_status(!create_dropdown_status)
               } }
@@ -496,7 +541,7 @@ function Schedule() {
                 {!collapse_sidebar ? "Create" : ""}
                 <div className={`create_dropdown ${create_dropdown_status ? '' : 'create_dropdown_collapse'} `}
                 > 
-                  <div className='create_dropdown_options'> Event </div>
+                  <div className='create_dropdown_options' onClick={() => set_draggable_div_open(true)} > Event </div>
                   <div className='create_dropdown_options'> New User </div>
                 </div>
               </div> 
@@ -534,7 +579,7 @@ function Schedule() {
                                 ${value?.background ? 'lighter_date_color' : ''} 
                                 ${((yyyy == year) && (value.date == dd) && (value.month == mm)) ? "mini_calender_today" : ""}
                             `}>
-                        {value.date}
+                        <div className={`${((yyyy == year) && (value.date == dd) && (value.month == mm)) ? "mini_schedule_focus_date" : ""}`}>{value.date}</div>
                       </div>
                     )
                   })}
@@ -663,9 +708,14 @@ function Schedule() {
                       <td>
                         <div className="week_large_div">
                           <div className="week_large_div_surface"> 
-                            <div className="week_example_timeline" style={{ top: '50px', bottom: '200px', left: '0px', backgroundColor: 'red'}}></div>
-                            <div className="week_example_timeline" style={{ top: '200px', bottom: '600px', left: '20px', backgroundColor: 'green'}}></div>
-                            <div className="week_example_timeline" style={{ top: '90px', bottom: '700px', left: '40px', backgroundColor: 'orange'}}></div>
+                            <div className="week_example_timeline" style={{ top: '0px', height: '300px', backgroundColor: 'rgba(255, 51, 51, 0.3)'}}></div>
+                            <div className="week_example_timeline" style={{ top: '100px', height: '400px', backgroundColor: 'rgba(19, 166, 107, 0.3)'}}></div>
+                            <div className="week_example_timeline" style={{ top: '400px', height: '500px', backgroundColor: 'rgba(228, 54, 255, 0.3)'}}></div>
+                            
+                            <div className="week_example_timeline" style={{ top: '30px', height: '670px', backgroundColor: 'rgba(252, 153, 54, 0.3)'}}></div>
+                            <div className="week_example_timeline" style={{ top: '600px', height: '430px', backgroundColor: 'rgba(64, 54, 252, 0.3)'}}></div>
+                            <div className="week_example_timeline" style={{ top: '20px', height: '590px', backgroundColor: 'rgba(207, 255, 16, 0.3)'}}></div>
+                            
                           </div> 
                           <div className="week_small_trim"> </div>
                           <div className="week_small_div"> </div>
@@ -752,12 +802,162 @@ function Schedule() {
                           <div className="week_small_div"> </div>
                         </div>
                       </td>
+                      <td>
+                        <div className="week_large_div">
+                          <div className="week_small_div week_small_trim"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="week_large_div">
+                          <div className="week_small_div week_small_trim"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="week_large_div">
+                          <div className="week_small_div week_small_trim"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="week_large_div">
+                          <div className="week_small_div week_small_trim"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                          <div className="week_small_div"> </div>
+                        </div>
+                      </td>
                     </tr>
                     
 
                   </tbody>
                 </table>
               </div>
+            }
+
+            { schedule_timesheet_calender_open_status && 
+              <div className="schedule_timesheet_calender stc">
+                {[1,2,4,5,6,7,78,89,9,845,5,5,55,5,5,5,5].map(() => { return (
+                  <div className="timesheet_row">
+                    <div className="timesheet_row_date">
+                        <DatePicker />
+                    </div>
+                    <div className="timesheet_row_start_end"> 
+                      <div className="timesheet_row_start_end_denotation">
+                        <div className="timesheet_start">
+                          Start
+                        </div>
+                        <div className="timesheet_end">
+                          End
+                        </div>
+                      </div>
+                      <div className="timesheet_row_start_end_times">
+                        <div className="timesheet_start_data">
+                          9am
+                        </div>
+                        <div className="timesheet_end_data">
+                          4pm
+                        </div> 
+                      </div>
+                    </div>
+                    <div className="timesheet_row_total_time">
+                      8 hrs
+                    </div>
+                  </div>
+                )})}
+              </div>
+
             }
 
             { schedule_large_calender_open_status &&
