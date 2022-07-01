@@ -10,4 +10,7 @@
 :root {
   --sidebar_width: 70px;
   --topbar_height: 30px;
+  --main_background_color: rgb(39, 39, 39);
+  --main_background_color_darker1: rgb(30, 30, 30);
+  --main_background_color_lighter1: rgb(45, 45, 45);
 }

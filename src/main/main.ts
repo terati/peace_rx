@@ -73,9 +73,11 @@ const createWindow = async () => {
   mainWindow = new BrowserWindow({
     frame: false,
     show: false,
+    // width: 1024,
+    // height: 728,
     width: 1024,
     height: 728,
-    icon: getAssetPath('icon.png'),
+    icon: getAssetPath('peace_logo.png'),
     webPreferences: {
       // nodeIntegration: true,
       // contextIsolation: false,

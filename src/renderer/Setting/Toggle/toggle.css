@@ -36,7 +36,7 @@
   transition: 0.4s;
 }
 
-input:checked + .slider {
+/* input:checked + .slider {
   background-color: #2196F3;
 }
 
@@ -48,7 +48,7 @@ input:checked + .slider:before {
   -webkit-transform: translateX(13px);
   -ms-transform: translateX(13px);
   transform: translateX(13px);
-}
+} */
 
 /* Rounded sliders */
 .slider.round {

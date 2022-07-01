@@ -197,12 +197,15 @@ html {
 
 .today_tooltip {
   /* position: relative; */
-  display: block;
+  display: flex;
   position: absolute;
   width: 20px;
   height: 20px; 
   background-color: rgba(28, 29, 29, 0);
   border-radius: 50%;
+  justify-content: center;
+  align-items: center;
+  color: white;
   /* left: -5px; */
   /* padding: 5px; */
 }
@@ -252,10 +255,13 @@ html {
 }
 
 .large_calender_today {
-  display: block;
+  display: flex;
   background-color: rgb(8, 107, 188);
   border-radius: 50%;
   cursor: pointer;
+  align-items: center;
+  justify-content: center;
+  color: white;
 }
 
 .lighter_date_color {

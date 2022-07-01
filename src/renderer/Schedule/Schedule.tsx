@@ -18,6 +18,7 @@ import { Checkbox } from './Checkbox';
 import { Dropdown } from './Dropdown';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import "./mini_date_picker_tmp.css";
 
 import useWindowDimensions from './useWindowDimensions';
 
@@ -60,7 +61,7 @@ function Schedule() {
   const [collapse_sidebar, set_collapse_sidebar] = React.useState(false);
 
   const events_test = {
-    '15_5_2022': {
+    '2022_05_15': {
       981293: {
         id: 981293,
         user_id: 101,
@@ -68,9 +69,9 @@ function Schedule() {
         last_name: "Wong",
         initials: "TW",
         role: "tech",
-        day: 6,
-        month: 0,
-        year: 2022,
+        day: '15',
+        month: '05',
+        year: '2022',
         time_specified: true,
         time_start: '8am',
         time_end: '12pm',
@@ -83,16 +84,16 @@ function Schedule() {
         last_name: "Ng",
         initials: "BN",
         role: "pharmacist",
-        day: 6,
-        month: 1,
-        year: 2022,
+        day: '15',
+        month: '05',
+        year: '2022',
         time_specified: true,
         time_start: '12am',
         time_end: '12pm',
         note: 'Test123'
       },
     },
-    '6_0_2022': {
+    '2022_06_00': {
       981293: {
         id: 981293,
         user_id: 101,
@@ -100,9 +101,9 @@ function Schedule() {
         initials: "TW",
         last_name: "Wong",
         role: "tech",
-        day: 6,
-        month: 1,
-        year: 2022,
+        day: '00',
+        month: '06',
+        year: '2022',
         time_specified: true,
         time_start: '8am',
         time_end: '12pm',
@@ -115,9 +116,9 @@ function Schedule() {
         last_name: "Ng",
         initials: "BN",
         role: "pharmacist",
-        day: 6,
-        month: 1,
-        year: 2022,
+        day: '00',
+        month: '06',
+        year: '2022',
         time_specified: true,
         time_start: '12am',
         time_end: '12pm',
@@ -226,7 +227,7 @@ function Schedule() {
 
   const onMouseDown_bubble_handler = (e, date, calender_event_object, idx) => {
     set_click_hold(true);
-    // console.log(date, e, calender_event_object, idx);
+    console.log(date, e, calender_event_object, idx);
     set_click_start_object(calender_event_object);
     set_click_start_date(date);
     
@@ -235,15 +236,11 @@ function Schedule() {
 
   const onMouseOver_bubble_handler = (e, date:string) => {
     if (!click_hold) return; 
-    // console.log(click_hold);
-    // console.log(click_hold, click_start_object);
     if (previous_hover_date && set_click_start_object) {
       let id = click_start_object?.id;
-      // console.log(id);
-        let new_events = { ...events };
+      let new_events = { ...events };
       if (events[previous_hover_date][id]) {
         delete events[previous_hover_date][id];
-        // console.log({...click_start_object});
         if (new_events[date]) {
           new_events[date][id] = {...click_start_object};
         } else {
@@ -403,11 +400,14 @@ function Schedule() {
   }, [onMouseUp_drag, onMouseDown_drag, onMouseMove_drag]);
 
   const [schedule_large_calender_open_status, set_schedule_large_calender_open_status] = React.useState(false);
-  const [schedule_week_calender_open_status, set_schedule_week_calender_open_status] = React.useState(true);
-  const [schedule_timesheet_calender_open_status, set_schedule_timesheet_calender_open_status] = React.useState(false);
+  const [schedule_week_calender_open_status, set_schedule_week_calender_open_status] = React.useState(false);
+  const [schedule_timesheet_calender_open_status, set_schedule_timesheet_calender_open_status] = React.useState(true);
 
   // the state of the calender: month, weekly, or timesheet
-  const [chosen_calender_state, set_chosen_calender_state] = React.useState();
+  const [chosen_calender_state, set_chosen_calender_state] = React.useState('Timesheet');
+
+
+
   React.useEffect(() => {
     if (chosen_calender_state == 'Month') {
       set_schedule_large_calender_open_status(true);
@@ -433,6 +433,10 @@ function Schedule() {
       drag_parent_ref?.current?.focus();
     }
   }, [draggable_div_open])
+
+  const pad_integer_with_zeros = (num:number | string, targetLength:number) => {
+    return String(num).padStart(targetLength, '0');
+  }
 
   return (
     <>
@@ -978,7 +982,7 @@ function Schedule() {
                   // console.log( `${value.date}_${value.month}_${year}` );
                   return (
                     <div className={`schedule_day ${value?.background ? 'lighter_date_color' : ''}`}
-                      onMouseOver={(e) => onMouseOver_bubble_handler(e, `${value.date}_${value.month}_${year}`)}
+                      onMouseOver={(e) => onMouseOver_bubble_handler(e, `${year}_${pad_integer_with_zeros(value.month, 2)}_${pad_integer_with_zeros(value.date, 2)}`)}
                       onMouseUp={(e) => onMouseUp_bubble_handler(e)}
                       onClick={() => set_draggable_div_open(true)}
                     > 
@@ -993,10 +997,10 @@ function Schedule() {
                         {value.date} 
                       </div>
                       <div className="large_calender_bubbles_wrapper">
-                        { Object.values(events[`${value.date}_${value.month}_${year}`] ?? {}).map((calender_event, calender_event_idx) => {
+                        { Object.values(events[`${year}_${pad_integer_with_zeros(value.month, 2)}_${pad_integer_with_zeros(value.date, 2)}`] ?? {}).map((calender_event, calender_event_idx) => {
                             return (
                               <div className="name_bubbles" 
-                                onMouseDown={(e) => onMouseDown_bubble_handler(e, `${value.date}_${value.month}_${year}`, calender_event, calender_event_idx)}
+                                onMouseDown={(e) => onMouseDown_bubble_handler(e, `${year}_${pad_integer_with_zeros(value.month, 2)}_${pad_integer_with_zeros(value.date, 2)}`, calender_event, calender_event_idx)}
                                 style={{ backgroundColor: individual_dt[calender_event?.user_id]?.color }}
                               >
                                 {calender_event?.initials}
