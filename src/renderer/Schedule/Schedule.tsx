@@ -438,6 +438,9 @@ function Schedule() {
     return String(num).padStart(targetLength, '0');
   }
 
+  const [timesheet_individual_dropdown_open, set_timesheet_individual_dropdown_open] = React.useState(false);
+  const [timesheet_individual_dropdown_state, set_timesheet_individual_dropdown_state] = React.useState();
+
   return (
     <>
       <Sidebar selected={'schedule'}/>
@@ -932,6 +935,27 @@ function Schedule() {
 
             { schedule_timesheet_calender_open_status && 
               <div className="schedule_timesheet_calender stc">
+                <div className="timesheet_head_selections">
+                  <div className="timesheet_individual_dropdown" 
+                    tabIndex={0}
+                    onClick={() => set_timesheet_individual_dropdown_open(!timesheet_individual_dropdown_open)}
+                    onBlur={() => set_timesheet_individual_dropdown_open(false)}  
+                  > 
+                    {timesheet_individual_dropdown_state}
+                    <div className={`timesheet_individual_dropdown_choices ${timesheet_individual_dropdown_open ? 'timesheet_individual_dropdown_choices_open' : ''}`}> 
+                      { Object.entries(individuals_dt).map((entry, idx) => {
+                        // console.log(entry)
+                        return (
+                          <div className="timesheet_individual_dropdown_options" onClick={() => set_timesheet_individual_dropdown_state(`${entry[1].first_name} ${entry[1].last_name}`)}>
+                            {entry[1].first_name} {entry[1].last_name}
+                          </div>
+                        )
+                      }) }
+                      
+                    </div>
+                  </div>
+                </div>
+
                 {[1,2,4,5,6,7,78,89,9,845,5,5,55,5,5,5,5].map(() => { return (
                   <div className="timesheet_row">
                     <div className="timesheet_row_date">

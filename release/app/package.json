@@ -1,6 +1,6 @@
 {
   "name": "peace_rx",
-  "version": "0.1",
+  "version": "0.0.1",
   "description": "SAAS Rx Logistics",
   "main": "./dist/main/main.js",
   "author": {
@@ -13,7 +13,6 @@
     "link-modules": "node -r ts-node/register ../../.erb/scripts/link-modules.ts",
     "postinstall": "npm run electron-rebuild && npm run link-modules"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "license": "MIT"
 }
