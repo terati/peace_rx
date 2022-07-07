@@ -10,6 +10,7 @@ html {
   width: 100%;
   position: relative;
   overflow: auto;
+  border-left: 1px solid rgb(96, 96, 96);
   /* background-color: aqua; */
 }
 
@@ -24,13 +25,15 @@ html {
 .timesheet_row_date {
   /* background-color: aqua; */
   min-width: 200px;
+  overflow-x: hidden;
   height: 100%;
   border-top: 1px solid var(--timesheet_border_color);
-  border-left: 1px solid var(--timesheet_border_color);
+  /* border-left: 1px solid var(--timesheet_border_color); */
   border-bottom: 1px solid var(--timesheet_border_color);
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .timesheet_row_start_end {
@@ -42,6 +45,7 @@ html {
   border-top: 1px solid var(--timesheet_border_color);
   border-left: 1px solid var(--timesheet_border_color);
   border-bottom: 1px solid var(--timesheet_border_color);
+  box-sizing: border-box;
 }
 
 .timesheet_row_start_end_denotation {
@@ -57,6 +61,7 @@ html {
   justify-content: center;
   background-color: rgb(25, 54, 45);
   padding: 5px;
+  box-sizing: border-box;
 }
 
 .timesheet_end {
@@ -68,6 +73,7 @@ html {
   justify-content: center;
   background-color: rgb(49, 39, 26);
   padding: 5px;
+  box-sizing: border-box;
 }
 
 .timesheet_row_start_end_times {
@@ -81,6 +87,7 @@ html {
   flex-grow: 1;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 .timesheet_end_data {
@@ -89,6 +96,7 @@ html {
   align-items: center;
   justify-content: center;
   border-top: 1px solid var(--timesheet_border_color);
+  box-sizing: border-box;
 }
 
 .timesheet_row_start_end_times {
@@ -106,20 +114,55 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+  box-sizing: border-box;
 }
 
 
 
 .timesheet_head_selections {
-  height: 100px;
-  background-color: yellowgreen;
+  height: 50px;
+  /* background-color: yellowgreen; */
+  display: flex;
+  padding: 10px 10px;
+  align-items: center;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.save_individual_timesheet_button_wrapper {
+  height: 30px;
+  width: 100px;
+  /* background-color: aqua; */
+  margin-right: 10px;
+  position: relative;
+}
+
+.save_individual_timesheet_button {
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  /* background-color: var(--main_background_color_darker1); */
+  background-color: rgb(2, 71, 12);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: small;
+}
+
+.save_individual_timesheet_button:hover {
+  transform: none;
+  /* background-color: var(--main_background_color_darker2); */
+  background-color: rgb(6, 34, 10);
+  /* border: 1px solid var(--timesheet_border_color); */
 }
 
 .timesheet_individual_dropdown {
   height: 30px;
   width: 200px;
-  border: 1px solid white;
-  background-color: rgb(66, 66, 66);
+  border: 1px solid rgb(66, 66, 66);
+  background-color: rgb(35 36 36);
+  border-radius: 5px;
   padding: 5px 10px;
   box-sizing: border-box;
   position: relative;
@@ -132,7 +175,7 @@ html {
 
 .timesheet_individual_dropdown_choices {
   position: absolute;
-  top: 30px;
+  top: 29px;
   left: -1px;
   min-height: 30px;
   width: 200px;
@@ -163,7 +206,13 @@ html {
   background-color: black;
 }
 
+.react-datepicker-ignore-onclickoutside {
+  color: white;
+}
 
+.react-datepicker__input-container input{
+  color: white;
+}
 
 
 

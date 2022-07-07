@@ -4,7 +4,7 @@ import './draggable_div.css';
 import './schedule_week.css';
 import './schedule_timesheet.css';
 import Sidebar from 'renderer/Sidebar/Sidebar';
-import { computeCalender } from './calender_calc';
+import { computeCalender, numberOfDays } from './calender_calc';
 import MenuBurger_Icon from '../Icons_Color_Control/Menu_burger';
 import Left_Icon from '../Icons_Color_Control/Left_Arrow';
 import Right_Icon from '../Icons_Color_Control/Right_Arrow';
@@ -21,6 +21,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import "./mini_date_picker_tmp.css";
 
 import useWindowDimensions from './useWindowDimensions';
+import { stringify } from 'querystring';
 
 let month_dt = {
   0: "January",
@@ -47,9 +48,9 @@ function Schedule() {
   const [full_year_calender, set_full_year_calender] = React.useState(computeCalender(yyyy));
   // console.log(full_year_calender);
 
-  const [day, set_day] = React.useState(dd);
   const [month, set_month] = React.useState(mm);
   const [year, set_year] = React.useState(yyyy);
+  const [numberOfDays_val, set_numberOfDays_val] = React.useState(numberOfDays(month, year));
 
   const [mini_full_year_calender, set_mini_full_year_calender] = React.useState(full_year_calender);
   const [mini_calender_day, set_mini_calender_day] = React.useState(dd);
@@ -75,12 +76,45 @@ function Schedule() {
         time_specified: true,
         time_start: '8am',
         time_end: '12pm',
-        note: 'It is your birthday !'
+        note: 'It is your birthday !',
+        start_date: '2022-07-06'
+      },
+      981292343: {
+        id: 981292343,
+        user_id: 101,
+        first_name: "Timothy",
+        last_name: "Wong",
+        initials: "TW",
+        role: "tech",
+        day: '15',
+        month: '05',
+        year: '2022',
+        time_specified: true,
+        time_start: '8am',
+        time_end: '12pm',
+        note: 'It is your birthday !',
+        start_date: '2022-07-06'
+      },
+      9812938734: {
+        id: 9812938734,
+        user_id: 101,
+        first_name: "Timothy",
+        last_name: "Wong",
+        initials: "TW",
+        role: "tech",
+        day: '15',
+        month: '05',
+        year: '2022',
+        time_specified: true,
+        time_start: '8am',
+        time_end: '12pm',
+        note: 'It is your birthday !',
+        start_date: '2022-07-06'
       },
       23748927: {
         id: 23748927,
         user_id: 102,
-        first_name: "Ben",
+        first_name: "Benjamin",
         last_name: "Ng",
         initials: "BN",
         role: "pharmacist",
@@ -90,7 +124,8 @@ function Schedule() {
         time_specified: true,
         time_start: '12am',
         time_end: '12pm',
-        note: 'Test123'
+        note: 'Test123',
+        start_date: '2022-07-06'
       },
     },
     '2022_06_00': {
@@ -107,7 +142,8 @@ function Schedule() {
         time_specified: true,
         time_start: '8am',
         time_end: '12pm',
-        note: 'It is your birthday !'
+        note: 'It is your birthday !',
+        start_date: '2022-07-06'
       },
       23748927: {
         id: 23748927,
@@ -122,7 +158,8 @@ function Schedule() {
         time_specified: true,
         time_start: '12am',
         time_end: '12pm',
-        note: 'Test123'
+        note: 'Test123',
+        start_date: '2022-07-06'
       }
     }
   }
@@ -225,6 +262,27 @@ function Schedule() {
 
   const [previous_hover_date, set_previous_hover_date] = React.useState(null);
 
+  // a more enumerated version of calender state
+  const [schedule_large_calender_open_status, set_schedule_large_calender_open_status] = React.useState(false);
+  const [schedule_week_calender_open_status, set_schedule_week_calender_open_status] = React.useState(false);
+  const [schedule_timesheet_calender_open_status, set_schedule_timesheet_calender_open_status] = React.useState(true);
+
+  // the state of the calender: month, weekly, or timesheet by dropdown
+  const [chosen_calender_state, set_chosen_calender_state] = React.useState('Timesheet');
+
+  const [timesheet_individual_dropdown_open, set_timesheet_individual_dropdown_open] = React.useState(false);
+  const [timesheet_individual_dropdown_state, set_timesheet_individual_dropdown_state] = React.useState();
+  /**
+   * State for timsheet
+   * True: first half of the month [1,15] (inclusive)
+   * False: rest of the month [16, end] (inclusive)
+   */
+  const [timesheet_first_half_month, set_timesheet_first_half_month] = React.useState((dd >= 16) ? true : false);
+
+  // array of dates
+  const [date_array, set_date_array] = React.useState({});
+
+
   const onMouseDown_bubble_handler = (e, date, calender_event_object, idx) => {
     set_click_hold(true);
     console.log(date, e, calender_event_object, idx);
@@ -281,33 +339,74 @@ function Schedule() {
 
   // click handlers for large calender
   const left_month_click_handler = (event:any) => {
-    if (month == 0) {
-      set_month(11);
-      set_year(year - 1);
-      set_mini_calender_month(11);
-      set_mini_calender_year(year - 1);
+    if (chosen_calender_state == 'Timesheet') {
+      if (timesheet_first_half_month == false) {
+        set_timesheet_first_half_month(true);
+      } else if (month == 0 && timesheet_first_half_month == true) {
+        set_month(11);
+        set_year(year - 1);
+        set_mini_calender_month(11);
+        set_mini_calender_year(year - 1);
+        set_timesheet_first_half_month(false);
+      } else if (month > 0 && timesheet_first_half_month == true) {
+        set_month(month - 1);
+        set_year(year);
+        set_mini_calender_month(month - 1);
+        set_mini_calender_year(year);
+        set_timesheet_first_half_month(false);
+      }
+      set_mini_full_year_calender(full_year_calender);
+      set_animation_status(true);
     } else {
-      set_month(month - 1);
-      set_mini_calender_month(month - 1);
-      set_mini_calender_year(year);
+      if (month == 0) {
+        set_month(11);
+        set_year(year - 1);
+        set_mini_calender_month(11);
+        set_mini_calender_year(year - 1);
+      } else {
+        set_month(month - 1);
+        set_mini_calender_month(month - 1);
+        set_mini_calender_year(year);
+      }
+      set_mini_full_year_calender(full_year_calender);
+      set_animation_status(true);
     }
-    set_mini_full_year_calender(full_year_calender);
-    set_animation_status(true);
+    
   }
 
   const right_month_click_handler = (event:any) => {
-    if (month == 11) {
-      set_month(0);
-      set_year(year + 1);
-      set_mini_calender_month(0);
-      set_mini_calender_year(year + 1);
+    if (chosen_calender_state == 'Timesheet') {
+      if (timesheet_first_half_month == true) {
+        set_timesheet_first_half_month(false);
+      } else if (month == 11 && timesheet_first_half_month == false) {
+        set_month(0);
+        set_year(year + 1);
+        set_mini_calender_month(0);
+        set_mini_calender_year(year + 1);
+        set_timesheet_first_half_month(true);
+      } else if (month < 11 && timesheet_first_half_month == false) {
+        set_month(month + 1);
+        set_mini_calender_month(month + 1);
+        set_mini_calender_year(year);
+        set_timesheet_first_half_month(true);
+      }
+      set_mini_full_year_calender(full_year_calender);
+      set_animation_status(true);
     } else {
-      set_month(month + 1);
-      set_mini_calender_month(month + 1);
-      set_mini_calender_year(year);
+      if (month == 11) {
+        set_month(0);
+        set_year(year + 1);
+        set_mini_calender_month(0);
+        set_mini_calender_year(year + 1);
+      } else {
+        set_month(month + 1);
+        set_mini_calender_month(month + 1);
+        set_mini_calender_year(year);
+      }
+      set_mini_full_year_calender(full_year_calender);
+      set_animation_status(true);
     }
-    set_mini_full_year_calender(full_year_calender);
-    set_animation_status(true);
+    
   }
 
   //click handlers for mini calenders
@@ -399,14 +498,6 @@ function Schedule() {
     }
   }, [onMouseUp_drag, onMouseDown_drag, onMouseMove_drag]);
 
-  const [schedule_large_calender_open_status, set_schedule_large_calender_open_status] = React.useState(false);
-  const [schedule_week_calender_open_status, set_schedule_week_calender_open_status] = React.useState(false);
-  const [schedule_timesheet_calender_open_status, set_schedule_timesheet_calender_open_status] = React.useState(true);
-
-  // the state of the calender: month, weekly, or timesheet
-  const [chosen_calender_state, set_chosen_calender_state] = React.useState('Timesheet');
-
-
 
   React.useEffect(() => {
     if (chosen_calender_state == 'Month') {
@@ -438,8 +529,29 @@ function Schedule() {
     return String(num).padStart(targetLength, '0');
   }
 
-  const [timesheet_individual_dropdown_open, set_timesheet_individual_dropdown_open] = React.useState(false);
-  const [timesheet_individual_dropdown_state, set_timesheet_individual_dropdown_state] = React.useState();
+  React.useEffect(() => {
+    set_numberOfDays_val(numberOfDays(month, year))
+  }, [month, year]);
+
+
+  const range = (start:number, stop:number, step:number) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
+
+  const onChange_datepicker_handler = (event_day_string, event_day_id, new_date) => {
+    console.log(event_day_string, event_day_id, new_date);
+    set_events(current => {
+      return {
+        ...current,
+        [event_day_string]: {
+          ...current[event_day_string],
+          [event_day_id]: {
+            ...current[event_day_string][event_day_id],
+            start_date: new_date
+          }
+        }
+      }
+    })
+    console.log(events);
+  }
 
   return (
     <>
@@ -530,7 +642,11 @@ function Schedule() {
               <div className='right_arrow' onClick={right_month_click_handler}>
                 <Right_Icon fill="white" width={13} height={13}/> 
               </div>
-              <h2 className="div_description" > { month_dt[month] } {year} </h2>
+              <h2 className="div_description" > 
+                { month_dt[month] } {year} 
+                {(chosen_calender_state == "Timesheet" && timesheet_first_half_month) ? " [1 - 15]" : ""} 
+                {(chosen_calender_state == "Timesheet" && !timesheet_first_half_month) ? ` [16 - ${numberOfDays_val}]` : ""} 
+              </h2>
               <div className="schedule_dropdown">
                 <Dropdown chosen={chosen_calender_state} set_chosen={set_chosen_calender_state} />
               </div>
@@ -954,36 +1070,71 @@ function Schedule() {
                       
                     </div>
                   </div>
-                </div>
-
-                {[1,2,4,5,6,7,78,89,9,845,5,5,55,5,5,5,5].map(() => { return (
-                  <div className="timesheet_row">
-                    <div className="timesheet_row_date">
-                        <DatePicker />
-                    </div>
-                    <div className="timesheet_row_start_end"> 
-                      <div className="timesheet_row_start_end_denotation">
-                        <div className="timesheet_start">
-                          Start
-                        </div>
-                        <div className="timesheet_end">
-                          End
-                        </div>
-                      </div>
-                      <div className="timesheet_row_start_end_times">
-                        <div className="timesheet_start_data">
-                          9am
-                        </div>
-                        <div className="timesheet_end_data">
-                          4pm
-                        </div> 
-                      </div>
-                    </div>
-                    <div className="timesheet_row_total_time">
-                      8 hrs
-                    </div>
+                  <div className="save_individual_timesheet_button_wrapper">
+                      <button className="save_individual_timesheet_button">
+                        Save
+                      </button>
                   </div>
-                )})}
+                </div>
+              
+                { (timesheet_first_half_month ? range(1, 15, 1) : range(16, Number(numberOfDays_val), 1)).map((day_value, idx) => { 
+                  let day_string = pad_integer_with_zeros(year, 2) + '_' +
+                                    pad_integer_with_zeros(month, 2) + '_' + 
+                                    pad_integer_with_zeros(day_value, 2) 
+                  let day = events[day_string];
+                  if (day) {
+                    // console.log(Object.values(day));
+                    return Object.values(day).map((event, idx) => {
+                      // console.log(timesheet_individual_dropdown_state);
+                      // console.log(`${event.first_name} ${event.last_name}`);
+                      if (timesheet_individual_dropdown_state == `${event.first_name} ${event.last_name}`) {
+                        // console.log(event);
+                        // set_date_array({
+                        //   ...date_array,
+                        //   [event.id]: {
+                        //     "id" : event.id,
+                        //     "time_start" : event.time_start,
+                        //     "time_end" : event.time_end
+                        //   }
+                        // })
+                        return (
+                        // timesheet_individual_dropdown_state
+                        <div key={event.id} className="timesheet_row">
+                          <div className="timesheet_row_date">
+                              <DatePicker 
+                                selected={new Date(day[event.id].start_date)} 
+                                onChange={(new_date) => onChange_datepicker_handler(day_string, event.id, new_date)}
+                              />
+                          </div>
+                          <div className="timesheet_row_start_end"> 
+                            <div className="timesheet_row_start_end_denotation">
+                              <div className="timesheet_start">
+                                Start
+                              </div>
+                              <div className="timesheet_end">
+                                End
+                              </div>
+                            </div>
+                            <div className="timesheet_row_start_end_times">
+                              <div className="timesheet_start_data">
+                                9am
+                              </div>
+                              <div className="timesheet_end_data">
+                                4pm
+                              </div> 
+                            </div>
+                          </div>
+                          <div className="timesheet_row_total_time">
+                            8 hrs
+                          </div>
+                        </div>
+                      )
+                      }
+                    }
+                    )
+                  }
+            
+                })}
               </div>
 
             }

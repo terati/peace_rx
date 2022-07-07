@@ -23,6 +23,13 @@
   border: none;
 }
 
+.react-datepicker-wrapper input {
+  cursor: pointer;
+  font-size: large;
+  padding-left: 20px;
+  
+}
+
 .react-datepicker-wrapper input:focus {
   outline: none;
 }
