@@ -3,7 +3,14 @@ import App from './App';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
-root.render(<App />);
+import { store } from './store';
+import { Provider } from 'react-redux';
+
+root.render(
+  <Provider store={store}>
+    <App />
+  </Provider>
+);
 
 // calling IPC exposed from preload script
 // window.electron.ipcRenderer.once('ipc-example', (arg) => {

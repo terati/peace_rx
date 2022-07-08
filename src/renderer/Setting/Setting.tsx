@@ -3,7 +3,9 @@ import "./setting.css";
 import "./../App.css";
 import Sidebar from 'renderer/Sidebar/Sidebar';
 import { Toggle } from "./Toggle";
-import Webcam from "react-webcam";
+import { store } from "renderer/store";
+import { getIP_async } from "reducers/ip_adr";
+import { useSelector } from "react-redux";
 
 import axios from "axios";
 
@@ -11,15 +13,18 @@ function Setting() {
   const [ip, set_ip] = React.useState("");
 
   const [stat, set_stat] = React.useState<boolean>(true);
+  // const getData = async () => {
+  //   const res = await axios.get('https://geolocation-db.com/json/');
+  //   set_ip(res.data.IPv4);
+  //   console.log(useSelector);
+  // }
 
-  const getData = async () => {
-    const res = await axios.get('https://geolocation-db.com/json/');
-    set_ip(res.data.IPv4);
-  }
+  const ip_store = useSelector(state => state.ip_adr?.value);
 
   React.useEffect(() => {
-    getData();
-  }, [])
+    // getData();
+    store.dispatch(getIP_async())
+  }, []);
 
   return (
     <>
@@ -43,7 +48,7 @@ function Setting() {
               Logged in device IPv4:
             </div>
             <div className="inner_grid_col2"> 
-              {ip}
+             {ip_store}
             </div>
           </div>
 
