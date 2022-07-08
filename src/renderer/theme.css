@@ -14,3 +14,9 @@
   --main_background_color_darker1: rgb(30, 30, 30);
   --main_background_color_lighter1: rgb(45, 45, 45);
 }
+
+[data-theme='light'] {
+  --main_background_color: rgb(182, 182, 182);
+  --main_background_color_darker1: rgb(143, 143, 143);
+  --main_background_color_lighter1: rgb(228, 228, 228);
+}

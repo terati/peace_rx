@@ -15,6 +15,7 @@ import Inventory from './Inventory/Inventory';
 import { Main } from './Main';
 import Setting from './Setting/Setting';
 import { Schedule } from './Schedule';
+import './theme.css';
 // onClick={() => ipcRenderer.send('close-window')}
 // import { ipcRenderer } from require('electron').myPing;
 

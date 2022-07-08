@@ -8,11 +8,11 @@ import { getIP_async } from "reducers/ip_adr";
 import { useSelector } from "react-redux";
 
 import axios from "axios";
+import { toggle_dark_light } from "reducers/dark_light";
 
 function Setting() {
-  const [ip, set_ip] = React.useState("");
 
-  const [stat, set_stat] = React.useState<boolean>(true);
+  const [dark_mode_toggle_state, set_dark_mode_toggle_state] = React.useState<boolean>(true);
   // const getData = async () => {
   //   const res = await axios.get('https://geolocation-db.com/json/');
   //   set_ip(res.data.IPv4);
@@ -20,17 +20,23 @@ function Setting() {
   // }
 
   const ip_store = useSelector(state => state.ip_adr?.value);
+  const dark_light_mode = useSelector(state => state.dark_light?.value);
 
   React.useEffect(() => {
     // getData();
     store.dispatch(getIP_async())
   }, []);
 
+  const toggle_dark_light_mode = () => {
+    set_dark_mode_toggle_state(!dark_mode_toggle_state);
+    store.dispatch(toggle_dark_light());
+  }
+
   return (
     <>
       <Sidebar selected={'settings'}/>
 
-      <div className="div_setting" >
+      <div className="div_setting" data-theme={dark_light_mode}>
         <div className="div_inner_setting">
           <h1> Settings </h1>
 
@@ -57,8 +63,8 @@ function Setting() {
               Toggle dark mode
             </div>
             <div className="inner_grid_col2"> 
-              <Toggle checked={stat} onClick={() => set_stat(!stat)}/>
-              <div style={{marginLeft: "10px"}} > {stat == true ? "Off" : "On" } </div>
+              <Toggle checked={dark_mode_toggle_state} onClick={toggle_dark_light_mode}/>
+              <div style={{marginLeft: "10px"}} > {dark_mode_toggle_state == true ? "Off" : "On" } </div>
             </div>
           </div>
 

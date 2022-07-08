@@ -8,7 +8,7 @@ import { Provider } from 'react-redux';
 
 root.render(
   <Provider store={store}>
-    <App />
+    <App data-theme='light'/>
   </Provider>
 );
 

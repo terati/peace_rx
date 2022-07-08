@@ -15,7 +15,7 @@ function Toggle(props: any) {
   return (
     <>
       <label className="switch">
-          <input type="checkbox" checked={stat} onClick = {onClick} />
+          <input type="checkbox" checked={stat} onClick={onClick} />
           <span className="slider round"></span>
       </label>
     </>

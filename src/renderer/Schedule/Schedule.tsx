@@ -624,7 +624,7 @@ function Schedule() {
         </div>
       }
 
-      <div className="div_schedule" >
+      <div className="div_schedule" data-theme='light'>
         <div className="div_main">
           <div className="schedule_topheader">
               <div className="menu_burger_icon" onClick={() => set_collapse_sidebar(!collapse_sidebar)}>
