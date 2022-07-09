@@ -1,4 +1,4 @@
-@import "./../theme.css";
+@import "./../theme.scss";
 
 .react-datepicker {
   color: white;

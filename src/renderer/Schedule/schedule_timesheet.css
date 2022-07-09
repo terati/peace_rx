@@ -1,4 +1,4 @@
-@import "./../theme.css";
+@import "./../theme.scss";
 
 html {
   --timesheet_border_color: rgb(98, 98, 98);

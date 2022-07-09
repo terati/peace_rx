@@ -1,7 +1,7 @@
 import * as React from 'react';
 import './../App.css';
 import './InputStyles.css';
-import './Inventory.css';
+import './Inventory.scss';
 import './SelectionStyles.css';
 import './Header_Input_Styles.css';
 import Sidebar from 'renderer/Sidebar/Sidebar';

@@ -22,6 +22,7 @@ import "./mini_date_picker_tmp.css";
 
 import useWindowDimensions from './useWindowDimensions';
 import { stringify } from 'querystring';
+import { TimePicker } from './TimePicker';
 
 let month_dt = {
   0: "January",
@@ -161,6 +162,24 @@ function Schedule() {
         note: 'Test123',
         start_date: '2022-07-06'
       }
+    },
+    '2022_07_08': {
+      234235234234: {
+        id: 234235234234,
+        user_id: 101,
+        first_name: "Timothy",
+        last_name: "Wong",
+        initials: "TW",
+        role: "tech",
+        day: '08',
+        month: '07',
+        year: '2022',
+        time_specified: true,
+        time_start: '12am',
+        time_end: '12pm',
+        note: 'Test123',
+        start_date: '2022-07-08'
+      }
     }
   }
   const [events, set_events] = React.useState(events_test);
@@ -277,7 +296,7 @@ function Schedule() {
    * True: first half of the month [1,15] (inclusive)
    * False: rest of the month [16, end] (inclusive)
    */
-  const [timesheet_first_half_month, set_timesheet_first_half_month] = React.useState((dd >= 16) ? true : false);
+  const [timesheet_first_half_month, set_timesheet_first_half_month] = React.useState((dd >= 16) ? false : true);
 
   // array of dates
   const [date_array, set_date_array] = React.useState({});
@@ -624,7 +643,7 @@ function Schedule() {
         </div>
       }
 
-      <div className="div_schedule" data-theme='light'>
+      <div className="div_schedule">
         <div className="div_main">
           <div className="schedule_topheader">
               <div className="menu_burger_icon" onClick={() => set_collapse_sidebar(!collapse_sidebar)}>
@@ -1079,8 +1098,10 @@ function Schedule() {
               
                 { (timesheet_first_half_month ? range(1, 15, 1) : range(16, Number(numberOfDays_val), 1)).map((day_value, idx) => { 
                   let day_string = pad_integer_with_zeros(year, 2) + '_' +
-                                    pad_integer_with_zeros(month, 2) + '_' + 
-                                    pad_integer_with_zeros(day_value, 2) 
+                                    pad_integer_with_zeros(month+1, 2) + '_' + 
+                                    pad_integer_with_zeros(day_value, 2);
+                  // console.log(day_string);
+                  // console.log(events[day_string]); 
                   let day = events[day_string];
                   if (day) {
                     // console.log(Object.values(day));
@@ -1117,7 +1138,7 @@ function Schedule() {
                             </div>
                             <div className="timesheet_row_start_end_times">
                               <div className="timesheet_start_data">
-                                9am
+                                <TimePicker />
                               </div>
                               <div className="timesheet_end_data">
                                 4pm

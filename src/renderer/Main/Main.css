@@ -1,4 +1,4 @@
-@import "./../theme.css";
+@import "./../theme.scss";
 
 .main {
   margin-left: var(--sidebar_width);

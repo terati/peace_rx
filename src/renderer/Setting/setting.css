@@ -1,4 +1,4 @@
-@import "./../theme.css";
+@import "./../theme.scss";
 
 .div_setting {
   box-sizing: border-box;

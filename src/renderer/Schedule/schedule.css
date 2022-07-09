@@ -1,4 +1,4 @@
-@import "./../theme.css";
+@import "./../theme.scss";
 
 :root {
   --border-color: rgb(96, 96, 96);
