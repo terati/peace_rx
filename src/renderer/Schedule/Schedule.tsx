@@ -23,6 +23,7 @@ import "./mini_date_picker_tmp.css";
 import useWindowDimensions from './useWindowDimensions';
 import { stringify } from 'querystring';
 import { TimePicker } from './TimePicker';
+import { _12_to_24_hour } from './time_calc_helpers';
 
 let month_dt = {
   0: "January",
@@ -75,8 +76,8 @@ function Schedule() {
         month: '05',
         year: '2022',
         time_specified: true,
-        time_start: '8am',
-        time_end: '12pm',
+        time_start: '8:00am',
+        time_end: '12:00pm',
         note: 'It is your birthday !',
         start_date: '2022-07-06'
       },
@@ -91,8 +92,8 @@ function Schedule() {
         month: '05',
         year: '2022',
         time_specified: true,
-        time_start: '8am',
-        time_end: '12pm',
+        time_start: '8:00am',
+        time_end: '12:00pm',
         note: 'It is your birthday !',
         start_date: '2022-07-06'
       },
@@ -107,8 +108,8 @@ function Schedule() {
         month: '05',
         year: '2022',
         time_specified: true,
-        time_start: '8am',
-        time_end: '12pm',
+        time_start: '8:00am',
+        time_end: '12:00pm',
         note: 'It is your birthday !',
         start_date: '2022-07-06'
       },
@@ -123,8 +124,8 @@ function Schedule() {
         month: '05',
         year: '2022',
         time_specified: true,
-        time_start: '12am',
-        time_end: '12pm',
+        time_start: '12:00am',
+        time_end: '12:00pm',
         note: 'Test123',
         start_date: '2022-07-06'
       },
@@ -141,8 +142,8 @@ function Schedule() {
         month: '06',
         year: '2022',
         time_specified: true,
-        time_start: '8am',
-        time_end: '12pm',
+        time_start: '8:00am',
+        time_end: '12:00pm',
         note: 'It is your birthday !',
         start_date: '2022-07-06'
       },
@@ -157,8 +158,8 @@ function Schedule() {
         month: '06',
         year: '2022',
         time_specified: true,
-        time_start: '12am',
-        time_end: '12pm',
+        time_start: '12:00am',
+        time_end: '12:00pm',
         note: 'Test123',
         start_date: '2022-07-06'
       }
@@ -175,8 +176,8 @@ function Schedule() {
         month: '07',
         year: '2022',
         time_specified: true,
-        time_start: '12am',
-        time_end: '12pm',
+        time_start: '12:00am',
+        time_end: '12:00pm',
         note: 'Test123',
         start_date: '2022-07-08'
       }
@@ -556,7 +557,7 @@ function Schedule() {
   const range = (start:number, stop:number, step:number) => Array.from({ length: (stop - start) / step + 1}, (_, i) => start + (i * step));
 
   const onChange_datepicker_handler = (event_day_string, event_day_id, new_date) => {
-    console.log(event_day_string, event_day_id, new_date);
+    // console.log(event_day_string, event_day_id, new_date);
     set_events(current => {
       return {
         ...current,
@@ -569,7 +570,7 @@ function Schedule() {
         }
       }
     })
-    console.log(events);
+    // console.log(events);
   }
 
   return (
@@ -1118,6 +1119,15 @@ function Schedule() {
                         //     "time_end" : event.time_end
                         //   }
                         // })
+                        // console.log(day[event.id]);
+                    
+                        const date1 = new Date("08-05-2022 "+ _12_to_24_hour(day[event.id].time_start) );
+                        const date2 = new Date("08-05-2022 "+ _12_to_24_hour(day[event.id].time_end) );
+                        const diff = date2.getTime() - date1.getTime();
+                        let msec = diff;
+                        const hh = msec / 1000 / 60 / 60;
+                        // console.log(hh);
+
                         return (
                         // timesheet_individual_dropdown_state
                         <div key={event.id} className="timesheet_row">
@@ -1138,15 +1148,15 @@ function Schedule() {
                             </div>
                             <div className="timesheet_row_start_end_times">
                               <div className="timesheet_start_data">
-                                <TimePicker />
+                                <TimePicker value={day[event.id].time_start} set_events={set_events} day_string={day_string} event_id={event.id} start={true}/>
                               </div>
                               <div className="timesheet_end_data">
-                                4pm
+                                <TimePicker value={day[event.id].time_end} set_events={set_events} day_string={day_string} event_id={event.id} start={false}/>
                               </div> 
                             </div>
                           </div>
                           <div className="timesheet_row_total_time">
-                            8 hrs
+                            {hh} hrs
                           </div>
                         </div>
                       )
