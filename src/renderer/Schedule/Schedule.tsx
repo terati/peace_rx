@@ -1,10 +1,10 @@
 import * as React from 'react';
-import './schedule.css';
+import './schedule.scss';
 import './draggable_div.css';
-import './schedule_week.css';
+import './schedule_week.scss';
 import './schedule_timesheet.css';
 import Sidebar from 'renderer/Sidebar/Sidebar';
-import { computeCalender, numberOfDays } from './calender_calc';
+import { computeCalender, numberOfDays, week_compose } from './calender_calc';
 import MenuBurger_Icon from '../Icons_Color_Control/Menu_burger';
 import Left_Icon from '../Icons_Color_Control/Left_Arrow';
 import Right_Icon from '../Icons_Color_Control/Right_Arrow';
@@ -59,12 +59,18 @@ function Schedule() {
   const [mini_calender_month, set_mini_calender_month] = React.useState(mm);
   const [mini_calender_year, set_mini_calender_year] = React.useState(yyyy);
 
+  const [week_dt, set_week_dt] = React.useState(week_compose(yyyy, mm, dd));
+
   const [animation_status, set_animation_status] = React.useState(true);
 
   const [collapse_sidebar, set_collapse_sidebar] = React.useState(false);
 
+  React.useEffect(() => {
+    set_week_dt(week_compose(yyyy, mm, dd));
+  }, [yyyy, mm, dd])
+
   const events_test = {
-    '2022_05_15': {
+    '2022_06_15': {
       981293: {
         id: 981293,
         user_id: 101,
@@ -73,13 +79,13 @@ function Schedule() {
         initials: "TW",
         role: "tech",
         day: '15',
-        month: '05',
+        month: '06',
         year: '2022',
         time_specified: true,
         time_start: '8:00am',
         time_end: '12:00pm',
         note: 'It is your birthday !',
-        start_date: '2022-07-06'
+        start_date: '2022-06-15'
       },
       981292343: {
         id: 981292343,
@@ -89,13 +95,13 @@ function Schedule() {
         initials: "TW",
         role: "tech",
         day: '15',
-        month: '05',
+        month: '06',
         year: '2022',
         time_specified: true,
         time_start: '8:00am',
         time_end: '12:00pm',
         note: 'It is your birthday !',
-        start_date: '2022-07-06'
+        start_date: '2022-06-15'
       },
       9812938734: {
         id: 9812938734,
@@ -105,13 +111,13 @@ function Schedule() {
         initials: "TW",
         role: "tech",
         day: '15',
-        month: '05',
+        month: '06',
         year: '2022',
         time_specified: true,
         time_start: '8:00am',
         time_end: '12:00pm',
         note: 'It is your birthday !',
-        start_date: '2022-07-06'
+        start_date: '2022-06-15'
       },
       23748927: {
         id: 23748927,
@@ -121,16 +127,16 @@ function Schedule() {
         initials: "BN",
         role: "pharmacist",
         day: '15',
-        month: '05',
+        month: '06',
         year: '2022',
         time_specified: true,
         time_start: '12:00am',
         time_end: '12:00pm',
         note: 'Test123',
-        start_date: '2022-07-06'
+        start_date: '2022-06-15'
       },
     },
-    '2022_06_00': {
+    '2022_06_17': {
       981293: {
         id: 981293,
         user_id: 101,
@@ -138,14 +144,14 @@ function Schedule() {
         initials: "TW",
         last_name: "Wong",
         role: "tech",
-        day: '00',
+        day: '17',
         month: '06',
         year: '2022',
         time_specified: true,
         time_start: '8:00am',
         time_end: '12:00pm',
         note: 'It is your birthday !',
-        start_date: '2022-07-06'
+        start_date: '2022-06-17'
       },
       23748927: {
         id: 23748927,
@@ -154,14 +160,14 @@ function Schedule() {
         last_name: "Ng",
         initials: "BN",
         role: "pharmacist",
-        day: '00',
+        day: '17',
         month: '06',
         year: '2022',
         time_specified: true,
         time_start: '12:00am',
         time_end: '12:00pm',
         note: 'Test123',
-        start_date: '2022-07-06'
+        start_date: '2022-06-17'
       }
     },
     '2022_07_08': {
@@ -305,7 +311,7 @@ function Schedule() {
 
   const onMouseDown_bubble_handler = (e, date, calender_event_object, idx) => {
     set_click_hold(true);
-    console.log(date, e, calender_event_object, idx);
+    // console.log(date, e, calender_event_object, idx);
     set_click_start_object(calender_event_object);
     set_click_start_date(date);
     
@@ -573,6 +579,17 @@ function Schedule() {
     // console.log(events);
   }
 
+  const delete_event_entry = (event_day_string, event_day_id) => {
+    set_events(current => {
+      const items = Object.fromEntries(Object.entries(current[event_day_string]).filter(([k,v]) => k != event_day_id));
+      console.log(items)
+      return {
+        ...current,
+        [event_day_string]: items,
+      }
+    })
+  }
+
   return (
     <>
       <Sidebar selected={'schedule'}/>
@@ -662,11 +679,19 @@ function Schedule() {
               <div className='right_arrow' onClick={right_month_click_handler}>
                 <Right_Icon fill="white" width={13} height={13}/> 
               </div>
-              <h2 className="div_description" > 
-                { month_dt[month] } {year} 
-                {(chosen_calender_state == "Timesheet" && timesheet_first_half_month) ? " [1 - 15]" : ""} 
-                {(chosen_calender_state == "Timesheet" && !timesheet_first_half_month) ? ` [16 - ${numberOfDays_val}]` : ""} 
-              </h2>
+              { (chosen_calender_state != "Week") &&
+                <h2 className="div_description" > 
+                  { month_dt[month] } {year} 
+                  {(chosen_calender_state == "Timesheet" && timesheet_first_half_month) ? " [1 - 15]" : ""} 
+                  {(chosen_calender_state == "Timesheet" && !timesheet_first_half_month) ? ` [16 - ${numberOfDays_val}]` : ""} 
+                </h2>
+              }
+
+              { (chosen_calender_state == "Week") &&
+                <h2 className="div_description">
+                  
+                </h2>
+              }
               <div className="schedule_dropdown">
                 <Dropdown chosen={chosen_calender_state} set_chosen={set_chosen_calender_state} />
               </div>
@@ -851,7 +876,7 @@ function Schedule() {
                       <td>
                         <div className="week_large_div">
                           <div className="week_large_div_surface"> 
-                            <div className="week_example_timeline" style={{ top: '0px', height: '300px', backgroundColor: 'rgba(255, 51, 51, 0.3)'}}></div>
+                            <div className="week_example_timeline" style={{ top: '0px', height: '1175px', backgroundColor: 'rgba(255, 51, 51, 1)'}}></div>
                             <div className="week_example_timeline" style={{ top: '100px', height: '400px', backgroundColor: 'rgba(19, 166, 107, 0.3)'}}></div>
                             <div className="week_example_timeline" style={{ top: '400px', height: '500px', backgroundColor: 'rgba(228, 54, 255, 0.3)'}}></div>
                             
@@ -861,34 +886,25 @@ function Schedule() {
                             
                           </div> 
                           <div className="week_small_trim"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
-                          <div className="week_small_div"> </div>
+                          { [...Array(24)].map(() => {
+                              return (
+                                <div className="week_small_div"> </div>
+                              )
+                             }) }
                         </div>
                       </td>
                       <td>
                           <div className="week_large_div">
+                            <div className="week_large_div_surface"> 
+                              <div className="week_example_timeline" style={{ top: '0px', height: '300px', backgroundColor: 'rgba(255, 51, 51, 0.3)'}}></div>
+                              <div className="week_example_timeline" style={{ top: '100px', height: '400px', backgroundColor: 'rgba(19, 166, 107, 0.3)'}}></div>
+                              <div className="week_example_timeline" style={{ top: '400px', height: '500px', backgroundColor: 'rgba(228, 54, 255, 0.3)'}}></div>
+                              
+                              <div className="week_example_timeline" style={{ top: '30px', height: '670px', backgroundColor: 'rgba(252, 153, 54, 0.3)'}}></div>
+                              <div className="week_example_timeline" style={{ top: '600px', height: '430px', backgroundColor: 'rgba(64, 54, 252, 0.3)'}}></div>
+                              <div className="week_example_timeline" style={{ top: '20px', height: '590px', backgroundColor: 'rgba(207, 255, 16, 0.3)'}}></div>
+                              
+                            </div> 
                           <div className="week_small_div week_small_trim"> </div>
                           <div className="week_small_div"> </div>
                           <div className="week_small_div"> </div>
@@ -1158,6 +1174,13 @@ function Schedule() {
                           <div className="timesheet_row_total_time">
                             {hh} hrs
                           </div>
+                          <div className="timesheet_row_options"> 
+                            <div className="timesheet_row_options_delete"
+                              onClick={() => delete_event_entry(day_string, event.id)}
+                            >
+                              <Close_Icon fill={'white'} height={'10px'} width={'10px'} />
+                            </div>
+                          </div>
                         </div>
                       )
                       }
@@ -1185,16 +1208,17 @@ function Schedule() {
                 }
 
                 {full_year_calender[month_dt[month]].map((value, idx) => {
-                  // console.log( `${value.date}_${value.month}_${year}` );
+                  // console.log( `${year}_${value.month}_${value.date}` );
                   return (
                     <div className={`schedule_day ${value?.background ? 'lighter_date_color' : ''}`}
-                      onMouseOver={(e) => onMouseOver_bubble_handler(e, `${year}_${pad_integer_with_zeros(value.month, 2)}_${pad_integer_with_zeros(value.date, 2)}`)}
+                      onMouseOver={(e) => onMouseOver_bubble_handler(e, `${year}_${pad_integer_with_zeros(value.month+1, 2)}_${pad_integer_with_zeros(value.date, 2)}`)}
                       onMouseUp={(e) => onMouseUp_bubble_handler(e)}
                       onClick={() => set_draggable_div_open(true)}
                     > 
                       {/* date number */}
                       <div className={`large_calender_date ${((yyyy == year) && (value.date == dd) && (value.month == mm)) ? "large_calender_today" : ""}`}
                       > 
+                      {/* tooltip for "today's" date */}
                       { ((yyyy == year) && (value.date == dd) && (value.month == mm)) &&
                         <div className="today_tooltip">
                           <span className="today_tooltip_text">Today</span>
@@ -1203,10 +1227,10 @@ function Schedule() {
                         {value.date} 
                       </div>
                       <div className="large_calender_bubbles_wrapper">
-                        { Object.values(events[`${year}_${pad_integer_with_zeros(value.month, 2)}_${pad_integer_with_zeros(value.date, 2)}`] ?? {}).map((calender_event, calender_event_idx) => {
+                        { Object.values(events[`${year}_${pad_integer_with_zeros(value.month+1, 2)}_${pad_integer_with_zeros(value.date, 2)}`] ?? {}).map((calender_event, calender_event_idx) => {
                             return (
                               <div className="name_bubbles" 
-                                onMouseDown={(e) => onMouseDown_bubble_handler(e, `${year}_${pad_integer_with_zeros(value.month, 2)}_${pad_integer_with_zeros(value.date, 2)}`, calender_event, calender_event_idx)}
+                                onMouseDown={(e) => onMouseDown_bubble_handler(e, `${year}_${pad_integer_with_zeros(value.month+1, 2)}_${pad_integer_with_zeros(value.date, 2)}`, calender_event, calender_event_idx)}
                                 style={{ backgroundColor: individual_dt[calender_event?.user_id]?.color }}
                               >
                                 {calender_event?.initials}

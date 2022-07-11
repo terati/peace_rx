@@ -187,6 +187,11 @@ html {
   border-top: 1px solid var(--border-color);
   border-right: 1px solid var(--border-color);
   overflow: hidden;
+  transition: 1000ms ease all;
+  &:hover {
+    border-radius: 50px 0 100px 0;
+    background-image: radial-gradient( circle farthest-corner at 10% 20%,  rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 90% );
+  }
 }
 
 .large_calender_date {
@@ -451,7 +456,7 @@ html {
   justify-content: center;
   align-items: center;
   background-color: rgb(0, 0, 0);
-  border: 2px solid rgb(255, 255, 255);
+  // border: 2px solid rgb(255, 255, 255);
   color: white;
   font-size: 8px;
   height: 20px;

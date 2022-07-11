@@ -59,7 +59,7 @@ html {
   border-right: 1px solid var(--timesheet_border_color);
   align-items: center;
   justify-content: center;
-  background-color: rgb(25, 54, 45);
+  background-color: rgb(20, 90, 67);
   padding: 5px;
   box-sizing: border-box;
 }
@@ -71,7 +71,7 @@ html {
   border-right: 1px solid var(--timesheet_border_color);
   align-items: center;
   justify-content: center;
-  background-color: rgb(49, 39, 26);
+  background-color: rgb(135, 107, 71);
   padding: 5px;
   box-sizing: border-box;
 }
@@ -117,7 +117,32 @@ html {
   box-sizing: border-box;
 }
 
+.timesheet_row_options {
+  min-width: 50px;
+  height: 100%;
+  /* border-top: 1px solid var(--timesheet_border_color);
+  border-right: 1px solid var(--timesheet_border_color);
+  border-bottom: 1px solid var(--timesheet_border_color); */
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
 
+.timesheet_row_options_delete {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 20px;
+  width: 20px;
+  border-radius: 50%;
+}
+
+.timesheet_row_options_delete:hover {
+  background-color: rgb(228, 62, 62);
+  cursor: pointer;
+}
 
 .timesheet_head_selections {
   height: 50px;
@@ -142,7 +167,7 @@ html {
   width: 100%;
   border-radius: 5px;
   /* background-color: var(--main_background_color_darker1); */
-  background-color: rgb(2, 71, 12);
+  background-color: rgb(43, 128, 56);
   color: white;
   display: flex;
   align-items: center;
