@@ -59,14 +59,29 @@ function Schedule() {
   const [mini_calender_month, set_mini_calender_month] = React.useState(mm);
   const [mini_calender_year, set_mini_calender_year] = React.useState(yyyy);
 
-  const [week_dt, set_week_dt] = React.useState(week_compose(yyyy, mm, dd));
+  const [week_dt, set_week_dt] = React.useState(week_compose(yyyy, mm+1, dd));
 
   const [animation_status, set_animation_status] = React.useState(true);
 
   const [collapse_sidebar, set_collapse_sidebar] = React.useState(false);
 
+  const [week_header_date_description_label, set_week_header_date_description_label] = React.useState('');
+
   React.useEffect(() => {
-    set_week_dt(week_compose(yyyy, mm, dd));
+    let week_data_tmp = week_compose(yyyy, mm+1, dd);
+    let start_date_arr = week_data_tmp[0]?.date.split('_');
+    let end_date_arr = week_data_tmp[6]?.date.split('_');
+    if (start_date_arr[0] != end_date_arr[0]) {
+      let _st = `${month_dt[parseInt(start_date_arr[1]-1)].substr(0, 3)} ${start_date_arr[0]} - ${month_dt[parseInt(end_date_arr[1]-1)].substr(0, 3)} ${end_date_arr[0]}`
+      set_week_header_date_description_label(_st);
+    } else if (start_date_arr[1] !== end_date_arr[1]) {
+      let _st = `${month_dt[parseInt(start_date_arr[1]-1)].substr(0, 3)} - ${month_dt[parseInt(end_date_arr[1]-1)].substr(0, 3)} ${end_date_arr[0]}`
+      set_week_header_date_description_label(_st);
+    } else if (start_date_arr[1] == end_date_arr[1]) {
+      let _st = `${month_dt[parseInt(start_date_arr[1]-1)]} ${end_date_arr[0]}`
+      set_week_header_date_description_label(_st);
+    }
+    set_week_dt(week_data_tmp);
   }, [yyyy, mm, dd])
 
   const events_test = {
@@ -365,7 +380,14 @@ function Schedule() {
 
   // click handlers for large calender
   const left_month_click_handler = (event:any) => {
-    if (chosen_calender_state == 'Timesheet') {
+    if (chosen_calender_state == 'Week') {
+      let tmp_date = new Date(yyyy, mm, dd-7);
+      set_yyyy(tmp_date.getFullYear());
+      set_mm(tmp_date.getMonth());
+      set_dd(tmp_date.getDate());
+      set_mini_calender_month(tmp_date.getMonth());
+      set_mini_calender_year(tmp_date.getDate());
+    } else if (chosen_calender_state == 'Timesheet') {
       if (timesheet_first_half_month == false) {
         set_timesheet_first_half_month(true);
       } else if (month == 0 && timesheet_first_half_month == true) {
@@ -401,7 +423,14 @@ function Schedule() {
   }
 
   const right_month_click_handler = (event:any) => {
-    if (chosen_calender_state == 'Timesheet') {
+    if (chosen_calender_state == 'Week') {
+      let tmp_date = new Date(yyyy, mm, dd+7);
+      set_yyyy(tmp_date.getFullYear());
+      set_mm(tmp_date.getMonth());
+      set_dd(tmp_date.getDate());
+      set_mini_calender_month(tmp_date.getMonth());
+      set_mini_calender_year(tmp_date.getDate());
+    } else if (chosen_calender_state == 'Timesheet') {
       if (timesheet_first_half_month == true) {
         set_timesheet_first_half_month(false);
       } else if (month == 11 && timesheet_first_half_month == false) {
@@ -689,7 +718,8 @@ function Schedule() {
 
               { (chosen_calender_state == "Week") &&
                 <h2 className="div_description">
-                  
+                  { week_header_date_description_label }
+                  {/* {month_dt[parseInt(week_dt[0]?.date?.split('_')[1])]}   */}
                 </h2>
               }
               <div className="schedule_dropdown">
@@ -801,43 +831,43 @@ function Schedule() {
                       <th>
                         <div className="week_title_div">
                           <p>SUN</p>
-                          <h2>3</h2>
+                          <h2>{parseInt(week_dt[0]?.date?.split('_')[2])}</h2>
                         </div>
                       </th>
                       <th>
                         <div className="week_title_div">
                           <p>MON</p>
-                          <h2>4</h2>
+                          <h2>{parseInt(week_dt[1]?.date?.split('_')[2])}</h2>
                         </div>
                       </th>
                       <th>
                         <div className="week_title_div">
                           <p>TUE</p>
-                          <h2>5</h2>
+                          <h2>{parseInt(week_dt[2]?.date?.split('_')[2])}</h2>
                         </div>
                       </th>
                       <th>
                         <div className="week_title_div">
                           <p>WED</p>
-                          <h2>6</h2>
+                          <h2>{parseInt(week_dt[3]?.date?.split('_')[2])}</h2>
                         </div>
                       </th>
                       <th>
                         <div className="week_title_div">
                           <p>THU</p>
-                          <h2>7</h2>
+                          <h2>{parseInt(week_dt[4]?.date?.split('_')[2])}</h2>
                         </div>
                       </th>
                       <th>
                         <div className="week_title_div">
                           <p>FRI</p>
-                          <h2>8</h2>
+                          <h2>{parseInt(week_dt[5]?.date?.split('_')[2])}</h2>
                         </div>
                       </th>
                       <th>
                         <div className="week_title_div">
                           <p>SAT</p>
-                          <h2>9</h2>
+                          <h2>{parseInt(week_dt[6]?.date?.split('_')[2])}</h2>
                         </div>
                       </th>
                     </tr>
@@ -873,9 +903,43 @@ function Schedule() {
                           <div className="week_tickers_div"> <div className="week_tickers_div_offset"> 12 AM </div> </div>
                         </div>
                       </td>
-                      <td>
+                      {
+                        week_dt.map((entry, idx) => {
+                          // console.log(Object.values(events[entry?.date] ?? {}) );
+                          return (
+                            <td>
+                              <div className="week_large_div">
+                                <div className="week_large_div_surface"> 
+                                {/* week bars */}
+                                  {Object.values(events[entry?.date] ?? {}).map((day_event, idx) => {
+                                    return (
+                                      <div className="week_example_timeline" style={{ top: '0px', height: '1175px', backgroundColor: 'rgba(255, 51, 51, 1)'}}></div>
+                                    )
+                                  })}
+                                 
+                                  {/* <div className="week_example_timeline" style={{ top: '100px', height: '400px', backgroundColor: 'rgba(19, 166, 107, 0.3)'}}></div>
+                                  <div className="week_example_timeline" style={{ top: '400px', height: '500px', backgroundColor: 'rgba(228, 54, 255, 0.3)'}}></div>
+                                  
+                                  <div className="week_example_timeline" style={{ top: '30px', height: '670px', backgroundColor: 'rgba(252, 153, 54, 0.3)'}}></div>
+                                  <div className="week_example_timeline" style={{ top: '600px', height: '430px', backgroundColor: 'rgba(64, 54, 252, 0.3)'}}></div>
+                                  <div className="week_example_timeline" style={{ top: '20px', height: '590px', backgroundColor: 'rgba(207, 255, 16, 0.3)'}}></div> */}
+                                  
+                                </div> 
+                                <div className="week_small_trim"> </div>
+                                { [...Array(24)].map(() => {
+                                    return (
+                                      <div className="week_small_div"> </div>
+                                    )
+                                  }) }
+                              </div>
+                            </td>
+                          )
+                        })
+                      }
+                      {/* <td>
                         <div className="week_large_div">
                           <div className="week_large_div_surface"> 
+            
                             <div className="week_example_timeline" style={{ top: '0px', height: '1175px', backgroundColor: 'rgba(255, 51, 51, 1)'}}></div>
                             <div className="week_example_timeline" style={{ top: '100px', height: '400px', backgroundColor: 'rgba(19, 166, 107, 0.3)'}}></div>
                             <div className="week_example_timeline" style={{ top: '400px', height: '500px', backgroundColor: 'rgba(228, 54, 255, 0.3)'}}></div>
@@ -1076,7 +1140,7 @@ function Schedule() {
                           <div className="week_small_div"> </div>
                           <div className="week_small_div"> </div>
                         </div>
-                      </td>
+                      </td> */}
                     </tr>
                     
 
