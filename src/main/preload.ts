@@ -15,6 +15,9 @@ contextBridge.exposeInMainWorld('electron', {
     restore() {
       ipcRenderer.send('restore-window');
     },
+    redirect_login_to_home() {
+      ipcRenderer.send('redirect_login_to_home');
+    }, 
     on(channel: string, func: (...args: unknown[]) => void) { 
       const validChannels = ['ipc-example'];
       if (validChannels.includes(channel)) {

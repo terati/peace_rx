@@ -74,8 +74,7 @@ const createWindow = async () => {
     frame: false,
     show: false,
     // width: 1024,
-    // height: 728,
-    width: 1024,
+    width: 500,
     height: 728,
     icon: getAssetPath('peace_logo.png'),
     webPreferences: {
@@ -167,6 +166,7 @@ app
   ipcMain.on('minimize-window', () => {
     if (mainWindow) {
       mainWindow.minimize();
+      
     }
   })
 
@@ -180,6 +180,12 @@ app
     }
   })
  
+  ipcMain.on('redirect_login_to_home', () => {
+    if (mainWindow) {
+      mainWindow.loadURL(resolveHtmlPath('index.html'));
+      mainWindow.maximize();
+    }
+  })
 
 // -------------------------------------------------------------------------
 

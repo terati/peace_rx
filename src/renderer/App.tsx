@@ -8,7 +8,7 @@ import closeIcon from './../../assets/generalIcons/close.svg';
 import restoreUpIcon from './../../assets/generalIcons/restoreUp.svg';
 import restoreDownIcon from './../../assets/generalIcons/restoreDown.svg';
 
-import './App.css';
+import './App.scss';
 
 
 import Inventory from './Inventory/Inventory';
@@ -16,6 +16,7 @@ import { Main } from './Main';
 import Setting from './Setting/Setting';
 import { Schedule } from './Schedule';
 import './theme.scss';
+import { Login } from './Login';
 // onClick={() => ipcRenderer.send('close-window')}
 // import { ipcRenderer } from require('electron').myPing;
 
@@ -56,10 +57,13 @@ export default function App() {
 
       <Router> 
         <Routes>
-          <Route path="/" element={<Schedule />} />
+          {/* <Route path="/" element={<Schedule />} /> */}
+          <Route path="/" element={<Login />} />
           <Route path="/inventory" element={<Inventory />} />
           <Route path="/settings" element={<Setting />} />
           <Route path="/schedule" element={<Schedule />} />
+
+          <Route path="./login" element={<Login />} />
         </Routes>
       </Router>
     </>

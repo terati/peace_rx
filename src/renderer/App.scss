@@ -93,7 +93,7 @@ a:hover {
   height: 30px;
   padding: 0;
   margin: 0;
-  width: calc(100% - 2px); /*Compensate for body 1px border*/
+  width: calc(100%); /*Compensate for body 1px border*/
   background: #254053;
   z-index: 9999999999;
 }

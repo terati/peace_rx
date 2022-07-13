@@ -1,6 +1,6 @@
 import * as React from "react";
 import "./setting.css";
-import "./../App.css";
+import "./../App.scss";
 import Sidebar from 'renderer/Sidebar/Sidebar';
 import { Toggle } from "./Toggle";
 import { store } from "renderer/store";

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import "./../App.css"
+import "./../App.scss"
 import Sidebar from 'renderer/Sidebar/Sidebar';
 import "./Main.css";
 import Graph from './Graph';
