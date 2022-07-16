@@ -1,4 +1,5 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
+import { Amplify, Auth } from 'aws-amplify';
 import * as React from 'react';
 import icon from '../../assets/icon.svg';
 import axios from 'axios';
@@ -17,8 +18,29 @@ import Setting from './Setting/Setting';
 import { Schedule } from './Schedule';
 import './theme.scss';
 import { Login } from './Login';
+import config from 'config';
 // onClick={() => ipcRenderer.send('close-window')}
 // import { ipcRenderer } from require('electron').myPing;
+
+Amplify.configure({
+  aws_cognito_region: 'us-east-1',
+  Auth: {
+    mandatorySignIn: true,
+    region: config.cognito.REGION,
+    userPoolId: config.cognito.USER_POOL_ID,
+    identityPoolId: config.cognito.IDENTITY_POOL_ID,
+    userPoolWebClientId: config.cognito.APP_CLIENT_ID,
+  }
+})
+
+Auth.configure({
+  aws_cognito_region: 'us-east-1',
+  Auth: {
+    mandatorySignIn: true,
+    region: 'us-east-1',
+    identityPoolId: 'us-east-1:37fe7370-a658-4e7e-85c9-ec9b4c137c12',
+  }
+})
 
 export default function App() {
   const size = 10;

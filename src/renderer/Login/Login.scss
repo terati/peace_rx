@@ -7,15 +7,24 @@ input {
   color: white;
   padding: 15px 20px;
   border-radius: 5px;
-  margin: 5px 0px;
+  // margin: 5px 0px;
   box-sizing: border-box;
   border: 3px solid rgb(62, 62, 62);
   font-size: large;
+  width: 100%;
 }
 
 input:focus {
   outline: none;
   border: 3px solid white;
+}
+
+input:invalid:focus {
+  border-color: rgb(177, 0, 0);
+}
+
+.input_wrapper_div {
+  padding: 5px 0;
 }
 
 button {
@@ -73,11 +82,11 @@ button:hover {
   cursor: pointer;
 }
 
-.create_an_account {
+.create_an_account, .p_resend_code, .p_go_back_to_confirm_email{
   color: rgb(93, 130, 200);
 }
 
-.create_an_account:hover {
+.create_an_account:hover, .p_resend_code:hover, .p_go_back_to_confirm_email:hover {
   cursor: pointer;
 }
 
@@ -95,4 +104,81 @@ button:hover {
   cursor: pointer;
 }
 
+.incorrect_login_info {
+  color: rgb(198, 0, 0);
+  margin: 0;
+  visibility: show;
+}
 
+.incorrect_create_info {
+  color: rgb(198, 0, 0);
+  margin: 0;
+  visibility: show;
+}
+
+.loader {
+  border: 2px solid #434343;
+  border-top: 2px solid #b6b9ba;
+  border-right: 3px solid #b6b9ba;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.login_button .create_account_button{
+  height: 40px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.password_div_wrapper {
+  position: relative;
+  width: 100%;
+  input {
+   width: 100%; 
+  }
+  .create_account_password_tooltip {
+    background-color: rgb(0, 16, 11);
+    position: absolute;
+    padding: 10px;
+    left: 0;
+    top: calc(100% + 10px);
+    z-index: 999999;
+    border: 1px solid white;
+    visibility: visible;
+  }
+  .hide_create_account_password_tooltip {
+    visibility: hidden;
+  }
+  .create_account_password_tooltip:after {
+    content: '';
+    position: absolute;
+    border-top: 1px solid white;
+    border-left: 1px solid white;
+    background-color: rgb(9, 5, 0);
+    transform: rotate(45deg);
+    height: 10px;
+    width: 10px;
+    left: 20px;
+    top: -6px;
+    z-index: 9999999;
+  }
+}
+
+
+.incorrect_code {
+  color: red;
+  margin: 0;
+}
