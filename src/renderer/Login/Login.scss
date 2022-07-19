@@ -38,6 +38,10 @@ button {
   font-size: small;
 }
 
+button:focus {
+  outline-color: white;
+}
+
 button:hover {
   transform: none;
 }
@@ -72,26 +76,37 @@ button:hover {
   text-align: center;
 }
 
-.forgot_password {
+.p_forgot_password {
   color: rgb(93, 130, 200);
   padding-bottom: 0;
   margin-bottom: 0;
+  font-size: small;
+  text-align: end;
 }
 
-.forgot_password:hover {
+.p_forgot_password:hover {
   cursor: pointer;
 }
 
-.create_an_account, .p_resend_code, .p_go_back_to_confirm_email{
+.p_create_an_account, .p_resend_code, .p_go_back_to_confirm_email{
   color: rgb(93, 130, 200);
+  font-size: small;
+  text-align: end;
 }
 
-.create_an_account:hover, .p_resend_code:hover, .p_go_back_to_confirm_email:hover {
+.p_create_an_account:hover, .p_resend_code:hover, .p_go_back_to_confirm_email:hover {
   cursor: pointer;
 }
 
-.create_an_account_h2 {
+.p_create_an_account_h2 {
   text-align: center;
+}
+
+.div_p_login_wrapper {
+  display: flex;
+  justify-content: space-between;
+  box-sizing: border-box;
+  padding: 0 5px;
 }
 
 .go_back_to_sign_in {
@@ -135,12 +150,13 @@ button:hover {
   }
 }
 
-.login_button .create_account_button{
+.login_button, .create_account_button{
   height: 40px;
   box-sizing: border-box;
   display: flex;
   justify-content: center;
   align-items: center;
+
 }
 
 .password_div_wrapper {

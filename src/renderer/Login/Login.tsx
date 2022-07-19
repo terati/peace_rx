@@ -2,11 +2,12 @@ import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Amplify, Auth } from 'aws-amplify';
 import './Login.scss';
-
+import { store } from 'renderer/store';
+import { getIP_async } from 'reducers/ip_adr';
 
 function Login() {
   let navigate = useNavigate();
-  const [section, set_section] = React.useState<'login' | 'create' | 'forgot' | 'confirm'>('confirm'); 
+  const [section, set_section] = React.useState<'login' | 'create' | 'forgot' | 'confirm'>('login'); 
 
   const [email, set_email] = React.useState('');
   const [password, set_password] = React.useState('');
@@ -16,7 +17,8 @@ function Login() {
   const [loader_status, set_loader_status] = React.useState<boolean>(false);
   const [incorrect_code_status, set_incorrect_code_status] = React.useState(false);
 
-  const [test, set_test] = React.useState(true);
+  const [test, set_test] = React.useState(false);
+
 
   async function sign_in() {
     try {
@@ -24,9 +26,10 @@ function Login() {
       set_incorrect_login_info_status(false);
       console.log(email, password)
       const user = await Auth.signIn(email, password);
+      store.dispatch(getIP_async())
       console.log(user);
       navigate('/schedule');
-      window.electron.ipcRenderer.maximize();
+      window.electron.ipcRenderer.force_maximize();
     } catch (error) {
       set_loader_status(false);
       set_incorrect_login_info_status(true);
@@ -82,22 +85,32 @@ function Login() {
               <input type="email" required={true} placeholder="Email" value={email} onChange={(e) => set_email(e.target.value)}/>
             </div>
             <div className="input_wrapper_div">
-              <input type="password" required={true} placeholder="Password" value={password} onChange={(e) => set_password(e.target.value)}/>
+              <input type="password" 
+                required={true} 
+                placeholder="Password" 
+                value={password} 
+                onChange={(e) => set_password(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key == 'Enter') sign_in();
+                }}
+              />
             </div>
-            <p className="forgot_password"
-              onClick={() => {
-                set_section('forgot')
-                set_loader_status(false);
-                set_incorrect_login_info_status(false);
-              }}
-            > Forgot your password? </p>
-            <p className="create_an_account"
-              onClick={() => {
-                set_section('create')
-                set_loader_status(false);
-                set_incorrect_login_info_status(false);
-              }}
-            > Create an account </p>
+            <div className="div_p_login_wrapper">
+              <p className="p_forgot_password"
+                onClick={() => {
+                  set_section('forgot')
+                  set_loader_status(false);
+                  set_incorrect_login_info_status(false);
+                }}
+              > Forgot Password </p>
+              <p className="p_create_an_account"
+                onClick={() => {
+                  set_section('create')
+                  set_loader_status(false);
+                  set_incorrect_login_info_status(false);
+                }}
+              > Create Account </p>
+            </div>
             <button
               className="login_button"
               onClick={() => {

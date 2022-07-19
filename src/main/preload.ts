@@ -12,6 +12,9 @@ contextBridge.exposeInMainWorld('electron', {
     maximize() {
       ipcRenderer.send('maximize-window');
     },
+    force_maximize() {
+      ipcRenderer.send('force-maximize-window');
+    },
     restore() {
       ipcRenderer.send('restore-window');
     },

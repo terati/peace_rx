@@ -179,6 +179,16 @@ app
       }
     }
   })
+
+  ipcMain.on('force-maximize-window', () => {
+    if (mainWindow) {
+      if (mainWindow.isMaximized()) {
+        // already maximized
+      } else {
+        mainWindow.maximize();
+      }
+    }
+  })
  
   ipcMain.on('redirect_login_to_home', () => {
     if (mainWindow) {
