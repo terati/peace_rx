@@ -1,20 +1,13 @@
-/* input[type=text].popup_input, select.popup_input  {
-
-  padding: 4px 5px;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  display: inline;
-  border: 1px solid rgb(77, 77, 77);
-  border-radius: 4px;
-  box-sizing: border-box;
-  outline: none;
-  font-size: medium;
+input[type=text].popup_input, select.popup_input  {
   background-color: rgba(0, 0, 0, 0);
-  color: white;
+  box-sizing: border-box;
+  border: none;
+  padding: 5px 20px;
+  /* font-size: 1.5rem; */
 }
 
 input[type=text].popup_input:focus {
-  border: 1px solid rgb(100, 100, 100);
+  /* border: 1px solid rgb(100, 100, 100); */
 }
 
 input[type=submit] {
@@ -24,4 +17,4 @@ input[type=submit] {
   border: none; 
   border-radius: 4px;
   cursor: pointer;
-} */
+}

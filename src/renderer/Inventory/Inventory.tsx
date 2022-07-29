@@ -13,6 +13,7 @@ import { Loader } from './Loader';
 import { Inventory_Search } from './Inventory_Search';
 import dog_gif from "./../../../assets/generalIcons/doge.gif";
 import axios from 'axios';
+import { Question_Tooltip } from 'renderer/Components/Question_Tooltip';
 
 function Inventory() {
 
@@ -309,6 +310,9 @@ function Inventory() {
   ]
 
   const example = "propietary_name"
+
+  let popup_item_pharm_classes_list = popup_item_pharm_classes.split(',');
+
   return (
     <>
       <Sidebar selected={'inventory'}/>
@@ -322,70 +326,99 @@ function Inventory() {
           <div className="popup_div" onClick={() => set_search_div_open(false)} >  
             <div className="inner_popup" onClick={(e) => e.stopPropagation()} >
               <div className="inner_popup_items">
-                <div className="inner_popup_item_row">
-                  <div> Item Name: </div>
-                  <Popup_input value={popup_item_name} onChange={(e:any) => set_popup_item_name(e.target.value)} /> 
+                <div className="inner_popup_item_row_title">
+                  <h1> {popup_item_name} </h1>
+                  {/* <div> Item Name: </div>
+                  <Popup_input value={popup_item_name} onChange={(e:any) => set_popup_item_name(e.target.value)} />  */}
+                </div>
+                <div className="inner_popup_item_row_ndc">
+                  <div className="popup_ndc"> 
+                    <div> {popup_item_ndc} </div>
+                    <Question_Tooltip text="NDC"/>
+                  </div>
+                  {/* <Popup_input value={popup_item_ndc} onChange={(e:any) => set_popup_item_ndc(e.target.value)} />  */}
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> Nonpropietary Name: {popup_item_nonpropietary_name} </div>
+                  {/* <Popup_input value={popup_item_nonpropietary_name} onChange={(e:any) => set_popup_item_nonpropietary_name(e.target.value)} /> */}
+                </div>
+                <div className="inner_popup_item_row"> 
+                  <div> {popup_item_package_description} </div>
                 </div>
                 <div className="inner_popup_item_row">
-                  <div> NDC:  </div>
-                  <Popup_input value={popup_item_ndc} onChange={(e:any) => set_popup_item_ndc(e.target.value)} /> 
-                </div>
-                <div className="inner_popup_item_row">
-                  <div> QOH:  </div>
+                  <div className="div_popup_highlighted"> 
+                    <div> QOH </div>
+                    <Question_Tooltip text='Quantity On Hand' />
+                  </div>
                   <Popup_input value={popup_item_qoh} onChange={(e:any) => set_popup_item_qoh(e.target.value)} />
                 </div>
-                <div className="inner_popup_item_row">
-                  <div> Threshhold:  </div>
+                {/* <div className="inner_popup_item_row">
+                  <div className="div_popup_highlighted"> Threshhold  </div>
                   <Popup_input value={popup_item_threshhold} onChange={(e:any) => set_popup_item_threshhold(e.target.value)} />
-                </div>
+                </div> */}
                 <div className="inner_popup_item_row">
-                  <div> Price:  </div>
+                  <div className="div_popup_highlighted"> Price  </div>
                   <Popup_input value={popup_item_price} onChange={(e:any) => set_popup_item_price(e.target.value)} />
                 </div>
-                <div className="inner_popup_item_row"> 
-                  <div> Last Updated:  </div>
+                {/* <div className="inner_popup_item_row"> 
+                  <div className="div_popup_highlighted"> Last Updated  </div>
                   <Popup_input value={popup_item_name} onChange={(e:any) => set_popup_item_name(e.target.value)} />
-                </div>
-                <div className="inner_popup_item_row"> 
-                  <div> Package Description:  </div>
+                </div> */}
+                {/* <div className="inner_popup_item_row"> 
+                  <div className="div_popup_highlighted"> Package Description  </div>
                   <div className="inner_popup_item_content"> {popup_item_package_description} </div>
-                </div>
+                </div> */}
 
                 <div className="inner_popup_item_row"> 
-                  <div> Strength </div>
+                  <div className="div_popup_highlighted"> Strength </div>
                   <Popup_input value={`${popup_item_active_numerator_strength} ${popup_item_active_ingredient_unit}`}  />
                 </div>
                 <div className="inner_popup_item_row"> 
-                  <div> Deaschedule </div>
+                  <div className="div_popup_highlighted"> Deaschedule </div>
                   <Popup_input value={popup_item_deaschedule} onChange={(e:any) => set_popup_item_deaschedule(e.target.value)} />
                 </div>
                 <div className="inner_popup_item_row"> 
-                  <div> Product Type Name </div>
+                  <div className="div_popup_highlighted"> Product Type Name </div>
                   <Popup_input value={popup_item_product_type_name} onChange={(e:any) => set_popup_item_product_type_name(e.target.value)} />
                 </div>
+                
                 <div className="inner_popup_item_row"> 
-                  <div> Nonpropietary Name </div>
-                  <Popup_input value={popup_item_nonpropietary_name} onChange={(e:any) => set_popup_item_nonpropietary_name(e.target.value)} />
-                </div>
-                <div className="inner_popup_item_row"> 
-                  <div> Route Name </div>
+                  <div className="div_popup_highlighted">  
+                    <div> Route </div>
+                    <Question_Tooltip text='Route of Administration' />
+                  </div>
                   <Popup_input value={popup_item_route_name} onChange={(e:any) => set_popup_item_route_name(e.target.value)} />
                 </div>
                 <div className="inner_popup_item_row"> 
-                  <div> Dosage Form Name </div>
+                  <div className="div_popup_highlighted"> Dosage Form Name </div>
                   <Popup_input value={popup_item_dosage_form_name} onChange={(e:any) => set_popup_item_dosage_form_name(e.target.value)} />
                 </div>
                 <div className="inner_popup_item_row"> 
-                  <div> Substance Name </div>
+                  <div className="div_popup_highlighted"> Substance Name </div>
                   <Popup_input value={popup_item_substance_name} onChange={(e:any) => set_popup_item_substance_name(e.target.value)} />
                 </div>
                 <div className="inner_popup_item_row"> 
-                  <div> Start Marketing Date </div>
-                  <Popup_input value={popup_item_start_marketing_date} onChange={(e:any) => set_popup_item_start_marketing_date(e.target.value)} />
+                  <div className="div_popup_highlighted"> 
+                    <div> Marketing Start </div>
+                    <Question_Tooltip text='Date of Market Arrival {year, month, day}' />
+                  </div>
+                  <Popup_input value={popup_item_start_marketing_date} onChange={(e:any) => set_popup_item_start_marketing_date(e.target.value)} disable={true}/>
                 </div>
                 <div className="inner_popup_item_row"> 
-                  <div> Pharm Classes </div>
-                  <Popup_input value={popup_item_pharm_classes} onChange={(e:any) => set_popup_item_pharm_classes(e.target.value)} />
+                  <div className="div_popup_highlighted"> Pharm Classes </div>
+                  <div className="pharm_classes">
+                    {/* {popup_item_pharm_classes} */}
+                    {/* {popup_item_pharm_classes.split(',')} */}
+                    { popup_item_pharm_classes.split(',').map((el) => {
+                        if (el)
+                        return (
+                          <div className="pharm_class">
+                            {el}
+                          </div>
+                        )
+                    }) }
+                  </div>
+                  {/* <Popup_input value={popup_item_pharm_classes} onChange={(e:any) => set_popup_item_pharm_classes(e.target.value)} /> */}
                 </div>
                 {/* popup_item_pharm_classes */}
               </div>

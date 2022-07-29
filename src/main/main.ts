@@ -76,7 +76,7 @@ const createWindow = async () => {
     // width: 1024,
     width: 500,
     height: 728,
-    icon: getAssetPath('peace_logo.png'),
+    icon: getAssetPath('icon.png'),
     webPreferences: {
       // nodeIntegration: true,
       // contextIsolation: false,

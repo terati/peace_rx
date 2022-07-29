@@ -4,6 +4,7 @@ import { Amplify, Auth } from 'aws-amplify';
 import './Login.scss';
 import { store } from 'renderer/store';
 import { getIP_async } from 'reducers/ip_adr';
+import Logo from './../../../assets/icon.png'
 
 function Login() {
   let navigate = useNavigate();
@@ -79,6 +80,9 @@ function Login() {
       <div className="login_page_inner_wrapper">
         { section == 'login' &&
           <>
+            <div className="div_logo_wrapper">
+              <img height={100} width={100} src={Logo} alt="logo" />
+            </div>
             <h1> Welcome Back! </h1>
             <p>ACCOUNT INFORMATION</p> 
             <div className="input_wrapper_div">

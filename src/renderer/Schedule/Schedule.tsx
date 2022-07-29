@@ -1,8 +1,8 @@
 import * as React from 'react';
 import './schedule.scss';
-import './draggable_div.css';
+import './draggable_div.scss';
 import './schedule_week.scss';
-import './schedule_timesheet.css';
+import './schedule_timesheet.scss';
 import Sidebar from 'renderer/Sidebar/Sidebar';
 import { computeCalender, numberOfDays, week_compose } from './calender_calc';
 import MenuBurger_Icon from '../Icons_Color_Control/Menu_burger';
@@ -23,7 +23,7 @@ import "./mini_date_picker_tmp.css";
 import useWindowDimensions from './useWindowDimensions';
 import { stringify } from 'querystring';
 import { TimePicker } from './TimePicker';
-import { _12_to_24_hour } from './time_calc_helpers';
+import { _12_to_24_hour, time_to_timesheet_conversion_dt } from './time_calc_helpers';
 
 let month_dt = {
   0: "January",
@@ -48,6 +48,7 @@ function Schedule() {
   const [mm, set_mm] = React.useState(today.getMonth());
   const [yyyy, set_yyyy] = React.useState(today.getFullYear()); 
   const [full_year_calender, set_full_year_calender] = React.useState(computeCalender(yyyy));
+  // console.log(today)
   // console.log(full_year_calender);
 
   const [month, set_month] = React.useState(mm);
@@ -98,7 +99,8 @@ function Schedule() {
         year: '2022',
         time_specified: true,
         time_start: '8:00am',
-        time_end: '12:00pm',
+        time_end: '2:00pm',
+        time_elapsed: 6,
         note: 'It is your birthday !',
         start_date: '2022-06-15'
       },
@@ -114,7 +116,8 @@ function Schedule() {
         year: '2022',
         time_specified: true,
         time_start: '8:00am',
-        time_end: '12:00pm',
+        time_end: '2:00pm',
+        time_elapsed: 6,
         note: 'It is your birthday !',
         start_date: '2022-06-15'
       },
@@ -130,7 +133,8 @@ function Schedule() {
         year: '2022',
         time_specified: true,
         time_start: '8:00am',
-        time_end: '12:00pm',
+        time_end: '2:00pm',
+        time_elapsed: 6,
         note: 'It is your birthday !',
         start_date: '2022-06-15'
       },
@@ -146,7 +150,8 @@ function Schedule() {
         year: '2022',
         time_specified: true,
         time_start: '12:00am',
-        time_end: '12:00pm',
+        time_end: '2:00pm',
+        time_elapsed: 2,
         note: 'Test123',
         start_date: '2022-06-15'
       },
@@ -164,7 +169,8 @@ function Schedule() {
         year: '2022',
         time_specified: true,
         time_start: '8:00am',
-        time_end: '12:00pm',
+        time_end: '2:00pm',
+        time_elapsed: 6,
         note: 'It is your birthday !',
         start_date: '2022-06-17'
       },
@@ -180,7 +186,8 @@ function Schedule() {
         year: '2022',
         time_specified: true,
         time_start: '12:00am',
-        time_end: '12:00pm',
+        time_end: '2:00pm',
+        time_elapsed: 2,
         note: 'Test123',
         start_date: '2022-06-17'
       }
@@ -198,7 +205,8 @@ function Schedule() {
         year: '2022',
         time_specified: true,
         time_start: '12:00am',
-        time_end: '12:00pm',
+        time_end: '2:00pm',
+        time_elapsed: 4,
         note: 'Test123',
         start_date: '2022-07-08'
       }
@@ -323,6 +331,25 @@ function Schedule() {
   // array of dates
   const [date_array, set_date_array] = React.useState({});
 
+  const [new_event_start_time, set_new_event_start_time] = React.useState('9:00am');
+  const [new_event_end_time, set_new_event_end_time] = React.useState('9:00am'); 
+  const [new_event_elapsed_time, set_new_event_elapsed_time] = React.useState(0);
+  const calculate_elapsed_time = () => {
+    const date1 = new Date("08-05-2022 "+ _12_to_24_hour(new_event_start_time) );
+    const date2 = new Date("08-05-2022 "+ _12_to_24_hour(new_event_end_time) );
+    const diff = date2.getTime() - date1.getTime();
+    let msec = diff;
+    set_new_event_elapsed_time(msec / 1000 / 60 / 60);
+  } 
+  React.useEffect(() => {
+    calculate_elapsed_time();
+    // const date1 = new Date("08-05-2022 "+ _12_to_24_hour(new_event_start_time) );
+    // const date2 = new Date("08-05-2022 "+ _12_to_24_hour(new_event_end_time) );
+    // const diff = date2.getTime() - date1.getTime();
+    // let msec = diff;
+    // set_new_event_elapsed_time(msec / 1000 / 60 / 60);
+  }, [new_event_start_time, new_event_end_time])
+
 
   const onMouseDown_bubble_handler = (e, date, calender_event_object, idx) => {
     set_click_hold(true);
@@ -357,6 +384,9 @@ function Schedule() {
     set_click_hold(false);
   }
 
+  // new timesheet row
+  const [new_timesheet_date, set_new_timesheet_date] = React.useState(new Date()); 
+  const [new_timesheet_status, set_new_timesheet_status] = React.useState(false);
   
   //upmouse click event 
   React.useEffect(() => {
@@ -369,6 +399,7 @@ function Schedule() {
   }, [])
 
   const [create_dropdown_status, set_create_dropdown_status] = React.useState(false);
+  
 
   React.useEffect(() => {
     set_full_year_calender(computeCalender(year));
@@ -632,7 +663,7 @@ function Schedule() {
           tabIndex={0}
           onBlur={(e) => {
             if (!e.currentTarget.contains(e.relatedTarget)) { 
-              set_draggable_div_open(false);
+              // set_draggable_div_open(false);
             }
           }}
         > 
@@ -670,8 +701,21 @@ function Schedule() {
                   <Clock_Icon height="15px" width="15px" fill="white"/>
                 </div>
                 <div className="calender_draggable_content_right">
-                  Start:
-                  End:
+                  <div className="div_calender_draggable_content_right">
+                    <p className="start_style">Start </p> 
+                    <TimePicker value={new_event_start_time} set_time={set_new_event_start_time} reg={true} />
+                  </div>
+                  <div className="div_calender_draggable_content_right">
+                    <p className="end_style"> End </p> 
+                    <TimePicker value={new_event_end_time} set_time={set_new_event_end_time} reg={true} />
+                  </div>
+                  <div className="div_calender_draggable_content_right">
+                    <p className="p_elapsed_time"> Time Elapsed </p> 
+                    <div className="div_calender_draggable_elapsed_time"> 
+                      { new_event_elapsed_time }
+                      {" hours"} 
+                    </div>
+                  </div>
                 </div>
             </div>
             <div className="calender_draggable_content_row">
@@ -679,7 +723,7 @@ function Schedule() {
                   <Description_Icon height="15px" width="15px" fill="white"/>
                 </div>
                 <div className="calender_draggable_content_right">
-                  <span className="textarea" role="textbox" contentEditable></span>
+                  <span className="textarea" role="textbox" placeholder={"Optional Notes"} contentEditable></span>
                 </div>
             </div>
             <div className="calender_draggable_submit_row"> 
@@ -906,23 +950,29 @@ function Schedule() {
                       {
                         week_dt.map((entry, idx) => {
                           // console.log(Object.values(events[entry?.date] ?? {}) );
+                          // time_to_timesheet_conversion_dt
+                          console.log(events[entry.date]);
+                          // let top_px = time_to_timesheet_conversion_dt(events[entry.date]);
                           return (
                             <td>
                               <div className="week_large_div">
                                 <div className="week_large_div_surface"> 
                                 {/* week bars */}
                                   {Object.values(events[entry?.date] ?? {}).map((day_event, idx) => {
+                                    let top_px = time_to_timesheet_conversion_dt[day_event.time_start]*25;
+                                    let length_px = time_to_timesheet_conversion_dt[day_event.time_elapsed]*50;
+                                    console.log(top_px);
                                     return (
-                                      <div className="week_example_timeline" style={{ top: '0px', height: '1175px', backgroundColor: 'rgba(255, 51, 51, 1)'}}></div>
+                                      <div className="week_example_timeline" style={{ top: `${top_px}px`, height: `${length_px}px`, backgroundColor: 'rgba(255, 51, 51, 1)'}}></div>
                                     )
                                   })}
                                  
-                                  {/* <div className="week_example_timeline" style={{ top: '100px', height: '400px', backgroundColor: 'rgba(19, 166, 107, 0.3)'}}></div>
+                                  <div className="week_example_timeline" style={{ top: '0px', height: '50px', backgroundColor: 'rgba(19, 166, 107, 0.3)'}}></div>
                                   <div className="week_example_timeline" style={{ top: '400px', height: '500px', backgroundColor: 'rgba(228, 54, 255, 0.3)'}}></div>
                                   
                                   <div className="week_example_timeline" style={{ top: '30px', height: '670px', backgroundColor: 'rgba(252, 153, 54, 0.3)'}}></div>
                                   <div className="week_example_timeline" style={{ top: '600px', height: '430px', backgroundColor: 'rgba(64, 54, 252, 0.3)'}}></div>
-                                  <div className="week_example_timeline" style={{ top: '20px', height: '590px', backgroundColor: 'rgba(207, 255, 16, 0.3)'}}></div> */}
+                                  <div className="week_example_timeline" style={{ top: '20px', height: '590px', backgroundColor: 'rgba(207, 255, 16, 0.3)'}}></div>
                                   
                                 </div> 
                                 <div className="week_small_trim"> </div>
@@ -1151,108 +1201,129 @@ function Schedule() {
 
             { schedule_timesheet_calender_open_status && 
               <div className="schedule_timesheet_calender stc">
-                <div className="timesheet_head_selections">
-                  <div className="timesheet_individual_dropdown" 
-                    tabIndex={0}
-                    onClick={() => set_timesheet_individual_dropdown_open(!timesheet_individual_dropdown_open)}
-                    onBlur={() => set_timesheet_individual_dropdown_open(false)}  
-                  > 
-                    {timesheet_individual_dropdown_state}
-                    <div className={`timesheet_individual_dropdown_choices ${timesheet_individual_dropdown_open ? 'timesheet_individual_dropdown_choices_open' : ''}`}> 
-                      { Object.entries(individuals_dt).map((entry, idx) => {
-                        // console.log(entry)
-                        return (
-                          <div className="timesheet_individual_dropdown_options" onClick={() => set_timesheet_individual_dropdown_state(`${entry[1].first_name} ${entry[1].last_name}`)}>
-                            {entry[1].first_name} {entry[1].last_name}
-                          </div>
+  
+                
+                <div className="timesheet_vertical_divider">
+                  <div className="timesheet_left_division">
+                    <div className="timesheet_head_selections">
+                      <div className="timesheet_individual_dropdown" 
+                        tabIndex={0}
+                        onClick={() => set_timesheet_individual_dropdown_open(!timesheet_individual_dropdown_open)}
+                        onBlur={() => set_timesheet_individual_dropdown_open(false)}  
+                      > 
+                        {timesheet_individual_dropdown_state}
+                        <div className={`timesheet_individual_dropdown_choices ${timesheet_individual_dropdown_open ? 'timesheet_individual_dropdown_choices_open' : ''}`}> 
+                          { Object.entries(individuals_dt).map((entry, idx) => {
+                            // console.log(entry)
+                            return (
+                              <div className="timesheet_individual_dropdown_options" onClick={() => set_timesheet_individual_dropdown_state(`${entry[1].first_name} ${entry[1].last_name}`)}>
+                                {entry[1].first_name} {entry[1].last_name}
+                              </div>
+                            )
+                          }) }
+                          
+                      </div>
+                    </div>
+                    <div className="save_individual_timesheet_button_wrapper">
+                        
+                      </div>
+                    </div>
+
+                    { (timesheet_first_half_month ? range(1, 15, 1) : range(16, Number(numberOfDays_val), 1)).map((day_value, idx) => { 
+                      let day_string = pad_integer_with_zeros(year, 2) + '_' +
+                                        pad_integer_with_zeros(month+1, 2) + '_' + 
+                                        pad_integer_with_zeros(day_value, 2);
+                      // console.log(day_string);
+                      // console.log(events[day_string]); 
+                      let day = events[day_string];
+                      if (day) {
+                        // console.log(Object.values(day));
+                        return Object.values(day).map((event, idx) => {
+                          // console.log(timesheet_individual_dropdown_state);
+                          // console.log(`${event.first_name} ${event.last_name}`);
+                          if (timesheet_individual_dropdown_state == `${event.first_name} ${event.last_name}`) {
+                            // console.log(event);
+                            // set_date_array({
+                            //   ...date_array,
+                            //   [event.id]: {
+                            //     "id" : event.id,
+                            //     "time_start" : event.time_start,
+                            //     "time_end" : event.time_end
+                            //   }
+                            // })
+                            // console.log(day[event.id]);
+                        
+                            const date1 = new Date("08-05-2022 "+ _12_to_24_hour(day[event.id].time_start) );
+                            const date2 = new Date("08-05-2022 "+ _12_to_24_hour(day[event.id].time_end) );
+                            const diff = date2.getTime() - date1.getTime();
+                            let msec = diff;
+                            const hh = msec / 1000 / 60 / 60;
+                            // console.log(hh);
+
+                            return (
+                            // timesheet_individual_dropdown_state
+                              <div key={event.id} className="timesheet_row">
+                                <div className="timesheet_row_date">
+                                    <DatePicker 
+                                      selected={new Date(day[event.id].start_date)} 
+                                      onChange={(new_date) => onChange_datepicker_handler(day_string, event.id, new_date)}
+                                      autocomplete={true}
+                                    />
+                                </div>
+                                <div className="timesheet_row_start_end"> 
+                                  <div className="timesheet_row_start_end_denotation">
+                                    <div className="timesheet_start">
+                                      <div className="timesheet_start_inner_div"> Start </div>
+                                    </div>
+                                    <div className="timesheet_end">
+                                      <div className="timesheet_end_inner_div"> End </div>
+                                    </div>
+                                  </div>
+                                  <div className="timesheet_row_start_end_times">
+                                    <div className="timesheet_start_data">
+                                      <TimePicker value={day[event.id].time_start} set_events={set_events} day_string={day_string} event_id={event.id} start={true}/>
+                                    </div>
+                                    <div className="timesheet_end_data">
+                                      <TimePicker value={day[event.id].time_end} set_events={set_events} day_string={day_string} event_id={event.id} start={false}/>
+                                    </div> 
+                                  </div>
+                                </div>
+                                <div className="timesheet_row_total_time">
+                                  <div className="div_inner_timesheet_row_total_time">
+                                    {hh} hrs
+                                  </div>
+                                </div>
+                                <div className="timesheet_row_options"> 
+                                  <div className="timesheet_row_options_delete"
+                                    onClick={() => delete_event_entry(day_string, event.id)}
+                                  >
+                                    <Close_Icon fill={'white'} height={'10px'} width={'10px'} />
+                                  </div>
+                                </div>
+                              </div>
+                            )
+                          }
+                        }
                         )
-                      }) }
-                      
+                      }
+                
+                    })}
+                  </div>
+                  <div className="timesheet_right_division">
+                    <div className="div_timesheet_right_division_content">
+                      <p> • <strong>Notice</strong>: All changes including event creation alterations, deletions, are logged. </p>
+                      <p> • All changes are automatically saved. 
+                        Changes are SUCCESSFUL as long as there there 
+                        is a green status bar and shows RED if unsuccessful. </p> 
+                      <p> • Reasons for an UNSUCCESSFUL save includes: </p>
+                        <ul className='bullet_points'>
+                          <li> Negative hours </li>
+                          <li> An invalid date </li>  
+                          <li> Loss of internet </li>  
+                        </ul>
                     </div>
                   </div>
-                  <div className="save_individual_timesheet_button_wrapper">
-                      <button className="save_individual_timesheet_button">
-                        Save
-                      </button>
-                  </div>
                 </div>
-              
-                { (timesheet_first_half_month ? range(1, 15, 1) : range(16, Number(numberOfDays_val), 1)).map((day_value, idx) => { 
-                  let day_string = pad_integer_with_zeros(year, 2) + '_' +
-                                    pad_integer_with_zeros(month+1, 2) + '_' + 
-                                    pad_integer_with_zeros(day_value, 2);
-                  // console.log(day_string);
-                  // console.log(events[day_string]); 
-                  let day = events[day_string];
-                  if (day) {
-                    // console.log(Object.values(day));
-                    return Object.values(day).map((event, idx) => {
-                      // console.log(timesheet_individual_dropdown_state);
-                      // console.log(`${event.first_name} ${event.last_name}`);
-                      if (timesheet_individual_dropdown_state == `${event.first_name} ${event.last_name}`) {
-                        // console.log(event);
-                        // set_date_array({
-                        //   ...date_array,
-                        //   [event.id]: {
-                        //     "id" : event.id,
-                        //     "time_start" : event.time_start,
-                        //     "time_end" : event.time_end
-                        //   }
-                        // })
-                        // console.log(day[event.id]);
-                    
-                        const date1 = new Date("08-05-2022 "+ _12_to_24_hour(day[event.id].time_start) );
-                        const date2 = new Date("08-05-2022 "+ _12_to_24_hour(day[event.id].time_end) );
-                        const diff = date2.getTime() - date1.getTime();
-                        let msec = diff;
-                        const hh = msec / 1000 / 60 / 60;
-                        // console.log(hh);
-
-                        return (
-                        // timesheet_individual_dropdown_state
-                        <div key={event.id} className="timesheet_row">
-                          <div className="timesheet_row_date">
-                              <DatePicker 
-                                selected={new Date(day[event.id].start_date)} 
-                                onChange={(new_date) => onChange_datepicker_handler(day_string, event.id, new_date)}
-                              />
-                          </div>
-                          <div className="timesheet_row_start_end"> 
-                            <div className="timesheet_row_start_end_denotation">
-                              <div className="timesheet_start">
-                                Start
-                              </div>
-                              <div className="timesheet_end">
-                                End
-                              </div>
-                            </div>
-                            <div className="timesheet_row_start_end_times">
-                              <div className="timesheet_start_data">
-                                <TimePicker value={day[event.id].time_start} set_events={set_events} day_string={day_string} event_id={event.id} start={true}/>
-                              </div>
-                              <div className="timesheet_end_data">
-                                <TimePicker value={day[event.id].time_end} set_events={set_events} day_string={day_string} event_id={event.id} start={false}/>
-                              </div> 
-                            </div>
-                          </div>
-                          <div className="timesheet_row_total_time">
-                            {hh} hrs
-                          </div>
-                          <div className="timesheet_row_options"> 
-                            <div className="timesheet_row_options_delete"
-                              onClick={() => delete_event_entry(day_string, event.id)}
-                            >
-                              <Close_Icon fill={'white'} height={'10px'} width={'10px'} />
-                            </div>
-                          </div>
-                        </div>
-                      )
-                      }
-                    }
-                    )
-                  }
-            
-                })}
               </div>
 
             }
@@ -1309,6 +1380,7 @@ function Schedule() {
               </div>
             }
           </div>
+
         </div>
 
       </div>

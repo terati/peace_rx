@@ -1,6 +1,6 @@
 {
-  "name": "electron-react-boilerplate",
-  "description": "A foundation for scalable desktop apps",
+  "name": "peace-logistic",
+  "description": "a logistical application for pharmacy inventory",
   "scripts": {
     "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
     "build:main": "cross-env NODE_ENV=production TS_NODE_TRANSPILE_ONLY=true webpack --config ./.erb/configs/webpack.config.main.prod.ts",
@@ -17,13 +17,16 @@
     "prepare": "husky install"
   },
   "build": {
-    "productName": "ElectronReact",
-    "appId": "org.erb.ElectronReact",
+    "productName": "Peace Logistic",
+    "appId": "com.electron.peace_rx",
     "asar": true,
     "asarUnpack": "**\\*.{node,dll}",
     "files": [
-      "dist",
-      "node_modules",
+      "dist/",
+      "node_modules/",
+      "app.html",
+      "main.prod.js",
+      "main.prod.js.map",
       "package.json"
     ],
     "afterSign": ".erb/scripts/notarize.js",
@@ -58,7 +61,8 @@
     "win": {
       "target": [
         "nsis"
-      ]
+      ],
+      "icon": "./build/win-unpacked/resources/assets/peace_logo.png"
     },
     "linux": {
       "target": [
@@ -76,8 +80,8 @@
     ],
     "publish": {
       "provider": "github",
-      "owner": "electron-react-boilerplate",
-      "repo": "electron-react-boilerplate"
+      "owner": "",
+      "repo": ""
     }
   },
   "author": {
@@ -247,9 +251,7 @@
     "node": ">=14.x",
     "npm": ">=7.x"
   },
-  "collective": {
-    "url": "https://opencollective.com/electron-react-boilerplate-594"
-  },
+  "collective": {},
   "browserslist": [],
   "prettier": {
     "overrides": [

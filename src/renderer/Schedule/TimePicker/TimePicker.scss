@@ -5,7 +5,7 @@
   position: relative;
   /* background-color: rgb(37, 37, 37); */
   height: 30px;
-  width: 100%;
+  // width: 100%;
   box-sizing: border-box;
   input {
     background-color: rgba(0, 255, 255, 0);
@@ -14,6 +14,11 @@
     border: none;
     text-align: center;
     font-size: medium;
+    box-sizing: border-box;
+  }
+  input:focus {
+    outline: none;
+    border: none;
   }
   input:hover {
     cursor: pointer;
@@ -50,6 +55,10 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  &:focus {
+    outline: none;
+    background-color: rgb(19, 19, 19);
+  }
 }
 
 .time_selection_dropdown_item:hover {

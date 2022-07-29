@@ -82,11 +82,12 @@
 
 .calender_draggable_content_left {
   display: flex;
-  width: 50px;
+  width: 30px;
   /* background-color: aquamarine; */
   padding: 5px 10px;
   /* display: block; */
   justify-content: center;
+  margin-right: 10px;
   /* align-items: center; */
 }
 
@@ -97,15 +98,53 @@
   display: block;
   position: relative;
   margin-right: 20px;
+  margin-bottom: 20px;
 }
 
 .calender_draggable_content_right h2 {
   margin: 10px 0 0 0;
 }
 
+.div_calender_draggable_content_right {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: 5px 10px;
+  p {
+    min-width: 50px;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+.start_style {
+  text-align: center;
+  min-width: 50px;
+  background-color: rgb(20, 90, 67);
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+.end_style {
+  text-align: center;
+  min-width: 50px;
+  background-color: rgb(156, 24, 160);
+  border-radius: 5px;
+  padding: 5px 10px;
+}
+
+
+
 .drag_header_div {
   border-bottom: 2px solid rgb(79, 81, 107);
   margin-bottom: 10px;
+}
+
+[contenteditable][placeholder]:empty:before {
+  content: attr(placeholder);
+  position: absolute;
+  color: gray;
+  background-color: transparent;
 }
 
 .textarea {
@@ -114,7 +153,7 @@
   /* max-width: 100%; */
   overflow: hidden;
   resize: none;
-  min-height: 100px;
+  min-height: 80px;
   height: fit-content;
   line-height: 20px;
   /* position: absolute; */
@@ -165,7 +204,7 @@
   background-color: rgb(68, 59, 154);
   color: white;
   border-radius: 3px;
-  padding: 10px 20px;
+  padding: 5px 10px;
   font-size: 15px;
   transition: .2s ease;
 }
@@ -185,6 +224,17 @@
   padding: 5px;
 }
 
+.div_calender_draggable_elapsed_time {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-grow: 1;
+}
 
+.p_elapsed_time {
+  margin-bottom: 10px;
+  // border-radius: 5px;
+  // background-color: rgb(31, 67, 183);
+}
 
 

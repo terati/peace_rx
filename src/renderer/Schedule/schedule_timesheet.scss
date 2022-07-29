@@ -43,7 +43,7 @@ html {
   min-width: 200px;
   height: 100%;
   border-top: 1px solid var(--timesheet_border_color);
-  border-left: 1px solid var(--timesheet_border_color);
+  // border-left: 1px solid var(--timesheet_border_color);
   border-bottom: 1px solid var(--timesheet_border_color);
   box-sizing: border-box;
 }
@@ -56,24 +56,42 @@ html {
 .timesheet_start {
   display: flex;
   flex-grow: 1;
-  border-right: 1px solid var(--timesheet_border_color);
+  // border-right: 1px solid var(--timesheet_border_color);
   align-items: center;
   justify-content: center;
-  background-color: rgb(20, 90, 67);
+  box-sizing: border-box;
+  // background-color: rgb(20, 90, 67);
+  // border-radius: 20px;
   padding: 5px;
   box-sizing: border-box;
+  .timesheet_start_inner_div {
+    background-color: rgb(20, 90, 67);
+    margin: 0;
+    padding: 5px 10px;
+    min-width: 50px;
+    text-align: end;
+    border-radius: 5px;
+  }
 }
 
 .timesheet_end {
   display: flex;
   flex-grow: 1;
   border-top: 1px solid var(--timesheet_border_color);
-  border-right: 1px solid var(--timesheet_border_color);
+  // border-right: 1px solid var(--timesheet_border_color);
   align-items: center;
   justify-content: center;
-  background-color: rgb(135, 107, 71);
+  // background-color: rgb(135, 107, 71);
   padding: 5px;
   box-sizing: border-box;
+  .timesheet_end_inner_div {
+    background-color: rgb(156, 24, 160);
+    margin: 0;
+    padding: 5px 10px;
+    min-width: 50px;
+    text-align: end;
+    border-radius: 5px;
+  }
 }
 
 .timesheet_row_start_end_times {
@@ -105,24 +123,37 @@ html {
 
 .timesheet_row_total_time {
   /* background-color: bisque; */
-  min-width: 100px;
+  min-width: 60px;
   height: 100%;
   border-top: 1px solid var(--timesheet_border_color);
-  border-left: 1px solid var(--timesheet_border_color);
-  border-right: 1px solid var(--timesheet_border_color);
+  // border-left: 1px solid var(--timesheet_border_color);
+  // border-right: 1px solid var(--timesheet_border_color);
   border-bottom: 1px solid var(--timesheet_border_color);
+  // border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: start;
+  box-sizing: border-box;
+}
+
+.div_inner_timesheet_row_total_time {
   display: flex;
   align-items: center;
   justify-content: center;
-  box-sizing: border-box;
+  height: 50%;
+  border-top: 1px solid var(--timesheet_border_color);
+  border-right: 1px solid var(--timesheet_border_color);
+  border-bottom: 1px solid var(--timesheet_border_color);
+  border-radius: 10px;
+  min-width: 50px;
 }
 
 .timesheet_row_options {
   min-width: 50px;
   height: 100%;
-  /* border-top: 1px solid var(--timesheet_border_color);
-  border-right: 1px solid var(--timesheet_border_color);
-  border-bottom: 1px solid var(--timesheet_border_color); */
+  border-top: 1px solid var(--timesheet_border_color);
+  // border-right: 1px solid var(--timesheet_border_color);
+  border-bottom: 1px solid var(--timesheet_border_color);
   box-sizing: border-box;
   display: flex;
   flex-direction: row;
@@ -145,13 +176,15 @@ html {
 }
 
 .timesheet_head_selections {
-  height: 50px;
+  height: 30px;
   /* background-color: yellowgreen; */
   display: flex;
+  // flex-grow: 1;
   padding: 10px 10px;
   align-items: center;
   flex-direction: row;
   justify-content: space-between;
+  border-bottom: solid 1px var(--timesheet_border_color);
 }
 
 .save_individual_timesheet_button_wrapper {
@@ -240,7 +273,67 @@ html {
 }
 
 
+.timesheet_add_row {
+  // width: 100%;
+  // background-color: red;
+  // padding: 10px;
+  display: flex;
+  flex-direction: column;
+  // align-items: center;
+  // padding: 5px 10px;
+  p {
+    padding: 0px;
+    margin: 5px 10px;
+  }
+  .button_timesheet_add_row {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    border: solid 1px gray;
+    width: 150px;
+  }
+  .button_timesheet_add_row:hover {
+    background-color: rgb(25, 25, 25);
+  }
+}
+
+.timesheet_vertical_divider {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.timesheet_left_division {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  justify-content: start;
+  // background-color: aqua;
+}
+
+.timesheet_right_division {
+  min-width: 200px;
+  max-width: 200px;
+  height: 100%;
+  // background-color: aliceblue;
+  border-left: solid 1px var(--timesheet_border_color);
+  box-sizing: border-box;
+}
 
 
+.div_timesheet_right_division_content {
+  padding: 0px 20px;
+  color: rgb(161, 161, 161);
+  font-weight: lighter;
+  line-height: normal;
+}
 
+li::before {
+  content: "•";
+}
 
+ul.bullet_points {
+  margin: 0;
+  padding-left: 20px;
+}

@@ -32,6 +32,14 @@ function Setting() {
     store.dispatch(toggle_dark_light());
   }
 
+  // const clickTestHandler = () => {
+  //   pyshell.run('hello.py',  function  (err, results)  {
+  //     if  (err)  throw err;
+  //     console.log('hello.py finished.');
+  //     console.log('results', results);
+  //    });
+  // }
+
   return (
     <>
       <Sidebar selected={'settings'}/>
@@ -85,6 +93,7 @@ function Setting() {
           <div>
             MIT License. 
           </div>
+ 
         </div>
       </div>
 

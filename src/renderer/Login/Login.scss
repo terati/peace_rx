@@ -76,6 +76,19 @@ button:hover {
   text-align: center;
 }
 
+.div_logo_wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  img {
+    -webkit-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+  }
+  
+}
+
 .p_forgot_password {
   color: rgb(93, 130, 200);
   padding-bottom: 0;
