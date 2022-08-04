@@ -4,7 +4,16 @@
   box-sizing: border-box;
   padding: 12px 20px;
   color: white;
+  border: 3px solid rgb(69, 69, 69);
+  margin: 5px 0;
+  width: 100%;
+  min-width: 500px;
+  &:hover {
+    border: 3px solid white;
+  }
 }
+
+
 
 /* input[type=text], select {
   width: 500px;

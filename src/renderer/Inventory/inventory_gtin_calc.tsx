@@ -9,7 +9,7 @@ const parseGS1 = (data: any) => {
     '17' : ['Expiration Date', 6],
     '21' : ['Serial Number', null]
   };
-  console.log(data);
+  // console.log(data);
   let ret_dt = {};
   for (let i = 0; i < data.length; i++) {
     let tmp = data[i];
@@ -36,10 +36,10 @@ const parseGS1 = (data: any) => {
 }
 
 
-let tmp = parseGS1("01003658622019042134H149H1Y583S04 1724113010LJ2521019-A ");
-console.log(tmp)
+// let tmp = parseGS1("01003658622019042134H149H1Y583S04 1724113010LJ2521019-A ");
+// console.log(tmp)
 
 
 export {
-
+  parseGS1
 }

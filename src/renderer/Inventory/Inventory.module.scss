@@ -60,7 +60,7 @@ table, th, tr {
 }
 
 .body_td td {
-  
+  border: none;
 }
 
 table.table_wrapper{
@@ -188,11 +188,11 @@ tr:nth-child(even) {
 }
 
 tr:nth-child(even):hover {
-  background-color: rgb(0, 53, 26);
+  background-color: rgb(15, 56, 103);
 }
 
-tr:hover {
-  background-color: rgb(0, 53, 26);
+tr:nth-child(odd):hover {
+  background-color: rgb(15, 56, 103);
 }
 
 .table_item_div_head {
@@ -378,6 +378,39 @@ tr:hover {
   margin: 5px 0;
 }
 
+.inner_popup_item_ingredient_card {
+  display: flex;
+  height: 100px;
+  max-height: 100px; 
+  width: 150px; 
+  max-width: 150px;
+  padding: 10px;
+  margin: 0 10px;
+  box-sizing: border-box;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  background-color: #063762;
+  overflow: hidden;
+  .ingredient {
+    width: 100%;
+    min-width: 100%;
+    text-align: center;
+    overflow-x: auto;
+  }
+  .ingredient::-webkit-scrollbar {
+    display: none;
+  }
+  .strength {
+    text-align: center;
+    overflow-x: auto;
+  }
+}
+
+.inner_popup_item_row_nonprietary_name {
+  font-size: 20px;
+}
+
 .inner_popup_item_row_title {
   display: flex;
   width: 100%;
@@ -440,8 +473,26 @@ tr:hover {
   flex-direction: row;
   flex-wrap: wrap;
   // flex-wrap: nowrap;
-  .pharm_class {
+  .pharm_class_epc {
     background-color: #840b8f;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px 5px;
+    max-height: 2em;
+    line-height: 1em;
+    overflow-x: auto;
+  }
+  .pharm_class_pe {
+    background-color: #0c873d;
+    border-radius: 5px;
+    padding: 5px 10px;
+    margin: 5px 5px;
+    max-height: 2em;
+    line-height: 1em;
+    overflow-x: auto;
+  }
+  .pharm_class_cs {
+    background-color: #972117;
     border-radius: 5px;
     padding: 5px 10px;
     margin: 5px 5px;
@@ -532,7 +583,7 @@ tr:hover {
 }
 
 .select_show_options select {
-  background-color: #3a3939;
+  // background-color: #3a3939;
   color: white;
   width: auto;
   height: auto;
