@@ -16,6 +16,7 @@ import axios from 'axios';
 import { Question_Tooltip } from 'renderer/Components/Question_Tooltip';
 import { Inventory_Action_Status } from './Inventory_Action_Status';
 import { parseGS1 } from './inventory_gtin_calc';
+import { Items_Per_Page } from './Items_Per_Page';
 
 function Inventory() {
 
@@ -101,7 +102,7 @@ function Inventory() {
   const [pagination_offset, set_pagination_offset] = React.useState(0);
   const [pagination_limit, set_pagination_limit] = React.useState(50);
   const [pagination_index, set_pagination_index] = React.useState(1);
-
+  const [number_of_items, set_number_of_items] = React.useState(50);
 
 
   const throttled = React.useCallback(
@@ -185,7 +186,7 @@ function Inventory() {
     set_pagination_offset(0);
     throttled(search_value);
     set_selected_row_index(1);
-    console.log('fire')
+    console.log('fire') 
   }, [search_value])
 
   React.useEffect(() => {
@@ -304,8 +305,8 @@ function Inventory() {
   // console.log(div_table_ref.current?.clientWidth/8)
 
   const [column_widths, set_column_widths] = React.useState({
-    0: '100px',
-    1: '150px',
+    0: '150px',
+    1: '100px',
     2: '150px',
     3: '80px',
     4: '80px',
@@ -314,8 +315,8 @@ function Inventory() {
     7: '500px'
   });
   const [parent_x_dt, set_parent_x_dt] = React.useState({
-    0: '100px',
-    1: '150px',
+    0: '150px',
+    1: '100px',
     2: '150px',
     3: '80px',
     4: '80px',
@@ -328,15 +329,15 @@ function Inventory() {
 
   const table_column_titles = [
     {
-      name: "Brand Name",
-      width: div_table_ref.current?.clientWidth/(8),
-      parse_property: "brand_name",
-      additional_properties: ""
-    },
-    {
       name: "Generic Name",
       width: div_table_ref.current?.clientWidth/(8),
       parse_property: "generic_name",
+      additional_properties: ""
+    },
+    {
+      name: "Brand Name",
+      width: div_table_ref.current?.clientWidth/(8),
+      parse_property: "brand_name",
       additional_properties: ""
     },
     {
@@ -768,18 +769,16 @@ function Inventory() {
           </div>
 
           <div className={inventory_style.pagination_options}> 
-                <Pagination ref={ref} max={pagination_page_count} current={3} pagination_index={pagination_index} set_pagination_index={set_pagination_index}/>
+            <div className={inventory_style.select_show_options}>
+              <p style={{padding: "5px"}}>Showing: {pagination_index} / {pagination_page_count} page </p> 
+            </div>
+      
+            <Pagination ref={ref} max={pagination_page_count} current={3} pagination_index={pagination_index} set_pagination_index={set_pagination_index}/>
 
-                
-
-                <div className={inventory_style.select_show_options}>
-                  <p style={{padding: "5px"}}>Show: {pagination_index} / {pagination_page_count} page </p> 
-                  <select>
-                    <option value="0">10 rows</option>
-                    <option value="1">50 rows</option>
-                    <option value="2">100 rows</option>
-                  </select>
-                </div>
+            <Items_Per_Page 
+              number_of_items={number_of_items} 
+              set_number_of_items={set_number_of_items}
+            />
           </div>
 
         </div>
