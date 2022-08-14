@@ -1,0 +1,45 @@
+@import "renderer/theme.scss";
+
+.logout_card {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  width: 400px; 
+  height: 400px;
+  top: calc(50vh - 200px);
+  left: calc(50vw - 200px);
+  z-index: 999999999999;
+  background-color: var(--main_background_color);
+  .header {
+    display: flex;
+    flex-direction: row-reverse;
+    height: 30px; 
+    // border-bottom: 1px solid white;
+    width: 100%;
+    background-color: var(--main_background_color_darker1);
+    .div_close_icon_wrapper {
+      display: flex;
+      padding: 5px;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+  }
+  h1 {
+    font-size: 80px;
+    font-weight: 100;
+    margin: 10px 0;
+  }
+  .content {
+    padding: 20px;
+  }
+  .div_buttons_wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+}
+
+
+
+

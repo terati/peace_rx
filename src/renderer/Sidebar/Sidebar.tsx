@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Logout_Card } from 'renderer/Components/Logout_Card';
 import "./Sidebar.css";
 
 // import HomeIcon from '../../../assets/generalIcons/layout-fluid.svg';
@@ -18,6 +19,7 @@ import Signout_Icon from '../Icons_Color_Control/Signout_Icon';
 
 function Sidebar({ selected = 'home' }) {
   const size = 20;
+  const [logout_card_status, set_logout_card_status] = React.useState(false);
   let navigate = useNavigate();
 
   return (
@@ -61,9 +63,17 @@ function Sidebar({ selected = 'home' }) {
           <Calender_Icon height={size} width={size} fill="white" />
         </div>
 
-        <div className={`option_focus ${(selected == 'signout') ? 'selected' : ''}`}>
+        <div className={`option_focus ${(selected == 'signout') ? 'selected' : ''}`}
+          onClick={() => set_logout_card_status(true)}
+        >
           <Signout_Icon height={size} width={size} fill="white" />
         </div>
+        { logout_card_status &&
+            <Logout_Card 
+              logout_card_status
+              set_logout_card_status={set_logout_card_status}
+            />
+        }
         
       </div> 
     </>

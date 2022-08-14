@@ -1,0 +1,30 @@
+
+.DataTable {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  // height: 100%;
+  min-height: 0;
+  width: 100%;
+  overflow: auto;
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  table, td, th {
+    // border: 1px solid white;
+  }
+  .header {
+    position: sticky;
+    top: 0;
+    background: rgb(38, 38, 38);
+    &:hover {
+      background: rgb(38, 38, 38);
+    }
+  }
+  tr, th {
+    // padding: 10px 20px; 
+    box-sizing: border-box;
+    height: 50px;
+  }
+}

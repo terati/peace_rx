@@ -17,6 +17,7 @@ import { Question_Tooltip } from 'renderer/Components/Question_Tooltip';
 import { Inventory_Action_Status } from './Inventory_Action_Status';
 import { parseGS1 } from './inventory_gtin_calc';
 import { Items_Per_Page } from './Items_Per_Page';
+import { Right_Sidebar } from './Right_Sidebar';
 
 function Inventory() {
 
@@ -397,9 +398,14 @@ function Inventory() {
             <div className={inventory_style.inner_popup} onClick={(e) => e.stopPropagation()} >
               <div className={inventory_style.inner_popup_items}>
                 <div className={inventory_style.inner_popup_item_row_title}>
-                  <h1> {popup_item_brand_name} </h1>
-                  {/* <div> Item Name: </div>
-                  <Popup_input value={popup_item_name} onChange={(e:any) => set_popup_item_name(e.target.value)} />  */}
+                  { popup_item_brand_name &&
+                    <h1> {popup_item_brand_name} </h1>
+                  }
+                  {
+                    !popup_item_brand_name &&
+                    <h1> {popup_item_generic_name} </h1>
+                  }
+                
                 </div>
                 
                 <div className={inventory_style.inner_popup_item_row}> 
@@ -602,170 +608,170 @@ function Inventory() {
       <div className={inventory_style.outerDiv}>
         <div className={inventory_style.inventoryRow}>
 
-          <div className={inventory_style.search_category}>
-            
-            <div className={inventory_style.search_category_top}>
-              <Inventory_Action_Status
-                options={['Dispense', 'Input', 'Section1', 'Section2']}
-                color_options={['red', 'green', 'orange', 'blue']}
-              />
-              {/* <div className={inventory_style.inventory_action_status}> 
-                {action_status ? 'Dispense' : 'Receive'}
-              </div> */}
-            </div>
-            
-            {/* <div> Example: {toast_ref.current} </div> */}
-
-            <div className={inventory_style.search_category_bottom}>
-              <div> 
-                <Inventory_Search 
-                  type={"text"} 
-                  onChange={(e) => set_search_value(e.target.value)} 
-                  value={search_value}
-                  placeholder={'NDC / GS1-128 / Name'}  
-                  onKeyDown={inventory_search_on_key_down_handler}
+          <div className={inventory_style.inventoryRow_left}>
+            <div className={inventory_style.search_category}>
+              
+              <div className={inventory_style.search_category_top}>
+                <Inventory_Action_Status
+                  options={['Dispense', 'Input', 'Section1', 'Section2']}
+                  color_options={['red', 'green', 'orange', 'blue']}
                 />
+                {/* <div className={inventory_style.inventory_action_status}> 
+                  {action_status ? 'Dispense' : 'Receive'}
+                </div> */}
               </div>
-              {/* <div className={inventory_style.search_dropdown}>
-                <button className={inventory_style.search_dropbtn} tabIndex={-1}> {search_dropdown} </button>
-                  <div className={inventory_style.search_dropdown_content}>
-                    <a href="#" onClick={() => set_search_dropdown('Auto')} >Auto</a>
-                    <a href="#" onClick={() => set_search_dropdown('NDC')}>NDC</a>
-                    <a href="#" onClick={() => set_search_dropdown('GS1')}>GS1</a>
-                    <a href="#" onClick={() => set_search_dropdown('TXT')}>TXT</a>
-                  </div>
-              </div> */}
+              
+              {/* <div> Example: {toast_ref.current} </div> */}
 
-              {/* </div> */}
+              <div className={inventory_style.search_category_bottom}>
+                <div> 
+                  <Inventory_Search 
+                    type={"text"} 
+                    onChange={(e) => set_search_value(e.target.value)} 
+                    value={search_value}
+                    placeholder={'NDC / GS1-128 / Name'}  
+                    onKeyDown={inventory_search_on_key_down_handler}
+                  />
+                </div>
+                {/* <div className={inventory_style.search_dropdown}>
+                  <button className={inventory_style.search_dropbtn} tabIndex={-1}> {search_dropdown} </button>
+                    <div className={inventory_style.search_dropdown_content}>
+                      <a href="#" onClick={() => set_search_dropdown('Auto')} >Auto</a>
+                      <a href="#" onClick={() => set_search_dropdown('NDC')}>NDC</a>
+                      <a href="#" onClick={() => set_search_dropdown('GS1')}>GS1</a>
+                      <a href="#" onClick={() => set_search_dropdown('TXT')}>TXT</a>
+                    </div>
+                </div> */}
 
-              {/* <div className="custom-select-option">
-                <select>
-                  <option>Brand Name</option>
-                  <option>Generic Name</option>
-                </select>
-              </div> */}
-              {/* <button onClick={() => set_search_div_open(true)}>
-                Test Button  
-              </button>  */}
+                {/* </div> */}
+
+                {/* <div className="custom-select-option">
+                  <select>
+                    <option>Brand Name</option>
+                    <option>Generic Name</option>
+                  </select>
+                </div> */}
+                {/* <button onClick={() => set_search_div_open(true)}>
+                  Test Button  
+                </button>  */}
+              </div>
             </div>
-            
-          </div>
           
 
-          <div ref={div_table_ref} className={inventory_style.table_wrapper_super}>
-            <table className={inventory_style.table_wrapper}>
-              {/* <thead> */}
-                <tr className={inventory_style.table_header}>
-                  { table_column_titles.map((item, idx:number) => {
-                    return (
-                      <th>
-                        <div ref={el => parentRef.current[idx] = el} className={inventory_style.table_item_div_head} style={{width: column_widths[idx]}}>
-                          <div className={inventory_style.table_slider} onMouseDown={(e) => click_handler_test(e, idx)} onMouseUp={click_handler_release_test} >
-                            <div className={inventory_style.three_dots}>
-                              <div className={inventory_style.dot}></div>
-                              <div className={inventory_style.dot}></div>
-                              <div className={inventory_style.dot}></div>
+            <div ref={div_table_ref} className={inventory_style.table_wrapper_super}>
+              <table className={inventory_style.table_wrapper}>
+                {/* <thead> */}
+                  <tr className={inventory_style.table_header}>
+                    { table_column_titles.map((item, idx:number) => {
+                      return (
+                        <th>
+                          <div ref={el => parentRef.current[idx] = el} className={inventory_style.table_item_div_head} style={{width: column_widths[idx]}}>
+                            <div className={inventory_style.table_slider} onMouseDown={(e) => click_handler_test(e, idx)} onMouseUp={click_handler_release_test} >
+                              <div className={inventory_style.three_dots}>
+                                <div className={inventory_style.dot}></div>
+                                <div className={inventory_style.dot}></div>
+                                <div className={inventory_style.dot}></div>
+                              </div>
                             </div>
+                            {item.name}
                           </div>
-                          {item.name}
-                        </div>
-                      </th>
-                    )
-                    })
-                  }
-                  {/* <th>
-                    <div ref={parentRef} className="table_item_div" style={{width: column_widths[0]}}>
-                      <div className="table_slider" onMouseDown={(e) => click_handler_test(e, 0)} onMouseUp={click_handler_release_test} >
-                        <div className="three_dots">
-                          <div className="dot"></div>
-                          <div className="dot"></div>
-                          <div className="dot"></div>
-                        </div>
-                      </div>
-                      Proprietary Name
-                    </div>
-                  </th>
-
-                  <th>
-                    <div ref={parentRef} className="table_item_div" style={{width: column_widths[1]}}>
-                        <div className="table_slider" onMouseDown={(e) => click_handler_test(e, 1)} onMouseUp={click_handler_release_test} >
+                        </th>
+                      )
+                      })
+                    }
+                    {/* <th>
+                      <div ref={parentRef} className="table_item_div" style={{width: column_widths[0]}}>
+                        <div className="table_slider" onMouseDown={(e) => click_handler_test(e, 0)} onMouseUp={click_handler_release_test} >
                           <div className="three_dots">
                             <div className="dot"></div>
                             <div className="dot"></div>
                             <div className="dot"></div>
                           </div>
                         </div>
-                        NDC Package Code
-                    </div>
-                  </th>
+                        Proprietary Name
+                      </div>
+                    </th>
 
-                  <th>QOH</th>
-                  <th>Thresh</th>
-                  <th>Purchase Price</th>
-                  <th>Suggested Price</th>
-                  <th>Last Transaction</th>
-                  <th> Description </th> */}
-                </tr>
-              {/* </thead> */}
+                    <th>
+                      <div ref={parentRef} className="table_item_div" style={{width: column_widths[1]}}>
+                          <div className="table_slider" onMouseDown={(e) => click_handler_test(e, 1)} onMouseUp={click_handler_release_test} >
+                            <div className="three_dots">
+                              <div className="dot"></div>
+                              <div className="dot"></div>
+                              <div className="dot"></div>
+                            </div>
+                          </div>
+                          NDC Package Code
+                      </div>
+                    </th>
 
-              <tbody></tbody>
-              {/* <tbody> */}
-                {/* <tr> */}
-                  {/* <td colSpan={15} height="50px">
-                    Not Found.
-                  </td> */}
-                {/* </tr> */}
-
-
-                {/* { (loading==true) && 
-                  <tr className="loading_tr">
-                    Hello World
-
+                    <th>QOH</th>
+                    <th>Thresh</th>
+                    <th>Purchase Price</th>
+                    <th>Suggested Price</th>
+                    <th>Last Transaction</th>
+                    <th> Description </th> */}
                   </tr>
-                } */}
+                {/* </thead> */}
 
-                { (loading==false) && data.data.rows.map((el:any, index:number) => {
-                  // let description = el.packaging.filter((pkg:any) => pkg.package_ndc == search_value)[0].description;
-                  // let package_ndc = el.packaging.filter((pkg:any) => pkg.package_ndc == search_value)[0]?.package_ndc;
-                  // let strengths = el.active_ingredients.map((inner_el:any) => {  })
-                  return (
-                    <tr key={index} className={inventory_style.body_td} onClick={event => select_row_index_onclick(event, index)}>
-                      { table_column_titles.map((item, idx:number) => {
-                          return (
-                            // minWidth: div_table_ref.current?.clientWidth ,
-                            <td> <div className={`${inventory_style.table_item_div} ${item.additional_properties}`} style={{ width: column_widths[idx]}}> <p>{el[item.parse_property] ?? 'N/A'}</p> </div></td>
-                          )
-                        }) 
-                      }
+                <tbody></tbody>
+                {/* <tbody> */}
+                  {/* <tr> */}
+                    {/* <td colSpan={15} height="50px">
+                      Not Found.
+                    </td> */}
+                  {/* </tr> */}
 
-                      {/* <td> <div className="table_item_div" style={{width: column_widths[0]}}> {el[example]} </div></td>
-                      <td> <div className="table_item_div" style={{width: column_widths[1]}}> {el.ndc_package_code ?? 'N/A'} </div></td>
-                      <td> <div className="table_item_div" style={{width: column_widths[2]}}> {el.qoh ?? 0} </div></td>
-                      <td> <div className="table_item_div" style={{width: column_widths[3]}}> {el.thresh ?? 0} </div></td>
-                      <td> <div className="table_item_div" style={{width: column_widths[4]}}> {el.purchase_price ?? 'N/A'} </div></td>
-                      <td> <div className="table_item_div" style={{width: column_widths[5]}}> {el.suggested_selling_price ?? 'N/A'} </div></td>
-                      <td> <div className="table_item_div" style={{width: column_widths[6]}}> {el.updatedAt ?? 'N/A'} </div></td>
-                      <td> <div className="table_item_div" style={{width: column_widths[7]}}> {el.package_description} </div></td> */}
+
+                  {/* { (loading==true) && 
+                    <tr className="loading_tr">
+                      Hello World
+
                     </tr>
-                  )
-                  })
-                }
+                  } */}
 
-                {/* { <td colSpan={1000} className="long_colspan"> Not Found </td> } */}
-              {/* </tbody> */}
-            </table>
-            {(loading==true) && 
-              <div className={inventory_style.loading_tr}>
-                <Loader />
-              </div>
-            }
+                  { (loading==false) && data.data.rows.map((el:any, index:number) => {
+                    // let description = el.packaging.filter((pkg:any) => pkg.package_ndc == search_value)[0].description;
+                    // let package_ndc = el.packaging.filter((pkg:any) => pkg.package_ndc == search_value)[0]?.package_ndc;
+                    // let strengths = el.active_ingredients.map((inner_el:any) => {  })
+                    return (
+                      <tr key={index} className={inventory_style.body_td} onClick={event => select_row_index_onclick(event, index)}>
+                        { table_column_titles.map((item, idx:number) => {
+                            return (
+                              // minWidth: div_table_ref.current?.clientWidth ,
+                              <td> <div className={`${inventory_style.table_item_div} ${item.additional_properties}`} style={{ width: column_widths[idx]}}> <p>{el[item.parse_property] ?? 'N/A'}</p> </div></td>
+                            )
+                          }) 
+                        }
 
-            {(!loading && (pagination_page_count==0) ) && 
-              <div className={inventory_style.nothing_here}>
-                <img height={100} width={100} src={dog_gif} draggable="false" alt="Nothing to see"/>
-                <p> Nothing here. </p>
-              </div>
-            }
+                        {/* <td> <div className="table_item_div" style={{width: column_widths[0]}}> {el[example]} </div></td>
+                        <td> <div className="table_item_div" style={{width: column_widths[1]}}> {el.ndc_package_code ?? 'N/A'} </div></td>
+                        <td> <div className="table_item_div" style={{width: column_widths[2]}}> {el.qoh ?? 0} </div></td>
+                        <td> <div className="table_item_div" style={{width: column_widths[3]}}> {el.thresh ?? 0} </div></td>
+                        <td> <div className="table_item_div" style={{width: column_widths[4]}}> {el.purchase_price ?? 'N/A'} </div></td>
+                        <td> <div className="table_item_div" style={{width: column_widths[5]}}> {el.suggested_selling_price ?? 'N/A'} </div></td>
+                        <td> <div className="table_item_div" style={{width: column_widths[6]}}> {el.updatedAt ?? 'N/A'} </div></td>
+                        <td> <div className="table_item_div" style={{width: column_widths[7]}}> {el.package_description} </div></td> */}
+                      </tr>
+                    )
+                    })
+                  }
+
+                  {/* { <td colSpan={1000} className="long_colspan"> Not Found </td> } */}
+                {/* </tbody> */}
+              </table>
+              {(loading==true) && 
+                <div className={inventory_style.loading_tr}>
+                  <Loader />
+                </div>
+              }
+
+              {(!loading && (pagination_page_count==0) ) && 
+                <div className={inventory_style.nothing_here}>
+                  <img height={100} width={100} src={dog_gif} draggable="false" alt="Nothing to see"/>
+                  <p> Nothing here. </p>
+                </div>
+              }
           </div>
 
           <div className={inventory_style.pagination_options}> 
@@ -780,6 +786,10 @@ function Inventory() {
               set_number_of_items={set_number_of_items}
             />
           </div>
+        </div>
+
+
+          <Right_Sidebar />
 
         </div>
       </div>
