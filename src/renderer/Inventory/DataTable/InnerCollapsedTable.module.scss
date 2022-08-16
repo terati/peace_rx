@@ -1,0 +1,21 @@
+.DataTable {
+  font-size: 15px;
+  color: gray;
+  table, th, tr {
+    background-color: rgb(34, 34, 34);
+    padding: 5px 10px;
+    margin: 0;
+  }
+  th, tr {
+    height: 20px;
+  }
+  th:hover {
+    background-color: rgb(34, 34, 34)
+  }
+  tr:hover {
+    background-color: rgb(34, 34, 34)
+  }
+  tr {
+    border: none;
+  }
+}

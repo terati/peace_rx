@@ -1,5 +1,7 @@
 import * as React from 'react';
+import Angle_Down from 'renderer/Icons_Color_Control/Angle_Down';
 import DataTable_style from './DataTable.module.scss';
+import InnerCollapsedTable from './InnerCollapsedTable';
 
 interface Column {
   field: string | number,
@@ -67,6 +69,9 @@ const DataTable = (props:any) => {
   const {
     rows = rrows,
     columns = ccolumns,
+    innerTable = false,
+    inner_rows,
+    inner_columns, 
     ...other
   } = props;
 
@@ -75,6 +80,7 @@ const DataTable = (props:any) => {
       <div className={DataTable_style.DataTable}>
       <table>
         <tr className={DataTable_style.header}>
+          <th></th>
           { columns.map((column: Column, idx: number) => {
               return (
                 <th>
@@ -86,17 +92,31 @@ const DataTable = (props:any) => {
         </tr>
 
         { rows.map((row, idx: number) => {
+            const [ex, set_ex] = React.useState(false);
+
             return (
-              <tr>
-                { columns.map((column: Column, idx: number) => {
-                    return (
-                      <th>
-                        { row[column.field] }
-                      </th>
-                    )
-                  })
+              <>
+                <tr>
+                  <th onClick={() => set_ex(!ex)}>
+                    <Angle_Down fill={'white'} height={12} width={12} />
+                  </th>
+                  { columns.map((column: Column, idx: number) => {
+                      return (
+                        <th>
+                          { row[column.field] }
+                        </th>
+                      )
+                    })
+                  }
+                </tr>
+                { ex &&
+                  <tr>
+                    <td colSpan={100} className={DataTable_style.collapsed_td}>
+                      <InnerCollapsedTable rows={row.entries} />
+                    </td>
+                  </tr>
                 }
-              </tr>
+              </>
             )
           })
 

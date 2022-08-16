@@ -613,8 +613,8 @@ function Inventory() {
               
               <div className={inventory_style.search_category_top}>
                 <Inventory_Action_Status
-                  options={['Dispense', 'Input', 'Section1', 'Section2']}
-                  color_options={['red', 'green', 'orange', 'blue']}
+                  options={['Dispense', 'Input', 'Reports']}
+                  color_options={['orange', 'green', 'gray',]}
                 />
                 {/* <div className={inventory_style.inventory_action_status}> 
                   {action_status ? 'Dispense' : 'Receive'}
